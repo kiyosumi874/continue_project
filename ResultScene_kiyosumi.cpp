@@ -1,11 +1,11 @@
 #include "DxLib.h"
-#include "PlayScene_kiyosumi.h"
 #include "ResultScene_kiyosumi.h"
+#include "TitleScene_kiyosumi.h"
 
 /// <summary>
 /// 初期化
 /// </summary>
-PlayScene_kiyosumi::PlayScene_kiyosumi()
+ResultScene_kiyosumi::ResultScene_kiyosumi()
 	: mDeltaTime(0.000001f)
 	, mInputReturnFlag(false)
 {
@@ -14,7 +14,7 @@ PlayScene_kiyosumi::PlayScene_kiyosumi()
 /// <summary>
 /// 後処理
 /// </summary>
-PlayScene_kiyosumi::~PlayScene_kiyosumi()
+ResultScene_kiyosumi::~ResultScene_kiyosumi()
 {
 }
 
@@ -26,7 +26,7 @@ PlayScene_kiyosumi::~PlayScene_kiyosumi()
 /// Enterを押したときに次のシーンのInstanceのポインタを返す
 /// それ以外は自分のポインタを返す
 /// </returns>
-SceneBase* PlayScene_kiyosumi::Update(float _deltaTime)
+SceneBase* ResultScene_kiyosumi::Update(float _deltaTime)
 {
 	mDeltaTime = _deltaTime;
 
@@ -37,14 +37,14 @@ SceneBase* PlayScene_kiyosumi::Update(float _deltaTime)
 	}
 
 	// デバッグ用
-	printfDx("今PlayScene_kiyosumi\n");
+	printfDx("今ResultScene_kiyosumi\n");
 
 	// シーン遷移条件
 	if (CheckHitKey(KEY_INPUT_RETURN) && mInputReturnFlag)
 	{
 		mInputReturnFlag = false;
 		// 条件を満たしていたら次のシーンを生成してそのポインタを返す
-		return new ResultScene_kiyosumi();
+		return new TitleScene_kiyosumi();
 	}
 
 	// シーンが変更されていなかったら自分のポインタを返す
@@ -54,20 +54,20 @@ SceneBase* PlayScene_kiyosumi::Update(float _deltaTime)
 /// <summary>
 /// 描画
 /// </summary>
-void PlayScene_kiyosumi::Draw()
+void ResultScene_kiyosumi::Draw()
 {
 }
 
 /// <summary>
 /// 音楽
 /// </summary>
-void PlayScene_kiyosumi::Sound()
+void ResultScene_kiyosumi::Sound()
 {
 }
 
 /// <summary>
 /// 初期化
 /// </summary>
-void PlayScene_kiyosumi::Load()
+void ResultScene_kiyosumi::Load()
 {
 }
