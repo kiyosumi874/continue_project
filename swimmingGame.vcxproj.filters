@@ -11,6 +11,12 @@
     <Filter Include="ソース ファイル\work_kiyosumi">
       <UniqueIdentifier>{ffa28588-5985-400f-8286-7ab4f4a5e990}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\work_syougo">
+      <UniqueIdentifier>{89206f4a-2495-4f35-8617-b78cc18ce4ab}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\work_haruto">
+      <UniqueIdentifier>{999acd3f-cc1f-4557-8e71-6559bde9decf}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -34,6 +40,12 @@
     <ClCompile Include="PlayScene_kiyosumi.cpp">
       <Filter>ソース ファイル\work_kiyosumi</Filter>
     </ClCompile>
+    <ClCompile Include="PlayScene_shougo.cpp">
+      <Filter>ソース ファイル\work_syougo</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayScene_YanoHaruto.cpp">
+      <Filter>ソース ファイル\work_haruto</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SceneBase.h">
@@ -53,6 +65,12 @@
     </ClInclude>
     <ClInclude Include="PlayScene_kiyosumi.h">
       <Filter>ソース ファイル\work_kiyosumi</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayScene_shougo.h">
+      <Filter>ソース ファイル\work_syougo</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayScene_YanoHaruto.h">
+      <Filter>ソース ファイル\work_haruto</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
