@@ -8,6 +8,9 @@
     <Filter Include="ソース ファイル\Scene">
       <UniqueIdentifier>{438267fc-9682-4e88-90ef-3355727ef2b5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\work_YanoHaruto">
+      <UniqueIdentifier>{bf3052d3-13c7-40c4-8bf6-1eb1c1c2c136}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -28,6 +31,9 @@
     <ClCompile Include="SceneBase.cpp">
       <Filter>ソース ファイル\Scene</Filter>
     </ClCompile>
+    <ClCompile Include="PlayScene_YanoHaruto.cpp">
+      <Filter>ソース ファイル\work_YanoHaruto</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SceneBase.h">
@@ -44,6 +50,9 @@
     </ClInclude>
     <ClInclude Include="SceneManager.h">
       <Filter>ソース ファイル\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayScene_YanoHaruto.h">
+      <Filter>ソース ファイル\work_YanoHaruto</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
