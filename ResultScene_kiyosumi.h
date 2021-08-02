@@ -1,6 +1,6 @@
 //----------------------------------------------------------------------------------//
-// @file         PlayScene_kiyosumi.h
-// @brief        PlayScene_kiyosumiクラス
+// @file         ResultScene_kiyosumi.h
+// @brief        ResultScene_kiyosumiクラス
 // @note         継承元:SceneBaseクラス              
 // @author       椎原 清澄 (Kiyosumi Shiihara, @2021)
 // @changelog
@@ -9,20 +9,21 @@
 
 #pragma once
 #include "SceneBase.h"
-#include "PlayUI.h"
+#include "ResultUI.h"
 
-class PlayScene_kiyosumi : public SceneBase
+class ResultScene_kiyosumi : public SceneBase
 {
 public:
-     PlayScene_kiyosumi();    // コンストラクタ
-    ~PlayScene_kiyosumi();    // デストラクタ
+     ResultScene_kiyosumi();    // コンストラクタ
+    ~ResultScene_kiyosumi();    // デストラクタ
 
     SceneBase* Update(float _deltaTime)override;    // 更新
     void       Draw()                  override;    // 描画
     void       Sound()                 override;    // 音楽
     void       Load()                  override;    // 初期化
 private:
-    PlayUI* mPlayUI;    // プレイUIクラスへのポインタメンバ変数
-    float mDeltaTime;          // デルタタイム
-    bool  mInputReturnFlag;    // Enterキーの連続入力防止
+    ResultUI* mResultUI;    // リザルトUIクラスへのポインタメンバ変数
+    float mDeltaTime;         // デルタタイム
+    bool  mInputReturnFlag;   // Enterキーの連続入力防止
 };
+
