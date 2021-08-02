@@ -11,11 +11,11 @@
     <Filter Include="ソース ファイル\work_kiyosumi">
       <UniqueIdentifier>{ffa28588-5985-400f-8286-7ab4f4a5e990}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ソース ファイル\work_syougo">
-      <UniqueIdentifier>{89206f4a-2495-4f35-8617-b78cc18ce4ab}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ソース ファイル\work_haruto">
       <UniqueIdentifier>{999acd3f-cc1f-4557-8e71-6559bde9decf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\work_shougo">
+      <UniqueIdentifier>{89206f4a-2495-4f35-8617-b78cc18ce4ab}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -41,34 +41,13 @@
       <Filter>ソース ファイル\work_kiyosumi</Filter>
     </ClCompile>
     <ClCompile Include="PlayScene_shougo.cpp">
-      <Filter>ソース ファイル\work_syougo</Filter>
+      <Filter>ソース ファイル\work_shougo</Filter>
     </ClCompile>
     <ClCompile Include="PlayScene_YanoHaruto.cpp">
       <Filter>ソース ファイル\work_haruto</Filter>
     </ClCompile>
-    <ClCompile Include="TitleScene_kiyosumi.cpp">
-      <Filter>ソース ファイル\work_kiyosumi</Filter>
-    </ClCompile>
-    <ClCompile Include="ResultScene_kiyosumi.cpp">
-      <Filter>ソース ファイル\work_kiyosumi</Filter>
-    </ClCompile>
-    <ClCompile Include="SceneManager_kiyosumi.cpp">
-      <Filter>ソース ファイル\work_kiyosumi</Filter>
-    </ClCompile>
-    <ClCompile Include="main_kiyosumi.cpp">
-      <Filter>ソース ファイル\work_kiyosumi</Filter>
-    </ClCompile>
-    <ClCompile Include="TitleUI.cpp">
-      <Filter>ソース ファイル\work_kiyosumi</Filter>
-    </ClCompile>
-    <ClCompile Include="PlayUI.cpp">
-      <Filter>ソース ファイル\work_kiyosumi</Filter>
-    </ClCompile>
-    <ClCompile Include="ResultUI.cpp">
-      <Filter>ソース ファイル\work_kiyosumi</Filter>
-    </ClCompile>
-    <ClCompile Include="UIBase.cpp">
-      <Filter>ソース ファイル\work_kiyosumi</Filter>
+    <ClCompile Include="PlayerActor_shougo.cpp">
+      <Filter>ソース ファイル\work_shougo</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -91,31 +70,13 @@
       <Filter>ソース ファイル\work_kiyosumi</Filter>
     </ClInclude>
     <ClInclude Include="PlayScene_shougo.h">
-      <Filter>ソース ファイル\work_syougo</Filter>
+      <Filter>ソース ファイル\work_shougo</Filter>
     </ClInclude>
     <ClInclude Include="PlayScene_YanoHaruto.h">
       <Filter>ソース ファイル\work_haruto</Filter>
     </ClInclude>
-    <ClInclude Include="TitleScene_kiyosumi.h">
-      <Filter>ソース ファイル\work_kiyosumi</Filter>
-    </ClInclude>
-    <ClInclude Include="ResultScene_kiyosumi.h">
-      <Filter>ソース ファイル\work_kiyosumi</Filter>
-    </ClInclude>
-    <ClInclude Include="SceneManager_kiyosumi.h">
-      <Filter>ソース ファイル\work_kiyosumi</Filter>
-    </ClInclude>
-    <ClInclude Include="TitleUI.h">
-      <Filter>ソース ファイル\work_kiyosumi</Filter>
-    </ClInclude>
-    <ClInclude Include="PlayUI.h">
-      <Filter>ソース ファイル\work_kiyosumi</Filter>
-    </ClInclude>
-    <ClInclude Include="ResultUI.h">
-      <Filter>ソース ファイル\work_kiyosumi</Filter>
-    </ClInclude>
-    <ClInclude Include="UIBase.h">
-      <Filter>ソース ファイル\work_kiyosumi</Filter>
+    <ClInclude Include="PlayerActor_shougo.h">
+      <Filter>ソース ファイル\work_shougo</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
