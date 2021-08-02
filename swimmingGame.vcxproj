@@ -152,6 +152,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="PlayerActor_shougo.cpp" />
     <ClCompile Include="PlayScene.cpp" />
     <ClCompile Include="PlayScene_kiyosumi.cpp" />
     <ClCompile Include="PlayScene_shougo.cpp" />
@@ -162,6 +163,7 @@
     <ClCompile Include="TitleScene.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="PlayerActor_shougo.h" />
     <ClInclude Include="PlayScene_kiyosumi.h" />
     <ClInclude Include="PlayScene.h" />
     <ClInclude Include="PlayScene_shougo.h" />
