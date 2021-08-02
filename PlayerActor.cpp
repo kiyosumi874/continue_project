@@ -1,5 +1,5 @@
 #include "DxLib.h"
-#include "PlayerActor_shougo.h"
+#include "PlayerActor.h"
 
 /// <summary>
 /// ì¬ˆ—

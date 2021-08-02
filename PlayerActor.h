@@ -1,7 +1,7 @@
 //----------------------------------------------------------------------------------//
-// @file         PlayerActor_shougo.h
-// @brief        PlayerActor_shougoクラス
-// @note         PlayerActor_shougoクラス
+// @file         PlayerActor.h
+// @brief        PlayerActorクラス
+// @note         PlayerActorクラス
 // @author       井口 翔悟 (iguchi shougo, @2021)
 // @changelog
 // 2021/ 8/1    新規作成
