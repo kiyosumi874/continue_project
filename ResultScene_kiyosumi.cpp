@@ -8,6 +8,7 @@
 ResultScene_kiyosumi::ResultScene_kiyosumi()
 	: mDeltaTime(0.000001f)
 	, mInputReturnFlag(false)
+	, mResultUI(new ResultUI)
 {
 }
 
@@ -16,6 +17,7 @@ ResultScene_kiyosumi::ResultScene_kiyosumi()
 /// </summary>
 ResultScene_kiyosumi::~ResultScene_kiyosumi()
 {
+	delete mResultUI;
 }
 
 /// <summary>
@@ -30,14 +32,16 @@ SceneBase* ResultScene_kiyosumi::Update(float _deltaTime)
 {
 	mDeltaTime = _deltaTime;
 
+	// リザルトUIの更新
+	mResultUI->Update(mDeltaTime);
+
 	// Enterキーの連続入力防止
 	if (!CheckHitKey(KEY_INPUT_RETURN))
 	{
 		mInputReturnFlag = true;
 	}
 
-	// デバッグ用
-	printfDx("今ResultScene_kiyosumi\n");
+	
 
 	// シーン遷移条件
 	if (CheckHitKey(KEY_INPUT_RETURN) && mInputReturnFlag)
@@ -56,6 +60,10 @@ SceneBase* ResultScene_kiyosumi::Update(float _deltaTime)
 /// </summary>
 void ResultScene_kiyosumi::Draw()
 {
+	// リザルトUIの描画
+	mResultUI->Draw();
+	// デバッグ用
+	printfDx("今ResultScene_kiyosumi\n");
 }
 
 /// <summary>
@@ -70,4 +78,6 @@ void ResultScene_kiyosumi::Sound()
 /// </summary>
 void ResultScene_kiyosumi::Load()
 {
+	// リザルトUIの初期化
+	mResultUI->Load();
 }

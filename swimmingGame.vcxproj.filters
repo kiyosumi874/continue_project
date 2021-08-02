@@ -46,9 +46,6 @@
     <ClCompile Include="PlayScene_YanoHaruto.cpp">
       <Filter>ソース ファイル\work_haruto</Filter>
     </ClCompile>
-    <ClCompile Include="UI.cpp">
-      <Filter>ソース ファイル\work_kiyosumi</Filter>
-    </ClCompile>
     <ClCompile Include="TitleScene_kiyosumi.cpp">
       <Filter>ソース ファイル\work_kiyosumi</Filter>
     </ClCompile>
@@ -59,6 +56,18 @@
       <Filter>ソース ファイル\work_kiyosumi</Filter>
     </ClCompile>
     <ClCompile Include="main_kiyosumi.cpp">
+      <Filter>ソース ファイル\work_kiyosumi</Filter>
+    </ClCompile>
+    <ClCompile Include="TitleUI.cpp">
+      <Filter>ソース ファイル\work_kiyosumi</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayUI.cpp">
+      <Filter>ソース ファイル\work_kiyosumi</Filter>
+    </ClCompile>
+    <ClCompile Include="ResultUI.cpp">
+      <Filter>ソース ファイル\work_kiyosumi</Filter>
+    </ClCompile>
+    <ClCompile Include="UIBase.cpp">
       <Filter>ソース ファイル\work_kiyosumi</Filter>
     </ClCompile>
   </ItemGroup>
@@ -87,9 +96,6 @@
     <ClInclude Include="PlayScene_YanoHaruto.h">
       <Filter>ソース ファイル\work_haruto</Filter>
     </ClInclude>
-    <ClInclude Include="UI.h">
-      <Filter>ソース ファイル\work_kiyosumi</Filter>
-    </ClInclude>
     <ClInclude Include="TitleScene_kiyosumi.h">
       <Filter>ソース ファイル\work_kiyosumi</Filter>
     </ClInclude>
@@ -97,6 +103,18 @@
       <Filter>ソース ファイル\work_kiyosumi</Filter>
     </ClInclude>
     <ClInclude Include="SceneManager_kiyosumi.h">
+      <Filter>ソース ファイル\work_kiyosumi</Filter>
+    </ClInclude>
+    <ClInclude Include="TitleUI.h">
+      <Filter>ソース ファイル\work_kiyosumi</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayUI.h">
+      <Filter>ソース ファイル\work_kiyosumi</Filter>
+    </ClInclude>
+    <ClInclude Include="ResultUI.h">
+      <Filter>ソース ファイル\work_kiyosumi</Filter>
+    </ClInclude>
+    <ClInclude Include="UIBase.h">
       <Filter>ソース ファイル\work_kiyosumi</Filter>
     </ClInclude>
   </ItemGroup>

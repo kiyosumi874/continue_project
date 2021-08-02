@@ -166,14 +166,17 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="PlayUI.cpp" />
     <ClCompile Include="ResultScene.cpp" />
     <ClCompile Include="ResultScene_kiyosumi.cpp" />
+    <ClCompile Include="ResultUI.cpp" />
     <ClCompile Include="SceneBase.cpp" />
     <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="SceneManager_kiyosumi.cpp" />
     <ClCompile Include="TitleScene.cpp" />
     <ClCompile Include="TitleScene_kiyosumi.cpp" />
-    <ClCompile Include="UI.cpp" />
+    <ClCompile Include="TitleUI.cpp" />
+    <ClCompile Include="UIBase.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="PlayScene_kiyosumi.h" />
@@ -186,14 +189,17 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClInclude>
+    <ClInclude Include="PlayUI.h" />
     <ClInclude Include="ResultScene.h" />
     <ClInclude Include="ResultScene_kiyosumi.h" />
+    <ClInclude Include="ResultUI.h" />
     <ClInclude Include="SceneBase.h" />
     <ClInclude Include="SceneManager.h" />
     <ClInclude Include="SceneManager_kiyosumi.h" />
     <ClInclude Include="TitleScene.h" />
     <ClInclude Include="TitleScene_kiyosumi.h" />
-    <ClInclude Include="UI.h" />
+    <ClInclude Include="TitleUI.h" />
+    <ClInclude Include="UIBase.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -8,6 +8,7 @@
 PlayScene_kiyosumi::PlayScene_kiyosumi()
 	: mDeltaTime(0.000001f)
 	, mInputReturnFlag(false)
+	, mPlayUI(new PlayUI)
 {
 }
 
@@ -16,6 +17,7 @@ PlayScene_kiyosumi::PlayScene_kiyosumi()
 /// </summary>
 PlayScene_kiyosumi::~PlayScene_kiyosumi()
 {
+	delete mPlayUI;
 }
 
 /// <summary>
@@ -30,14 +32,16 @@ SceneBase* PlayScene_kiyosumi::Update(float _deltaTime)
 {
 	mDeltaTime = _deltaTime;
 
+	// プレイUIの更新
+	mPlayUI->Update(mDeltaTime);
+
 	// Enterキーの連続入力防止
 	if (!CheckHitKey(KEY_INPUT_RETURN))
 	{
 		mInputReturnFlag = true;
 	}
 
-	// デバッグ用
-	printfDx("今PlayScene_kiyosumi\n");
+	
 
 	// シーン遷移条件
 	if (CheckHitKey(KEY_INPUT_RETURN) && mInputReturnFlag)
@@ -56,6 +60,10 @@ SceneBase* PlayScene_kiyosumi::Update(float _deltaTime)
 /// </summary>
 void PlayScene_kiyosumi::Draw()
 {
+	// プレイUIの描画
+	mPlayUI->Draw();
+	// デバッグ用
+	printfDx("今PlayScene_kiyosumi\n");
 }
 
 /// <summary>
@@ -70,4 +78,6 @@ void PlayScene_kiyosumi::Sound()
 /// </summary>
 void PlayScene_kiyosumi::Load()
 {
+	// プレイUIの初期化
+	mPlayUI->Load();
 }

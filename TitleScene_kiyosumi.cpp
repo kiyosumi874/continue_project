@@ -3,12 +3,19 @@
 #include "TitleScene_kiyosumi.h"
 #include "PlayScene_kiyosumi.h"
 
+#include "TitleUI.h"
+
+
+
 /// <summary>
 /// 初期化
 /// </summary>
 TitleScene_kiyosumi::TitleScene_kiyosumi()
-	: mDeltaTime(0.000001f)
+	: mTitleUI(new TitleUI)
+	, mDeltaTime(0.000001f)
 	, mInputReturnFlag(false)
+	, mSceneTransitionCount(0)
+	, mStartButtonFlag(false)
 {
 }
 
@@ -17,6 +24,7 @@ TitleScene_kiyosumi::TitleScene_kiyosumi()
 /// </summary>
 TitleScene_kiyosumi::~TitleScene_kiyosumi()
 {
+	delete mTitleUI;
 }
 
 /// <summary>
@@ -31,22 +39,35 @@ SceneBase* TitleScene_kiyosumi::Update(float _deltaTime)
 {
 	mDeltaTime = _deltaTime;
 
-	// Enterキーの連続入力防止
-	if (!CheckHitKey(KEY_INPUT_RETURN))
+	// タイトルUIの更新
+	mTitleUI->Update(mDeltaTime);
+	mStartButtonFlag = mTitleUI->GetStartButtonFlag();
+	
+	//// Enterキーの連続入力防止
+	//if (!CheckHitKey(KEY_INPUT_RETURN))
+	//{
+	//	mInputReturnFlag = true;
+	//}
+
+	if (mStartButtonFlag)
 	{
-		mInputReturnFlag = true;
+		mSceneTransitionCount += 1.0f * mDeltaTime;
 	}
 
-	// デバッグ用
-	printfDx("今TitleScene_kiyosumi\n");
-
 	// シーン遷移条件
-	if (CheckHitKey(KEY_INPUT_RETURN) && mInputReturnFlag)
+	if (mSceneTransitionCount >= 0.5f)
 	{
-		mInputReturnFlag = false;
 		// 条件を満たしていたら次のシーンを生成してそのポインタを返す
 		return new PlayScene_kiyosumi();
 	}
+
+	//// シーン遷移条件
+	//if (CheckHitKey(KEY_INPUT_RETURN) && mInputReturnFlag)
+	//{
+	//	mInputReturnFlag = false;
+	//	// 条件を満たしていたら次のシーンを生成してそのポインタを返す
+	//	return new PlayScene_kiyosumi();
+	//}
 
 	// シーンが変更されていなかったら自分のポインタを返す
 	return this;
@@ -57,6 +78,8 @@ SceneBase* TitleScene_kiyosumi::Update(float _deltaTime)
 /// </summary>
 void TitleScene_kiyosumi::Draw()
 {
+	// タイトルUIの描画
+	mTitleUI->Draw();
 }
 
 /// <summary>
@@ -71,4 +94,10 @@ void TitleScene_kiyosumi::Sound()
 /// </summary>
 void TitleScene_kiyosumi::Load()
 {
+	// タイトルUIの初期化
+	/*mTitleUI->Load();
+	mDeltaTime = 0.000001f;
+	mInputReturnFlag = false;
+	mSceneTransitionCount = 0;
+	mStartButtonFlag = false;*/
 }

@@ -4,16 +4,17 @@
 // @note         継承元:SceneBaseクラス              
 // @author       椎原 清澄 (Kiyosumi Shiihara, @2021)
 // @changelog
-// 2021/ 7/29    新規作成
+// 2021/ 7/31    新規作成
 //----------------------------------------------------------------------------------//
 
 #pragma once
 #include "SceneBase.h"
+#include "PlayUI.h"
 
 class PlayScene_kiyosumi : public SceneBase
 {
 public:
-    PlayScene_kiyosumi();    // コンストラクタ
+     PlayScene_kiyosumi();    // コンストラクタ
     ~PlayScene_kiyosumi();    // デストラクタ
 
     SceneBase* Update(float _deltaTime)override;    // 更新
@@ -21,6 +22,7 @@ public:
     void       Sound()                 override;    // 音楽
     void       Load()                  override;    // 初期化
 private:
+    PlayUI* mPlayUI;    // プレイUIクラスへのポインタメンバ変数
     float mDeltaTime;          // デルタタイム
     bool  mInputReturnFlag;    // Enterキーの連続入力防止
 };
