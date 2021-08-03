@@ -55,6 +55,15 @@ void TitleUI::Update(float _deltaTime)
 void TitleUI::Load()
 {
 	mStartButtonFlag = false;
+	mHandle = 0;
+	mDeltaTime = 0.000001f;
+	mStartButtonBeginX = 480;
+	mStartButtonBeginY = 675;
+	mStartButtonEndX = 1440;
+	mStartButtonEndY = 945;
+	mStartButtonFontSize = 200;
+	mStartButtonFlag = false;
+	mInputReturnFlag = false;
 }
 
 /// <summary>

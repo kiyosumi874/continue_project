@@ -17,6 +17,15 @@
     <Filter Include="ソース ファイル\work_haruto">
       <UniqueIdentifier>{999acd3f-cc1f-4557-8e71-6559bde9decf}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\work_kiyosumi\Camera">
+      <UniqueIdentifier>{e70e66cb-9705-49c6-97ee-70aa63bde80c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\work_kiyosumi\UI">
+      <UniqueIdentifier>{822742aa-5f55-41d6-8dc3-982b9eb0a287}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\work_kiyosumi\Scene_kiyosumi">
+      <UniqueIdentifier>{36461a0a-4e07-45c0-b2fb-49878e9ff3e1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -37,38 +46,47 @@
     <ClCompile Include="SceneBase.cpp">
       <Filter>ソース ファイル\Scene</Filter>
     </ClCompile>
-    <ClCompile Include="PlayScene_kiyosumi.cpp">
-      <Filter>ソース ファイル\work_kiyosumi</Filter>
-    </ClCompile>
     <ClCompile Include="PlayScene_shougo.cpp">
       <Filter>ソース ファイル\work_syougo</Filter>
     </ClCompile>
     <ClCompile Include="PlayScene_YanoHaruto.cpp">
       <Filter>ソース ファイル\work_haruto</Filter>
     </ClCompile>
-    <ClCompile Include="TitleScene_kiyosumi.cpp">
-      <Filter>ソース ファイル\work_kiyosumi</Filter>
+    <ClCompile Include="TitleCamera.cpp">
+      <Filter>ソース ファイル\work_kiyosumi\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="TitleUI.cpp">
+      <Filter>ソース ファイル\work_kiyosumi\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="UIBase.cpp">
+      <Filter>ソース ファイル\work_kiyosumi\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayUI.cpp">
+      <Filter>ソース ファイル\work_kiyosumi\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="ResultUI.cpp">
+      <Filter>ソース ファイル\work_kiyosumi\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayScene_kiyosumi.cpp">
+      <Filter>ソース ファイル\work_kiyosumi\Scene_kiyosumi</Filter>
     </ClCompile>
     <ClCompile Include="ResultScene_kiyosumi.cpp">
-      <Filter>ソース ファイル\work_kiyosumi</Filter>
+      <Filter>ソース ファイル\work_kiyosumi\Scene_kiyosumi</Filter>
     </ClCompile>
     <ClCompile Include="SceneManager_kiyosumi.cpp">
-      <Filter>ソース ファイル\work_kiyosumi</Filter>
+      <Filter>ソース ファイル\work_kiyosumi\Scene_kiyosumi</Filter>
+    </ClCompile>
+    <ClCompile Include="TitleScene_kiyosumi.cpp">
+      <Filter>ソース ファイル\work_kiyosumi\Scene_kiyosumi</Filter>
     </ClCompile>
     <ClCompile Include="main_kiyosumi.cpp">
       <Filter>ソース ファイル\work_kiyosumi</Filter>
     </ClCompile>
-    <ClCompile Include="TitleUI.cpp">
-      <Filter>ソース ファイル\work_kiyosumi</Filter>
+    <ClCompile Include="PlayCamera.cpp">
+      <Filter>ソース ファイル\work_kiyosumi\Camera</Filter>
     </ClCompile>
-    <ClCompile Include="PlayUI.cpp">
-      <Filter>ソース ファイル\work_kiyosumi</Filter>
-    </ClCompile>
-    <ClCompile Include="ResultUI.cpp">
-      <Filter>ソース ファイル\work_kiyosumi</Filter>
-    </ClCompile>
-    <ClCompile Include="UIBase.cpp">
-      <Filter>ソース ファイル\work_kiyosumi</Filter>
+    <ClCompile Include="ResultCamera.cpp">
+      <Filter>ソース ファイル\work_kiyosumi\Camera</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -87,35 +105,47 @@
     <ClInclude Include="SceneManager.h">
       <Filter>ソース ファイル\Scene</Filter>
     </ClInclude>
-    <ClInclude Include="PlayScene_kiyosumi.h">
-      <Filter>ソース ファイル\work_kiyosumi</Filter>
-    </ClInclude>
     <ClInclude Include="PlayScene_shougo.h">
       <Filter>ソース ファイル\work_syougo</Filter>
     </ClInclude>
     <ClInclude Include="PlayScene_YanoHaruto.h">
       <Filter>ソース ファイル\work_haruto</Filter>
     </ClInclude>
-    <ClInclude Include="TitleScene_kiyosumi.h">
-      <Filter>ソース ファイル\work_kiyosumi</Filter>
+    <ClInclude Include="CameraBase.h">
+      <Filter>ソース ファイル\work_kiyosumi\Camera</Filter>
     </ClInclude>
-    <ClInclude Include="ResultScene_kiyosumi.h">
-      <Filter>ソース ファイル\work_kiyosumi</Filter>
-    </ClInclude>
-    <ClInclude Include="SceneManager_kiyosumi.h">
-      <Filter>ソース ファイル\work_kiyosumi</Filter>
-    </ClInclude>
-    <ClInclude Include="TitleUI.h">
-      <Filter>ソース ファイル\work_kiyosumi</Filter>
-    </ClInclude>
-    <ClInclude Include="PlayUI.h">
-      <Filter>ソース ファイル\work_kiyosumi</Filter>
-    </ClInclude>
-    <ClInclude Include="ResultUI.h">
-      <Filter>ソース ファイル\work_kiyosumi</Filter>
+    <ClInclude Include="TitleCamera.h">
+      <Filter>ソース ファイル\work_kiyosumi\Camera</Filter>
     </ClInclude>
     <ClInclude Include="UIBase.h">
-      <Filter>ソース ファイル\work_kiyosumi</Filter>
+      <Filter>ソース ファイル\work_kiyosumi\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="TitleUI.h">
+      <Filter>ソース ファイル\work_kiyosumi\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayUI.h">
+      <Filter>ソース ファイル\work_kiyosumi\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="ResultUI.h">
+      <Filter>ソース ファイル\work_kiyosumi\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayScene_kiyosumi.h">
+      <Filter>ソース ファイル\work_kiyosumi\Scene_kiyosumi</Filter>
+    </ClInclude>
+    <ClInclude Include="ResultScene_kiyosumi.h">
+      <Filter>ソース ファイル\work_kiyosumi\Scene_kiyosumi</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneManager_kiyosumi.h">
+      <Filter>ソース ファイル\work_kiyosumi\Scene_kiyosumi</Filter>
+    </ClInclude>
+    <ClInclude Include="TitleScene_kiyosumi.h">
+      <Filter>ソース ファイル\work_kiyosumi\Scene_kiyosumi</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayCamera.h">
+      <Filter>ソース ファイル\work_kiyosumi\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="ResultCamera.h">
+      <Filter>ソース ファイル\work_kiyosumi\Camera</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
