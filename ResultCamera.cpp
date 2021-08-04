@@ -9,7 +9,7 @@
 /// ‰Šú‰»
 /// </summary>
 ResultCamera::ResultCamera()
-	: mCameraPosition(VGet(0.0f, 0.0f, -2.0f))
+	: mCameraPosition(VGet(0.0f, 0.0f, -1.0f))
 	, mCameraTarget(VGet(0.0f, 0.0f, 0.0f))
 	, mCameraUp(VGet(0.0f, 1.0f, 0.0f))
 {

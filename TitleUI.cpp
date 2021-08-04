@@ -87,6 +87,5 @@ void TitleUI::Draw()
 		SetFontSize(mStartButtonFontSize);
 		DrawString(mStartButtonBeginX + 45, mStartButtonBeginY + 30, "EnterÉLÅ[", GREEN);
 	}
-	
 }
  

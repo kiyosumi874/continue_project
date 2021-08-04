@@ -23,8 +23,8 @@ public:
     void       Load()                  override;    // 初期化
 
 private:
-    class TitleUI*         mTitleUI;    // タイトルUIクラスへのポインタメンバ変数
     class TitleCamera* mTitleCamera;    // タイトルカメラクラスへのポインタメンバ変数
+    class TitleUI*         mTitleUI;    // タイトルUIクラスへのポインタメンバ変数
     float mDeltaTime;          // デルタタイム
     bool  mInputReturnFlag;    // Enterキーの連続入力防止
     // スタートボタンのフラグ
@@ -35,5 +35,6 @@ private:
 
     // キャラ表示デバッグ用
     int mHandle;
+    float mRotate;
 };
 

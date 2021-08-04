@@ -12,12 +12,13 @@
 /// 初期化
 /// </summary>
 TitleScene_kiyosumi::TitleScene_kiyosumi()
-	: mTitleUI(nullptr)
-	, mTitleCamera(nullptr)
+	: mTitleCamera(nullptr)
+	, mTitleUI(nullptr)
 	, mDeltaTime(0.000001f)
 	, mInputReturnFlag(false)
 	, mSceneTransitionCount(0)
 	, mStartButtonFlag(false)
+	, mRotate(0.0f)
 {
 	// キャラ表示デバッグ用
 	mHandle = MV1LoadModel("data/model/player/Alicia_solid.pmx");
@@ -31,8 +32,8 @@ TitleScene_kiyosumi::TitleScene_kiyosumi()
 /// </summary>
 TitleScene_kiyosumi::~TitleScene_kiyosumi()
 {
-	delete mTitleUI;
 	delete mTitleCamera;
+	delete mTitleUI;
 	MV1DeleteModel(mHandle);
 }
 
@@ -49,6 +50,11 @@ SceneBase* TitleScene_kiyosumi::Update(float _deltaTime)
 	mDeltaTime = _deltaTime;
 	// タイトルカメラの更新
 	mTitleCamera->Update();
+
+
+	// キャラ表示デバッグ用
+	mRotate += 5.0f * mDeltaTime;
+	MV1SetRotationXYZ(mHandle, VGet(0.0f, mRotate, 0.0f));
 
 	// タイトルUIの更新
 	mTitleUI->Update(mDeltaTime);
@@ -91,11 +97,12 @@ void TitleScene_kiyosumi::Draw()
 {
 	// タイトルカメラの描画
 	mTitleCamera->Draw();
-	// タイトルUIの描画
-	mTitleUI->Draw();
 
 	// キャラ表示デバッグ用
 	MV1DrawModel(mHandle);
+
+	// タイトルUIの描画
+	mTitleUI->Draw();
 }
 
 /// <summary>
@@ -110,17 +117,8 @@ void TitleScene_kiyosumi::Sound()
 /// </summary>
 void TitleScene_kiyosumi::Load()
 {
-	mTitleUI = new TitleUI;
 	mTitleCamera = new TitleCamera;
-	mDeltaTime = 0.000001f;
-	mInputReturnFlag = false;
-	mSceneTransitionCount = 0;
-	mStartButtonFlag = false;
-
-	// キャラ表示デバッグ用
-	mHandle = MV1LoadModel("data/model/player/Alicia_solid.pmx");
-	MV1SetScale(mHandle, VGet(0.5f, 0.5f, 0.5f));
-	MV1SetPosition(mHandle, VGet(0, -5, 10));
+	mTitleUI = new TitleUI;
 
 	// タイトルカメラの初期化
 	mTitleCamera->Load();
