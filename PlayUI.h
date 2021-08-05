@@ -20,6 +20,10 @@ public:
 	void Load()                  override;    // ロード
 	void Draw()                  override;    // 描画
 
+	// GameCountFlag3のフラグのゲッター
+	const bool& GetGameCountFlag3() const { return mGameCountFlag3; }
+	// スコアのゲッター
+	const int& GetScore() const { return mScore; }
 private:
 	float mDeltaTime;    // デルタタイム
 	int   mHandle;       // ハンドル格納変数
@@ -29,6 +33,7 @@ private:
 	int   mGameCount;          // 増えると次のミニゲームに遷移する
 	bool  mGameCountFlag1;     // 増えると次のミニゲームに遷移するFlag
 	bool  mGameCountFlag2;     // 増えると次のミニゲームに遷移するFlag
+	bool  mGameCountFlag3;     // 最後のミニゲームが終わったかどうかのFlag
 
 	//------------//
 	//-CircleGame-//
@@ -69,5 +74,28 @@ private:
 	bool mPlayGaugeGame;    // ゲージゲームをしているかしていないかのFlag
 	bool mDrawGaugeGame;    // ゲージゲームを描画しているかしていないかのFlag
 
+	//--------------//
+	//-PendulumGame-//
+	//--------------//
+	int mPendulumOutX;                 // 描く円の中心座標X
+	int mPendulumOutY;                 // 描く円の中心座標Y
+	int mPendulumOutRadius;            // 描く円の半径
+	unsigned int mPendulumOutColor;    // 円の色
+	int mPendulumOutFillFlag;          // TRUE(1の意)で円の中身も塗りつぶし、FALSE(0の意)で輪郭のみ
+	int mPendulumOutLineThickness;     // 描く円の線の太さ
+
+	int mPendulumInX;                 // 描く円の中心座標X
+	int mPendulumInFx;                 // 支点X
+	int mPendulumInY;                 // 描く円の中心座標Y
+	int mPendulumInFy;                 // 支点Y
+	float mPendulumInAngle;            // 角度
+	float mPendulumInAngleSpeed;        // 角速度
+	int mPendulumLength;                // 紐の長さ
+	int mPendulumInRadius;            // 描く円の半径
+	unsigned int mPendulumInColor;    // 円の色
+	int mPendulumInFillFlag;          // TRUE(1の意)で円の中身も塗りつぶし、FALSE(0の意)で輪郭のみ
+	
+	bool mPlayPendulumGame;           // 振り子ゲームをしているかしていないかのFlag
+	bool mDrawPendulumGame;           // 振り子ゲームを描画しているかしていないかのFlag
 
 };

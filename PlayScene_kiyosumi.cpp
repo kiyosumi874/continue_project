@@ -12,6 +12,8 @@ PlayScene_kiyosumi::PlayScene_kiyosumi()
 	, mInputReturnFlag(false)
 	, mPlayCamera(nullptr)
 	, mPlayUI(nullptr)
+	, mGameCountFlag3(true)
+	, mScore(0)
 {
 }
 
@@ -40,6 +42,15 @@ SceneBase* PlayScene_kiyosumi::Update(float _deltaTime)
 
 	// プレイUIの更新
 	mPlayUI->Update(mDeltaTime);
+	mGameCountFlag3 = mPlayUI->GetGameCountFlag3();
+	mScore = mPlayUI->GetScore();
+
+	// シーン遷移条件
+	if (!mGameCountFlag3)
+	{
+		// 条件を満たしていたら次のシーンを生成してそのポインタを返す
+		return new ResultScene_kiyosumi(mScore);
+	}
 
 	//// Enterキーの連続入力防止
 	//if (!CheckHitKey(KEY_INPUT_RETURN))

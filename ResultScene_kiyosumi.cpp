@@ -7,11 +7,12 @@
 /// <summary>
 /// 初期化
 /// </summary>
-ResultScene_kiyosumi::ResultScene_kiyosumi()
+ResultScene_kiyosumi::ResultScene_kiyosumi(int _score)
 	: mDeltaTime(0.000001f)
 	, mInputReturnFlag(false)
 	, mResultCamera(nullptr)
 	, mResultUI(nullptr)
+	, mScore(_score)
 {
 }
 
@@ -39,6 +40,8 @@ SceneBase* ResultScene_kiyosumi::Update(float _deltaTime)
 	mResultCamera->Update();
 	// リザルトUIの更新
 	mResultUI->Update(mDeltaTime);
+	// リザルトUIにスコアを渡す
+	mResultUI->LoadScore(mScore);
 
 	// Enterキーの連続入力防止
 	if (!CheckHitKey(KEY_INPUT_RETURN))
@@ -69,8 +72,6 @@ void ResultScene_kiyosumi::Draw()
 	mResultCamera->Draw();
 	// リザルトUIの描画
 	mResultUI->Draw();
-	// デバッグ用
-	printfDx("今ResultScene_kiyosumi\n");
 }
 
 /// <summary>

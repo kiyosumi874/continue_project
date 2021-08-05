@@ -25,4 +25,6 @@ private:
     class PlayUI*         mPlayUI;    // プレイUIクラスへのポインタメンバ変数
     float mDeltaTime;          // デルタタイム
     bool  mInputReturnFlag;    // Enterキーの連続入力防止
+    bool  mGameCountFlag3;     // 最後のミニゲームが終わったかどうかのFlag
+    int   mScore;
 };

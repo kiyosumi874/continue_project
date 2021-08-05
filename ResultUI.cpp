@@ -1,5 +1,6 @@
 #include "DxLib.h"
 #include "ResultUI.h"
+#include "PlayUI.h"
 
 
 /// <summary>
@@ -8,6 +9,7 @@
 ResultUI::ResultUI()
 	: mHandle(0)
 	, mDeltaTime(0.000001f)
+	, mScore(0)
 {
 }
 
@@ -25,7 +27,6 @@ ResultUI::~ResultUI()
 void ResultUI::Update(float _deltaTime)
 {
 	mDeltaTime = _deltaTime;
-
 	
 }
 
@@ -41,6 +42,14 @@ void ResultUI::Load()
 /// </summary>
 void ResultUI::Draw()
 {
-	// デバッグ用
-	printfDx("今ResultUI");
+	DrawFormatString(700, 540, GetColor(0, 255, 0), "スコア：%d", mScore);
+}
+
+/// <summary>
+/// スコアをもらう関数
+/// </summary>
+/// <param name="_score">スコア</param>
+void ResultUI::LoadScore(int _score)
+{
+	mScore = _score;
 }

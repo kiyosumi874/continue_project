@@ -13,7 +13,7 @@
 class ResultScene_kiyosumi : public SceneBase
 {
 public:
-     ResultScene_kiyosumi();    // コンストラクタ
+     ResultScene_kiyosumi(int _score);    // コンストラクタ
     ~ResultScene_kiyosumi();    // デストラクタ
 
     SceneBase* Update(float _deltaTime)override;    // 更新
@@ -25,5 +25,6 @@ private:
     class ResultUI*     mResultUI;        // リザルトUIクラスへのポインタメンバ変数
     float mDeltaTime;         // デルタタイム
     bool  mInputReturnFlag;   // Enterキーの連続入力防止
+    int mScore;
 };
 
