@@ -1,6 +1,8 @@
 #include "DxLib.h"
 #include "PlayScene_kiyosumi.h"
 #include "ResultScene_kiyosumi.h"
+#include "PlayUI.h"
+#include "PlayCamera.h"
 
 /// <summary>
 /// 初期化
@@ -8,7 +10,10 @@
 PlayScene_kiyosumi::PlayScene_kiyosumi()
 	: mDeltaTime(0.000001f)
 	, mInputReturnFlag(false)
-	, mPlayUI(new PlayUI)
+	, mPlayCamera(nullptr)
+	, mPlayUI(nullptr)
+	, mGameCountFlag3(true)
+	, mScore(0)
 {
 }
 
@@ -17,6 +22,7 @@ PlayScene_kiyosumi::PlayScene_kiyosumi()
 /// </summary>
 PlayScene_kiyosumi::~PlayScene_kiyosumi()
 {
+	delete mPlayCamera;
 	delete mPlayUI;
 }
 
@@ -31,25 +37,34 @@ PlayScene_kiyosumi::~PlayScene_kiyosumi()
 SceneBase* PlayScene_kiyosumi::Update(float _deltaTime)
 {
 	mDeltaTime = _deltaTime;
+	// プレイカメラの更新
+	mPlayCamera->Update();
 
 	// プレイUIの更新
 	mPlayUI->Update(mDeltaTime);
-
-	// Enterキーの連続入力防止
-	if (!CheckHitKey(KEY_INPUT_RETURN))
-	{
-		mInputReturnFlag = true;
-	}
-
-	
+	mGameCountFlag3 = mPlayUI->GetGameCountFlag3();
+	mScore = mPlayUI->GetScore();
 
 	// シーン遷移条件
-	if (CheckHitKey(KEY_INPUT_RETURN) && mInputReturnFlag)
+	if (!mGameCountFlag3)
 	{
-		mInputReturnFlag = false;
 		// 条件を満たしていたら次のシーンを生成してそのポインタを返す
-		return new ResultScene_kiyosumi();
+		return new ResultScene_kiyosumi(mScore);
 	}
+
+	//// Enterキーの連続入力防止
+	//if (!CheckHitKey(KEY_INPUT_RETURN))
+	//{
+	//	mInputReturnFlag = true;
+	//}
+
+	//// シーン遷移条件
+	//if (CheckHitKey(KEY_INPUT_RETURN) && mInputReturnFlag)
+	//{
+	//	mInputReturnFlag = false;
+	//	// 条件を満たしていたら次のシーンを生成してそのポインタを返す
+	//	return new ResultScene_kiyosumi();
+	//}
 
 	// シーンが変更されていなかったら自分のポインタを返す
 	return this;
@@ -60,10 +75,10 @@ SceneBase* PlayScene_kiyosumi::Update(float _deltaTime)
 /// </summary>
 void PlayScene_kiyosumi::Draw()
 {
+	// プレイカメラの描画
+	mPlayCamera->Draw();
 	// プレイUIの描画
 	mPlayUI->Draw();
-	// デバッグ用
-	printfDx("今PlayScene_kiyosumi\n");
 }
 
 /// <summary>
@@ -78,6 +93,10 @@ void PlayScene_kiyosumi::Sound()
 /// </summary>
 void PlayScene_kiyosumi::Load()
 {
+	mPlayCamera = new PlayCamera;
+	mPlayUI = new PlayUI;
+	// プレイカメラの初期化
+	mPlayCamera->Load();
 	// プレイUIの初期化
 	mPlayUI->Load();
 }

@@ -20,7 +20,10 @@ public:
 	void Load()                  override;    // ロード
 	void Draw()                  override;    // 描画
 
+	void LoadScore(int _score);
+
 private:
 	float mDeltaTime;    // デルタタイム
 	int   mHandle;       // ハンドル格納変数
+	int   mScore;        // スコア
 };
