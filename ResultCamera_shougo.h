@@ -1,7 +1,7 @@
 //----------------------------------------------------------------------------------//
-// @file         PlayCamera_shougo.h
-// @brief        PlayCamera_shougoクラス
-// @note         継承元:CameraBase_shougoクラス              
+// @file         ResultCamera_shoguo.h
+// @brief        ResultCamera_shougoクラス
+// @note         継承元:CameraBaseクラス              
 // @author       井口 翔悟 (shougo iguchi, @2021)
 // @changelog
 // 2021/ 8/ 5    新規作成
@@ -10,11 +10,11 @@
 #pragma once
 #include "CameraBase_shougo.h"
 
-class PlayCamera_shougo : public CameraBase_shougo
+class ResultCamera_shougo : public CameraBase_shougo
 {
 public:
-	PlayCamera_shougo();    // コンストラクタ
-	~PlayCamera_shougo();    // デストラクタ
+	ResultCamera_shougo();    // コンストラクタ
+	~ResultCamera_shougo();    // デストラクタ
 
 	void Update()                override;    // 更新
 	void Load()                  override;    // ロード

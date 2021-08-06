@@ -91,14 +91,29 @@
     <ClCompile Include="ResultCamera.cpp">
       <Filter>ソース ファイル\work_kiyosumi\Camera</Filter>
     </ClCompile>
-    <ClCompile Include="PlayScene_shougo.cpp">
-      <Filter>ソース ファイル\work_shougo\Scene_shougo</Filter>
-    </ClCompile>
     <ClCompile Include="TitleScene_shougo.cpp">
       <Filter>ソース ファイル\work_shougo\Scene_shougo</Filter>
     </ClCompile>
     <ClCompile Include="PlayCamera_shougo.cpp">
       <Filter>ソース ファイル\work_shougo\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="main_shougo.cpp">
+      <Filter>ソース ファイル\work_shougo</Filter>
+    </ClCompile>
+    <ClCompile Include="TitleCamera_shougo.cpp">
+      <Filter>ソース ファイル\work_shougo\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayScene_shougo.cpp">
+      <Filter>ソース ファイル\work_shougo\Scene_shougo</Filter>
+    </ClCompile>
+    <ClCompile Include="ResultCamera_shougo.cpp">
+      <Filter>ソース ファイル\work_shougo\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="SceneManager_shougo.cpp">
+      <Filter>ソース ファイル\work_shougo\Scene_shougo</Filter>
+    </ClCompile>
+    <ClCompile Include="ResultScene_shougo.cpp">
+      <Filter>ソース ファイル\work_shougo\Scene_shougo</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -167,6 +182,18 @@
     </ClInclude>
     <ClInclude Include="PlayCamera_shougo.h">
       <Filter>ソース ファイル\work_shougo\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="TitleCamera_shougo.h">
+      <Filter>ソース ファイル\work_shougo\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="ResultCamera_shougo.h">
+      <Filter>ソース ファイル\work_shougo\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneManager_shougo.h">
+      <Filter>ソース ファイル\work_shougo\Scene_shougo</Filter>
+    </ClInclude>
+    <ClInclude Include="ResultScene_shougo.h">
+      <Filter>ソース ファイル\work_shougo\Scene_shougo</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

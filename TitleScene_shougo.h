@@ -23,7 +23,7 @@ public:
     void       Load()                  override;    // 初期化
 
 private:
-    class TitleCamera* mTitleCamera;    // タイトルカメラクラスへのポインタメンバ変数
+    class TitleCamera_shougo* mTitleCamera;    // タイトルカメラクラスへのポインタメンバ変数
     class TitleUI* mTitleUI;    // タイトルUIクラスへのポインタメンバ変数
     float mDeltaTime;          // デルタタイム
     bool  mInputReturnFlag;    // Enterキーの連続入力防止

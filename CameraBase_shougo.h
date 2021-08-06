@@ -1,20 +1,20 @@
 //----------------------------------------------------------------------------------//
-// @file         CameraBase.h
-// @brief        CameraBaseクラス
-// @note         CameraBaseクラス
+// @file         CameraBase_shougo.h
+// @brief        CameraBase_shougoクラス
+// @note         CameraBase_shougoクラス
 // @author       井口 翔悟  (shougo iguchi, @2021)
 // @changelog
-// 2021/ 8/ 2    新規作成
+// 2021/ 8/ 5    新規作成
 //----------------------------------------------------------------------------------//
 
 #pragma once
 
 // UIベースクラス
-class CameraBase
+class CameraBase_shougo
 {
 public:
-	CameraBase() {};    // コンストラクタ
-	virtual ~CameraBase() {};    // 仮想デストラクタ
+	CameraBase_shougo() {};    // コンストラクタ
+	virtual ~CameraBase_shougo() {};    // 仮想デストラクタ
 
 	virtual void Update() = 0;    // シーンの更新処理 (オーバーライド必須)
 	virtual void Draw() = 0;    // シーンの描画処理 (オーバーライド必須)

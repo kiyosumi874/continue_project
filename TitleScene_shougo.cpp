@@ -4,7 +4,7 @@
 #include "PlayScene_shougo.h"
 
 #include "TitleUI.h"
-#include "TitleCamera.h"
+#include "TitleCamera_shougo.h"
 
 
 
@@ -117,7 +117,7 @@ void TitleScene_shougo::Sound()
 /// </summary>
 void TitleScene_shougo::Load()
 {
-	mTitleCamera = new TitleCamera;
+	mTitleCamera = new TitleCamera_shougo;
 	mTitleUI = new TitleUI;
 
 	// タイトルカメラの初期化

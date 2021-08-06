@@ -1,6 +1,8 @@
 #include "DxLib.h"
 #include "PlayScene_shougo.h"
-#include "ResultScene.h"
+#include "ResultScene_shougo.h"
+#include "PlayUI.h"
+#include "PlayCamera_shougo.h"
 
 /// <summary>
 /// 初期化
@@ -8,6 +10,10 @@
 PlayScene_shougo::PlayScene_shougo()
 	: mDeltaTime(0.000001f)
 	, mInputReturnFlag(false)
+	, mPlayCamera(nullptr)
+	, mPlayUI(nullptr)
+	, mGameCountFlag3(true)
+	, mScore(0)
 {
 }
 
@@ -16,6 +22,8 @@ PlayScene_shougo::PlayScene_shougo()
 /// </summary>
 PlayScene_shougo::~PlayScene_shougo()
 {
+	delete mPlayCamera;
+	delete mPlayUI;
 }
 
 /// <summary>
@@ -29,23 +37,34 @@ PlayScene_shougo::~PlayScene_shougo()
 SceneBase* PlayScene_shougo::Update(float _deltaTime)
 {
 	mDeltaTime = _deltaTime;
+	// プレイカメラの更新
+	mPlayCamera->Update();
 
-	// Enterキーの連続入力防止
-	if (!CheckHitKey(KEY_INPUT_RETURN))
-	{
-		mInputReturnFlag = true;
-	}
-
-	// デバッグ用
-	printfDx("今PlayScene_shougo\n");
+	// プレイUIの更新
+	mPlayUI->Update(mDeltaTime);
+	mGameCountFlag3 = mPlayUI->GetGameCountFlag3();
+	mScore = mPlayUI->GetScore();
 
 	// シーン遷移条件
-	if (CheckHitKey(KEY_INPUT_RETURN) && mInputReturnFlag)
+	if (!mGameCountFlag3)
 	{
-		mInputReturnFlag = false;
 		// 条件を満たしていたら次のシーンを生成してそのポインタを返す
-		return new ResultScene();
+		return new ResultScene_shougo(mScore);
 	}
+
+	//// Enterキーの連続入力防止
+	//if (!CheckHitKey(KEY_INPUT_RETURN))
+	//{
+	//	mInputReturnFlag = true;
+	//}
+
+	//// シーン遷移条件
+	//if (CheckHitKey(KEY_INPUT_RETURN) && mInputReturnFlag)
+	//{
+	//	mInputReturnFlag = false;
+	//	// 条件を満たしていたら次のシーンを生成してそのポインタを返す
+	//	return new ResultScene_kiyosumi();
+	//}
 
 	// シーンが変更されていなかったら自分のポインタを返す
 	return this;
@@ -56,6 +75,10 @@ SceneBase* PlayScene_shougo::Update(float _deltaTime)
 /// </summary>
 void PlayScene_shougo::Draw()
 {
+	// プレイカメラの描画
+	mPlayCamera->Draw();
+	// プレイUIの描画
+	mPlayUI->Draw();
 }
 
 /// <summary>
@@ -70,4 +93,10 @@ void PlayScene_shougo::Sound()
 /// </summary>
 void PlayScene_shougo::Load()
 {
+	mPlayCamera = new PlayCamera_shougo;
+	mPlayUI = new PlayUI;
+	// プレイカメラの初期化
+	mPlayCamera->Load();
+	// プレイUIの初期化
+	mPlayUI->Load();
 }
