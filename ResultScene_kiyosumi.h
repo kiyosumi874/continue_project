@@ -9,12 +9,11 @@
 
 #pragma once
 #include "SceneBase.h"
-#include "ResultUI.h"
 
 class ResultScene_kiyosumi : public SceneBase
 {
 public:
-     ResultScene_kiyosumi();    // コンストラクタ
+     ResultScene_kiyosumi(int _score);    // コンストラクタ
     ~ResultScene_kiyosumi();    // デストラクタ
 
     SceneBase* Update(float _deltaTime)override;    // 更新
@@ -22,8 +21,10 @@ public:
     void       Sound()                 override;    // 音楽
     void       Load()                  override;    // 初期化
 private:
-    ResultUI* mResultUI;    // リザルトUIクラスへのポインタメンバ変数
+    class ResultCamera* mResultCamera;    // リザルトカメラクラスへのポインタメンバ変数
+    class ResultUI*     mResultUI;        // リザルトUIクラスへのポインタメンバ変数
     float mDeltaTime;         // デルタタイム
     bool  mInputReturnFlag;   // Enterキーの連続入力防止
+    int mScore;
 };
 

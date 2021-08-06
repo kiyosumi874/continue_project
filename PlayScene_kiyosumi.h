@@ -9,7 +9,6 @@
 
 #pragma once
 #include "SceneBase.h"
-#include "PlayUI.h"
 
 class PlayScene_kiyosumi : public SceneBase
 {
@@ -22,7 +21,10 @@ public:
     void       Sound()                 override;    // 音楽
     void       Load()                  override;    // 初期化
 private:
-    PlayUI* mPlayUI;    // プレイUIクラスへのポインタメンバ変数
+    class PlayCamera* mPlayCamera;    // プレイカメラクラスへのポインタメンバ変数
+    class PlayUI*         mPlayUI;    // プレイUIクラスへのポインタメンバ変数
     float mDeltaTime;          // デルタタイム
     bool  mInputReturnFlag;    // Enterキーの連続入力防止
+    bool  mGameCountFlag3;     // 最後のミニゲームが終わったかどうかのFlag
+    int   mScore;
 };
