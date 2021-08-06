@@ -152,6 +152,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="PlayCamera.cpp" />
+    <ClCompile Include="PlayCamera_shougo.cpp" />
     <ClCompile Include="ResultCamera.cpp" />
     <ClCompile Include="TitleCamera.cpp" />
     <ClCompile Include="main.cpp">
@@ -178,12 +179,15 @@
     <ClCompile Include="SceneManager_kiyosumi.cpp" />
     <ClCompile Include="TitleScene.cpp" />
     <ClCompile Include="TitleScene_kiyosumi.cpp" />
+    <ClCompile Include="TitleScene_shougo.cpp" />
     <ClCompile Include="TitleUI.cpp" />
     <ClCompile Include="UIBase.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CameraBase.h" />
+    <ClInclude Include="CameraBase_shougo.h" />
     <ClInclude Include="PlayCamera.h" />
+    <ClInclude Include="PlayCamera_shougo.h" />
     <ClInclude Include="PlayScene_kiyosumi.h" />
     <ClInclude Include="PlayScene.h" />
     <ClInclude Include="PlayScene_shougo.h">
@@ -205,6 +209,7 @@
     <ClInclude Include="TitleCamera.h" />
     <ClInclude Include="TitleScene.h" />
     <ClInclude Include="TitleScene_kiyosumi.h" />
+    <ClInclude Include="TitleScene_shougo.h" />
     <ClInclude Include="TitleUI.h" />
     <ClInclude Include="UIBase.h" />
   </ItemGroup>
