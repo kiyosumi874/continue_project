@@ -1,13 +1,18 @@
 #include "DxLib.h"
 #include "ResultScene_kiyosumi.h"
 #include "TitleScene_kiyosumi.h"
+#include "ResultCamera.h"
+#include "ResultUI.h"
 
 /// <summary>
 /// 初期化
 /// </summary>
-ResultScene_kiyosumi::ResultScene_kiyosumi()
+ResultScene_kiyosumi::ResultScene_kiyosumi(int _score)
 	: mDeltaTime(0.000001f)
 	, mInputReturnFlag(false)
+	, mResultCamera(nullptr)
+	, mResultUI(nullptr)
+	, mScore(_score)
 {
 }
 
@@ -16,6 +21,8 @@ ResultScene_kiyosumi::ResultScene_kiyosumi()
 /// </summary>
 ResultScene_kiyosumi::~ResultScene_kiyosumi()
 {
+	delete mResultCamera;
+	delete mResultUI;
 }
 
 /// <summary>
@@ -29,6 +36,12 @@ ResultScene_kiyosumi::~ResultScene_kiyosumi()
 SceneBase* ResultScene_kiyosumi::Update(float _deltaTime)
 {
 	mDeltaTime = _deltaTime;
+	// リザルトカメラの更新
+	mResultCamera->Update();
+	// リザルトUIの更新
+	mResultUI->Update(mDeltaTime);
+	// リザルトUIにスコアを渡す
+	mResultUI->LoadScore(mScore);
 
 	// Enterキーの連続入力防止
 	if (!CheckHitKey(KEY_INPUT_RETURN))
@@ -36,8 +49,7 @@ SceneBase* ResultScene_kiyosumi::Update(float _deltaTime)
 		mInputReturnFlag = true;
 	}
 
-	// デバッグ用
-	printfDx("今ResultScene_kiyosumi\n");
+	
 
 	// シーン遷移条件
 	if (CheckHitKey(KEY_INPUT_RETURN) && mInputReturnFlag)
@@ -56,6 +68,10 @@ SceneBase* ResultScene_kiyosumi::Update(float _deltaTime)
 /// </summary>
 void ResultScene_kiyosumi::Draw()
 {
+	// リザルトカメラの描画
+	mResultCamera->Draw();
+	// リザルトUIの描画
+	mResultUI->Draw();
 }
 
 /// <summary>
@@ -70,4 +86,11 @@ void ResultScene_kiyosumi::Sound()
 /// </summary>
 void ResultScene_kiyosumi::Load()
 {
+	mResultCamera = new ResultCamera;
+	mResultUI = new ResultUI;
+
+	// リザルトカメラの初期化
+	mResultCamera->Load();
+	// リザルトUIの初期化
+	mResultUI->Load();
 }

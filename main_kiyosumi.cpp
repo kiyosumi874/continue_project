@@ -6,6 +6,8 @@
 #include "PlayScene_kiyosumi.h"
 #include "ResultScene_kiyosumi.h"
 
+
+
 // SetGraphModeのパラメータ
 #define WINDOW_SCREEN_WIDTH  1920
 #define WINDOW_SCREEN_HEIGHT 1080
@@ -37,9 +39,11 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 
 	// シーンマネージャークラスのインスタンスを生成
 	SceneManager_kiyosumi* scene = new SceneManager_kiyosumi;
+	
 
 	// タイトルシーンをセット
 	scene->SetScene(new TitleScene_kiyosumi);
+	
 
 	deltaTime = 0.000001f;
 

@@ -4,7 +4,7 @@
 // @note         継承元:SceneBaseクラス              
 // @author       椎原 清澄 (Kiyosumi Shiihara, @2021)
 // @changelog
-// 2021/ 7/29    新規作成
+// 2021/ 7/31    新規作成
 //----------------------------------------------------------------------------------//
 
 #pragma once
@@ -13,7 +13,7 @@
 class ResultScene_kiyosumi : public SceneBase
 {
 public:
-    ResultScene_kiyosumi();    // コンストラクタ
+     ResultScene_kiyosumi(int _score);    // コンストラクタ
     ~ResultScene_kiyosumi();    // デストラクタ
 
     SceneBase* Update(float _deltaTime)override;    // 更新
@@ -21,7 +21,10 @@ public:
     void       Sound()                 override;    // 音楽
     void       Load()                  override;    // 初期化
 private:
+    class ResultCamera* mResultCamera;    // リザルトカメラクラスへのポインタメンバ変数
+    class ResultUI*     mResultUI;        // リザルトUIクラスへのポインタメンバ変数
     float mDeltaTime;         // デルタタイム
     bool  mInputReturnFlag;   // Enterキーの連続入力防止
+    int mScore;
 };
 
