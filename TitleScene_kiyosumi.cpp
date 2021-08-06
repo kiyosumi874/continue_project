@@ -1,4 +1,5 @@
 #include "DxLib.h"
+#include <math.h>
 
 #include "TitleScene_kiyosumi.h"
 #include "PlayScene_kiyosumi.h"
@@ -18,13 +19,16 @@ TitleScene_kiyosumi::TitleScene_kiyosumi()
 	, mInputReturnFlag(false)
 	, mSceneTransitionCount(0)
 	, mStartButtonFlag(false)
-	, mRotate(0.0f)
 {
 	// キャラ表示デバッグ用
-	mHandle = MV1LoadModel("data/model/player/Alicia_solid.pmx");
+	mHandle = MV1LoadModel("data/model/player4/かれん.pmx");
+	mAttachIndex = MV1AttachAnim(mHandle, 0, -1, FALSE);
+	mTotalTime = MV1GetAttachAnimTotalTime(mHandle, mAttachIndex);
+	mPlayTime = 0.0f; 
 	MV1SetScale(mHandle, VGet(0.5f, 0.5f, 0.5f));
-	MV1SetPosition(mHandle, VGet(0, -5, 10));
-
+	MV1SetPosition(mHandle, VGet(0, -7.0, 10));
+	x = 0.0f;
+	z = 0.0f;
 }
 
 /// <summary>
@@ -35,6 +39,7 @@ TitleScene_kiyosumi::~TitleScene_kiyosumi()
 	delete mTitleCamera;
 	delete mTitleUI;
 	MV1DeleteModel(mHandle);
+	MV1DetachAnim(mHandle, mAttachIndex);
 }
 
 /// <summary>
@@ -48,13 +53,22 @@ TitleScene_kiyosumi::~TitleScene_kiyosumi()
 SceneBase* TitleScene_kiyosumi::Update(float _deltaTime)
 {
 	mDeltaTime = _deltaTime;
+	// キャラ表示デバッグ用
+	mPlayTime += 50.0f * mDeltaTime;
+	// 再生時間がアニメーションの総再生時間に達したら再生時間を０に戻す
+	if (mPlayTime >= mTotalTime)
+	{
+		mPlayTime = 0.0f;
+	}
+	// 再生時間をセットする
+	MV1SetAttachAnimTime(mHandle, mAttachIndex, mPlayTime);
+	x += 150.0f * mDeltaTime;
+	z += 150.0f * mDeltaTime;
+	MV1SetPosition(mHandle, VGet(0.0f+5*sin(x*DX_PI_F/180.0f), -7.0f, 10.0f + 5*cos(z * DX_PI_F / 180.0f)));
+
 	// タイトルカメラの更新
 	mTitleCamera->Update();
 
-
-	// キャラ表示デバッグ用
-	mRotate += 5.0f * mDeltaTime;
-	MV1SetRotationXYZ(mHandle, VGet(0.0f, mRotate, 0.0f));
 
 	// タイトルUIの更新
 	mTitleUI->Update(mDeltaTime);
