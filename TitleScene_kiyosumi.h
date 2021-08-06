@@ -36,5 +36,9 @@ private:
     // キャラ表示デバッグ用
     int mHandle;
     float mRotate;
+    int mAttachIndex;
+    float mTotalTime;
+    float mPlayTime;
+    float x, z;
 };
 

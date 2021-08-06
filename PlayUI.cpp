@@ -106,6 +106,7 @@ void PlayUI::Update(float _deltaTime)
 			{
 				mScore += 200;
 				mCircleOutRadius = 30;
+				mCircleInColor = GetColor(0, 255, 0);
 			}
 			else if (mCircleOutRadius <= 120)
 			{
@@ -133,10 +134,11 @@ void PlayUI::Update(float _deltaTime)
 
 		if (CheckHitKey(KEY_INPUT_RETURN) && mInputReturnFlag)
 		{
-			if (mGaugeInBeginY <= 400)
+			if ((mGaugeInBeginY <= 370) || (710 <= mGaugeInBeginY && mGaugeInBeginY <= 720))
 			{
 				mScore += 200;
 				mGaugeInBeginY = 360;
+				mGaugeInColor = GetColor(0, 255, 0);
 			}
 			else if (mGaugeInBeginY <= 560)
 			{
@@ -199,13 +201,14 @@ void PlayUI::Update(float _deltaTime)
 
 		if (CheckHitKey(KEY_INPUT_RETURN) && mInputReturnFlag)
 		{
-			if (950 <= mPendulumInX && mPendulumInX <= 970)
+			if (940 <= mPendulumInX && mPendulumInX <= 980)
 			{
 				mPendulumInX = 960;
 				mPendulumInY = 700;
 				mScore += 200;
+				mPendulumInColor = GetColor(0, 255, 0);
 			}
-			else if (820 <= mPendulumInX && mPendulumInX < 950 || 970 < mPendulumInX && mPendulumInX <= 1100)
+			else if (820 <= mPendulumInX && mPendulumInX < 940 || 980 < mPendulumInX && mPendulumInX <= 1100)
 			{
 				mScore += 100;
 			}
