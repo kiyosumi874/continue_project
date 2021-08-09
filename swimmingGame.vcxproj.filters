@@ -32,6 +32,9 @@
     <Filter Include="ソース ファイル\work_shougo\Scene_shougo">
       <UniqueIdentifier>{5c2e7aa5-7f9a-40a4-be0b-d9f9abda87e0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\work_kiyosumi\Sound">
+      <UniqueIdentifier>{32c1396e-bc62-47f3-9d2a-132f90534556}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -100,6 +103,15 @@
     <ClCompile Include="PlayCamera_shougo.cpp">
       <Filter>ソース ファイル\work_shougo\Camera</Filter>
     </ClCompile>
+    <ClCompile Include="PlaySound.cpp">
+      <Filter>ソース ファイル\work_kiyosumi\Sound</Filter>
+    </ClCompile>
+    <ClCompile Include="ResultSound.cpp">
+      <Filter>ソース ファイル\work_kiyosumi\Sound</Filter>
+    </ClCompile>
+    <ClCompile Include="TitleSound.cpp">
+      <Filter>ソース ファイル\work_kiyosumi\Sound</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SceneBase.h">
@@ -167,6 +179,15 @@
     </ClInclude>
     <ClInclude Include="PlayCamera_shougo.h">
       <Filter>ソース ファイル\work_shougo\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="PlaySound.h">
+      <Filter>ソース ファイル\work_kiyosumi\Sound</Filter>
+    </ClInclude>
+    <ClInclude Include="ResultSound.h">
+      <Filter>ソース ファイル\work_kiyosumi\Sound</Filter>
+    </ClInclude>
+    <ClInclude Include="TitleSound.h">
+      <Filter>ソース ファイル\work_kiyosumi\Sound</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
