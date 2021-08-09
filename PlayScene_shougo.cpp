@@ -3,6 +3,8 @@
 #include "ResultScene_shougo.h"
 #include "PlayUI.h"
 #include "PlayCamera_shougo.h"
+#include "Object_shougo.h"
+#include "Player_shougo.h"
 
 /// <summary>
 /// 初期化
@@ -12,6 +14,8 @@ PlayScene_shougo::PlayScene_shougo()
 	, mInputReturnFlag(false)
 	, mPlayCamera(nullptr)
 	, mPlayUI(nullptr)
+	, mObject(nullptr)
+	, mPlayer(nullptr)
 	, mGameCountFlag3(true)
 	, mScore(0)
 {
@@ -24,6 +28,8 @@ PlayScene_shougo::~PlayScene_shougo()
 {
 	delete mPlayCamera;
 	delete mPlayUI;
+	delete mObject;
+	delete mPlayer;
 }
 
 /// <summary>
@@ -44,6 +50,9 @@ SceneBase* PlayScene_shougo::Update(float _deltaTime)
 	mPlayUI->Update(mDeltaTime);
 	mGameCountFlag3 = mPlayUI->GetGameCountFlag3();
 	mScore = mPlayUI->GetScore();
+
+	// プレイヤーの更新
+	mPlayer->Update(mDeltaTime);
 
 	// シーン遷移条件
 	if (!mGameCountFlag3)
@@ -77,8 +86,13 @@ void PlayScene_shougo::Draw()
 {
 	// プレイカメラの描画
 	mPlayCamera->Draw();
+	// プレイヤーの描画
+	mPlayer->Draw();
+	// ステージの描画
+	mObject->Draw();
 	// プレイUIの描画
 	mPlayUI->Draw();
+	
 }
 
 /// <summary>
@@ -95,6 +109,8 @@ void PlayScene_shougo::Load()
 {
 	mPlayCamera = new PlayCamera_shougo;
 	mPlayUI = new PlayUI;
+	mObject = new Object_shougo;
+	mPlayer = new Player_shougo;
 	// プレイカメラの初期化
 	mPlayCamera->Load();
 	// プレイUIの初期化

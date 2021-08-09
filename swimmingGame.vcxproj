@@ -152,8 +152,10 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="main_shougo.cpp" />
+    <ClCompile Include="Object_shougo.cpp" />
     <ClCompile Include="PlayCamera.cpp" />
     <ClCompile Include="PlayCamera_shougo.cpp" />
+    <ClCompile Include="Player_shougo.cpp" />
     <ClCompile Include="ResultCamera.cpp" />
     <ClCompile Include="ResultCamera_shougo.cpp" />
     <ClCompile Include="ResultScene_shougo.cpp" />
@@ -196,8 +198,10 @@
   <ItemGroup>
     <ClInclude Include="CameraBase.h" />
     <ClInclude Include="CameraBase_shougo.h" />
+    <ClInclude Include="Object_shougo.h" />
     <ClInclude Include="PlayCamera.h" />
     <ClInclude Include="PlayCamera_shougo.h" />
+    <ClInclude Include="Player_shougo.h" />
     <ClInclude Include="PlayScene_kiyosumi.h" />
     <ClInclude Include="PlayScene.h" />
     <ClInclude Include="PlayScene_shougo.h">
