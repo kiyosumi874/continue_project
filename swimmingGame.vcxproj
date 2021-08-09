@@ -151,24 +151,17 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="main_shougo.cpp" />
     <ClCompile Include="PlayCamera.cpp" />
     <ClCompile Include="PlayCamera_shougo.cpp" />
+    <ClCompile Include="PlaySound.cpp" />
     <ClCompile Include="ResultCamera.cpp" />
-    <ClCompile Include="ResultCamera_shougo.cpp" />
-    <ClCompile Include="ResultScene_shougo.cpp" />
-    <ClCompile Include="SceneManager_shougo.cpp" />
+    <ClCompile Include="ResultSound.cpp" />
     <ClCompile Include="TitleCamera.cpp" />
     <ClCompile Include="main.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="main_kiyosumi.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </ClCompile>
+    <ClCompile Include="main_kiyosumi.cpp" />
     <ClCompile Include="PlayScene.cpp" />
     <ClCompile Include="PlayScene_kiyosumi.cpp" />
     <ClCompile Include="PlayScene_shougo.cpp">
@@ -189,9 +182,9 @@
     <ClCompile Include="TitleScene.cpp" />
     <ClCompile Include="TitleScene_kiyosumi.cpp" />
     <ClCompile Include="TitleScene_shougo.cpp" />
+    <ClCompile Include="TitleSound.cpp" />
     <ClCompile Include="TitleUI.cpp" />
     <ClCompile Include="UIBase.cpp" />
-    <ClCompile Include="TitleCamera_shougo.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CameraBase.h" />
@@ -208,22 +201,21 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClInclude>
+    <ClInclude Include="PlaySound.h" />
     <ClInclude Include="PlayUI.h" />
     <ClInclude Include="ResultCamera.h" />
-    <ClInclude Include="ResultCamera_shougo.h" />
     <ClInclude Include="ResultScene.h" />
     <ClInclude Include="ResultScene_kiyosumi.h" />
-    <ClInclude Include="ResultScene_shougo.h" />
+    <ClInclude Include="ResultSound.h" />
     <ClInclude Include="ResultUI.h" />
     <ClInclude Include="SceneBase.h" />
     <ClInclude Include="SceneManager.h" />
     <ClInclude Include="SceneManager_kiyosumi.h" />
-    <ClInclude Include="SceneManager_shougo.h" />
     <ClInclude Include="TitleCamera.h" />
-    <ClInclude Include="TitleCamera_shougo.h" />
     <ClInclude Include="TitleScene.h" />
     <ClInclude Include="TitleScene_kiyosumi.h" />
     <ClInclude Include="TitleScene_shougo.h" />
+    <ClInclude Include="TitleSound.h" />
     <ClInclude Include="TitleUI.h" />
     <ClInclude Include="UIBase.h" />
   </ItemGroup>

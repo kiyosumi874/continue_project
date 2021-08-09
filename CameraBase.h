@@ -17,6 +17,6 @@ public:
 	virtual ~CameraBase() {};    // 仮想デストラクタ
 
 	virtual void Update() = 0;    // シーンの更新処理 (オーバーライド必須)
-	virtual void Draw() = 0;    // シーンの描画処理 (オーバーライド必須)
-	virtual void Load() = 0;    // 初期化 (オーバーライド必須)
+	virtual void Draw()   = 0;    // シーンの描画処理 (オーバーライド必須)
+	virtual void Load()   = 0;    // 初期化 (オーバーライド必須)
 };
