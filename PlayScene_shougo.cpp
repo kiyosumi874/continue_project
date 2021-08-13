@@ -43,8 +43,6 @@ PlayScene_shougo::~PlayScene_shougo()
 SceneBase* PlayScene_shougo::Update(float _deltaTime)
 {
 	mDeltaTime = _deltaTime;
-	// プレイカメラの更新
-	mPlayCamera->Update();
 
 	// プレイUIの更新
 	mPlayUI->Update(mDeltaTime);
@@ -53,6 +51,11 @@ SceneBase* PlayScene_shougo::Update(float _deltaTime)
 
 	// プレイヤーの更新
 	mPlayer->Update(mDeltaTime);
+
+	mPlayCamera->SetTargetPosition(mPlayer->PlayerGetPosition());
+
+	// プレイカメラの更新
+	mPlayCamera->Update();
 
 	// シーン遷移条件
 	if (!mGameCountFlag3)

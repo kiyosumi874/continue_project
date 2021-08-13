@@ -20,9 +20,10 @@ public:
 	void Load()                  override;    // ロード
 	void Draw()                  override;    // 描画
 
+	void SetTargetPosition(const VECTOR& _targetPos) { mCameraTarget = _targetPos; }
+
 private:
 	VECTOR mCameraPosition;    // カメラの位置
 	VECTOR mCameraTarget;      // カメラの注視点( 見ている座標 )
 	VECTOR mCameraUp;          // カメラの上方向
-
 };

@@ -7,13 +7,17 @@
 /// 初期化
 /// </summary>
 Player_shougo::Player_shougo()
-	: mDeltaTime(0.000001f)
+	: mPlayerPos(VGet(0,-10,50))
+	, mDeltaTime(0.000001f)
 	, mModelHandle(MV1LoadModel("data/model/swim/player.pmx"))
-	, mAttachIndex(MV1AttachAnim(mModelHandle,0,-1,FALSE))
-	, mTotalTime(MV1GetAttachAnimTotalTime(mModelHandle,mAttachIndex))
+	, mAttachIndex(NULL)
+	, mTotalTime(NULL) 
 	, mPlayTime(0.0f)
+	, mJumpFlag(false)
 {
-	MV1SetPosition(mModelHandle, VGet(0, -10, 20));
+	MV1SetPosition(mModelHandle, mPlayerPos);
+	//MV1AttachAnim(mModelHandle,0,-1,FALSE)
+	//MV1GetAttachAnimTotalTime(mModelHandle,mAttachIndex)
 }
 
 /// <summary>
@@ -22,6 +26,7 @@ Player_shougo::Player_shougo()
 Player_shougo::~Player_shougo()
 {
 	MV1DeleteModel(mModelHandle);
+	MV1DetachAnim(mModelHandle, mAttachIndex);
 }
 
 /// <summary>
@@ -32,15 +37,29 @@ void Player_shougo::Update(float _deltaTime)
 {
 	mDeltaTime = _deltaTime;
 
-	mPlayTime += 1.0f;
+	//mPlayTime += 0.5f;
+	mPlayerPos.z -= 0.1;
+
+	if (mPlayerPos.z < 30 && mJumpFlag == false)
+	{
+		mJumpFlag = true;
+		mPlayerPos.y += 5;
+	}
+
+	if (mJumpFlag == true) //地面にめり込まない処理
+	{
+		mPlayerPos.y -= 0.05;		
+	}
+
 	// 再生時間がアニメーションの総再生時間に達したら再生時間を0に戻す
 	if (mPlayTime >= mTotalTime)
 	{
 		mPlayTime = 0.0f;
 	}
+
 	// 再生時間をセットする
-	MV1SetAttachAnimTime(mModelHandle, mAttachIndex, mPlayTime);
-	MV1SetPosition(mModelHandle, VGet(0, -10, 20));
+	//MV1SetAttachAnimTime(mModelHandle, mAttachIndex, mPlayTime);
+	MV1SetPosition(mModelHandle, mPlayerPos);
 }
 
 /// <summary>

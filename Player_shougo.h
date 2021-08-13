@@ -20,11 +20,15 @@ public:
 	void Draw()                  ;    // 描画
 	void Load()                  ;    // 初期化
 
+	const VECTOR& PlayerGetPosition() const{return mPlayerPos;}
+
 private:
 	float mDeltaTime;    // デルタタイム
 	// キャラ表示
+	VECTOR mPlayerPos;
 	int mModelHandle;
 	int mAttachIndex;
 	float mTotalTime;
 	float mPlayTime;
+	bool mJumpFlag;
 };
