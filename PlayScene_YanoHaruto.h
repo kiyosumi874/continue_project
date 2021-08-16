@@ -10,7 +10,7 @@
 
 #pragma once
 #include "SceneBase.h"
-
+#include "DxLib.h"
 class PlayScene_YanoHaruto : public SceneBase
 {
 public:
@@ -22,7 +22,10 @@ public:
     void       Sound()                 override;    // 音楽
     void       Load()                  override;    // 初期化
 private:
-    float mDeltaTime;          // デルタタイム
-    bool  mInputReturnFlag;    // Enterキーの連続入力防止
+    class PlayCamera_YanoHaruto* mPlayCamera;     //プレイカメラへのポインタ
+    class Audience*              mAudience;       //観客へのポインタ
+    class Pool*                  mPool;           //プールへのポインタ
+    float                        mDeltaTime;      // デルタタイム
+    bool                         mInputReturnFlag;// Enterキーの連続入力防止
+    VECTOR                       mTargetPos;        //プールの座標
 };
-

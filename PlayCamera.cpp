@@ -3,7 +3,7 @@
 
 // SetCameraNearFar‚Ìˆø”
 #define NEAR  1.0f
-#define FAR 150.0f
+#define FAR 200.0f
 
 /// <summary>
 /// ‰Šú‰»

@@ -1,6 +1,9 @@
 #include "DxLib.h"
+#include "Audience.h"
+#include "ResultScene_YanoHaruto.h"
 #include "PlayScene_YanoHaruto.h"
-#include "ResultScene.h"
+#include "PlayCamera_YanoHaruto.h"
+#include "Pool.h"
 
 /// <summary>
 /// 初期化
@@ -9,6 +12,7 @@ PlayScene_YanoHaruto::PlayScene_YanoHaruto()
 	: mDeltaTime(0.000001f)
 	, mInputReturnFlag(false)
 {
+	mTargetPos = VGet(0.0f, 0.0f, 0.0f);
 }
 
 /// <summary>
@@ -29,7 +33,10 @@ PlayScene_YanoHaruto::~PlayScene_YanoHaruto()
 SceneBase* PlayScene_YanoHaruto::Update(float _deltaTime)
 {
 	mDeltaTime = _deltaTime;
-
+	//プレイカメラの更新
+	mPlayCamera->Update();
+	//観客の更新
+	mAudience->Update();
 	// Enterキーの連続入力防止
 	if (!CheckHitKey(KEY_INPUT_RETURN))
 	{
@@ -44,7 +51,7 @@ SceneBase* PlayScene_YanoHaruto::Update(float _deltaTime)
 	{
 		mInputReturnFlag = false;
 		// 条件を満たしていたら次のシーンを生成してそのポインタを返す
-		return new ResultScene();
+		return new ResultScene_YanoHaruto();
 	}
 
 	// シーンが変更されていなかったら自分のポインタを返す
@@ -52,10 +59,13 @@ SceneBase* PlayScene_YanoHaruto::Update(float _deltaTime)
 }
 
 /// <summary>
-/// 描画
+/// 描画8/12追加
 /// </summary>
 void PlayScene_YanoHaruto::Draw()
 {
+	mAudience->Draw();
+	mPool->Draw();
+	mPlayCamera->Draw();
 }
 
 /// <summary>
@@ -66,8 +76,13 @@ void PlayScene_YanoHaruto::Sound()
 }
 
 /// <summary>
-/// 初期化
+/// 初期化8/12追記
 /// </summary>
 void PlayScene_YanoHaruto::Load()
-{
+{	
+	mPool = new Pool;
+	mAudience = new Audience;
+	mPlayCamera = new PlayCamera_YanoHaruto;
+	mTargetPos = mPool->mGetPoolPos();
+	mPlayCamera->mSetTargetPos(mTargetPos);
 }

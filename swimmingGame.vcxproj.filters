@@ -32,7 +32,7 @@
     <Filter Include="ソース ファイル\work_shougo\Scene_shougo">
       <UniqueIdentifier>{5c2e7aa5-7f9a-40a4-be0b-d9f9abda87e0}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ソース ファイル\work_kiyosumi\Sound">
+    <Filter Include="ソース ファイル\work_kiyosumi\UI\Sound">
       <UniqueIdentifier>{32c1396e-bc62-47f3-9d2a-132f90534556}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -104,13 +104,34 @@
       <Filter>ソース ファイル\work_shougo\Camera</Filter>
     </ClCompile>
     <ClCompile Include="PlaySound.cpp">
-      <Filter>ソース ファイル\work_kiyosumi\Sound</Filter>
+      <Filter>ソース ファイル\work_kiyosumi\UI\Sound</Filter>
     </ClCompile>
     <ClCompile Include="ResultSound.cpp">
-      <Filter>ソース ファイル\work_kiyosumi\Sound</Filter>
+      <Filter>ソース ファイル\work_kiyosumi\UI\Sound</Filter>
     </ClCompile>
     <ClCompile Include="TitleSound.cpp">
-      <Filter>ソース ファイル\work_kiyosumi\Sound</Filter>
+      <Filter>ソース ファイル\work_kiyosumi\UI\Sound</Filter>
+    </ClCompile>
+    <ClCompile Include="Audience.cpp">
+      <Filter>ソース ファイル\work_haruto</Filter>
+    </ClCompile>
+    <ClCompile Include="Pool.cpp">
+      <Filter>ソース ファイル\work_haruto</Filter>
+    </ClCompile>
+    <ClCompile Include="main_YanoHaruto.cpp">
+      <Filter>ソース ファイル\work_haruto</Filter>
+    </ClCompile>
+    <ClCompile Include="TitleScene_YanoHaruto.cpp">
+      <Filter>ソース ファイル\work_haruto</Filter>
+    </ClCompile>
+    <ClCompile Include="SceneManager_YanoHaruto.cpp">
+      <Filter>ソース ファイル\work_haruto</Filter>
+    </ClCompile>
+    <ClCompile Include="ResultScene_YanoHaruto.cpp">
+      <Filter>ソース ファイル\work_haruto</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayCamera_YanoHaruto.cpp">
+      <Filter>ソース ファイル\work_haruto</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -181,13 +202,31 @@
       <Filter>ソース ファイル\work_shougo\Camera</Filter>
     </ClInclude>
     <ClInclude Include="PlaySound.h">
-      <Filter>ソース ファイル\work_kiyosumi\Sound</Filter>
+      <Filter>ソース ファイル\work_kiyosumi\UI\Sound</Filter>
     </ClInclude>
     <ClInclude Include="ResultSound.h">
-      <Filter>ソース ファイル\work_kiyosumi\Sound</Filter>
+      <Filter>ソース ファイル\work_kiyosumi\UI\Sound</Filter>
     </ClInclude>
     <ClInclude Include="TitleSound.h">
-      <Filter>ソース ファイル\work_kiyosumi\Sound</Filter>
+      <Filter>ソース ファイル\work_kiyosumi\UI\Sound</Filter>
+    </ClInclude>
+    <ClInclude Include="Audience.h">
+      <Filter>ソース ファイル\work_haruto</Filter>
+    </ClInclude>
+    <ClInclude Include="Pool.h">
+      <Filter>ソース ファイル\work_haruto</Filter>
+    </ClInclude>
+    <ClInclude Include="TitleScene_YanoHaruto.h">
+      <Filter>ソース ファイル\work_haruto</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneManager_YanoHaruto.h">
+      <Filter>ソース ファイル\work_haruto</Filter>
+    </ClInclude>
+    <ClInclude Include="ResultScene_YanoHaruto.h">
+      <Filter>ソース ファイル\work_haruto</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayCamera_YanoHaruto.h">
+      <Filter>ソース ファイル\work_haruto</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
