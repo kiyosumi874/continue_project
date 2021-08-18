@@ -9,7 +9,7 @@
 /// ‰Šú‰»
 /// </summary>
 PlayCamera_YanoHaruto::PlayCamera_YanoHaruto()
-	: mCameraPosition(VGet(45.0f, 53.0f, -18.0f))//ŠÏ‹q(-30.0f, 15.0f, -30.0f)pool(45.0f, 53.0f, -18.0f)
+	: mCameraPosition(VGet(-30.0f, 15.0f, -30.0f))//ŠÏ‹q‘S‘Ì(-30.0f, 15.0f, -30.0f)ˆê‘Ì(-38.5f, 12.0f, -35.0f)pool(45.0f, 53.0f, -18.0f)
 	, mCameraTarget(VGet(0.0f, 0.0f, 0.0f))
 	, mCameraUp(VGet(0.0f, 1.0f, 0.0f))
 {

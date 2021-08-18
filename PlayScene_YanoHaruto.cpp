@@ -83,6 +83,6 @@ void PlayScene_YanoHaruto::Load()
 	mPool = new Pool;
 	mAudience = new Audience;
 	mPlayCamera = new PlayCamera_YanoHaruto;
-	mTargetPos = mPool->mGetPoolPos();
+	mTargetPos = mAudience->mGetAudiencePos();
 	mPlayCamera->mSetTargetPos(mTargetPos);
 }

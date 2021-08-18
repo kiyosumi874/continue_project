@@ -1,13 +1,18 @@
 #pragma once
 #include "DxLib.h"
-#define AudienceNum 5
+#define AudienceNum  8
+#define AudienceLine 3
+#define AudienceKind 5
+
 class Audience
 {
 	enum
 	{
+		Idol,      //待機
 		Excitement,//興奮
 		Quiet,     //鎮静
-		Idol       //待機
+		Normal     //通常状態
+
 	};
 public:
 	Audience();
@@ -15,25 +20,27 @@ public:
 	void Init();
 	void Update();
 	void Draw();
-	const VECTOR& mGetAudiencePos()const { return mPos; };
+	const VECTOR& mGetAudiencePos()const { return mPos[NULL][NULL]; };
 private:
-	VECTOR mPos;		      //観客の位置
-	VECTOR mRote;		      //回転
-	VECTOR mScale;           //観客の大きさ
-	float mAudienceBetween;               //観客同士の距離
-	bool mDownFlag;		                  //落下flag
-	float mDownInterval;				  //落下まで少し待つ
-	float mExcitementJump;   //興奮時の  跳ね方
-	int mGoldModelHandle;                 //金髪の　　モデル
-	float mGroundHight;                   //観客の立つ地面の高さ
-	int mHatModelHandle;                  //帽子の人　モデル
-	float mHighestJumpLine;               //最高ジャンプ高度
-	float mIdolJump;		  //待機時の  跳ね方
-	int mManModelHandle;                  //男性の　　モデル
-	float mNowState;		              //観客の状態
-	float mQuietJump;		  //鎮静時の  跳ね方
-	int mSilverModelHandle;               //銀髪の　　モデル
-	float mStartPosZ;		              //観客の初期Z位置
-	int mWomanModelHandle;                //女性の　　モデル
+	int   mAudienceModelHandle[AudienceLine][AudienceNum];		  //観客のモデルハンドル
+	VECTOR mPos[AudienceLine][AudienceNum];	                      //観客の位置
+	VECTOR mRote;		                                          //回転
+	VECTOR mScale;                                                //観客の大きさ
+	float mAudienceBetweenX;                                      //観客同士のX距離
+	float mAudienceBetweenY;                                      //観客同士のY距離
+	float mAudienceBetweenZ;                                      //観客同士のZ距離
 
+	bool  mDownFlag[AudienceLine][AudienceNum];		              //落下flag
+	float mDownInterval;		                                  //落下まで少し待つ
+	float mExcitementJump;                                        //興奮時の  跳ね方
+	float mGroundHight[AudienceLine];                             //観客の立つ地面の高さ
+	float mHighestJumpLine[AudienceLine];                         //最高ジャンプ高度
+	float mNormalJump;		                                      //待機時の  跳ね方
+	float mNowState;		                                      //観客の状態
+	float mQuietJump;		                                      //鎮静時の  跳ね方
+	int   mRand;                                                  //乱数
+	int   mSideAudienceState;				                      //隣の観客の状態
+	float mStartPosX;				                              //観客の初期X位置
+	float mStartPosY;				                              //観客の初期Y位置
+	float mStartPosZ;		                                      //観客の初期Z位置
 };

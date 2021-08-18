@@ -5,54 +5,62 @@
 /// <returns></returns>
 Audience::Audience()
 {
+	mAudienceBetweenX = 7.0f;	     //観客同士のX距離
+	mAudienceBetweenY = 1.5f;	     //観客同士のY距離
+	mAudienceBetweenZ = 5.0f;	     //観客同士のZ距離
+	mDownInterval = 0.0;             //落下まで少し待つ
+								     
+	mNowState  = Normal;	             //観客の状態
+	mStartPosX = -45.5f;             //観客の初期x位置
+	mStartPosY = 10.0f;              //観客の初期y位置
+	mStartPosZ = -17.0f;     	     //観客の初期ｚ位置
+	mSideAudienceState = mNowState;	 //隣の観客の状態
+
+	mExcitementJump = 0.2f;	         //興奮時のジャンプ速度
+	mNormalJump     = 0.03f;	     //通常のジャンプ速度
+	mQuietJump      = 0.02f;	     //しらけたジャンプ速度
+
 	//モデルの読み込み
+	for (int i = 0; i < AudienceLine; i++)
+	{	
+		mGroundHight[i] = mStartPosY + i * mAudienceBetweenY;	    //列ごとの地面の高さ
+		mHighestJumpLine[i] = mGroundHight[i] + 1.0f;	            //最高ジャンプ高度
+		for (int j = 0; j < AudienceNum; j++)
+		{
+			mRand = rand() % 5;
 
-	mGoldModelHandle = MV1LoadModel("data/model/audience/Gold.mv1");
-	mHatModelHandle = MV1LoadModel("data/model/audience/Hat.mv1");
-	mManModelHandle = MV1LoadModel("data/model/audience/Man.mv1");
-	mSilverModelHandle = MV1LoadModel("data/model/audience/Silver.mv1");
-	mWomanModelHandle = MV1LoadModel("data/model/audience/Woman.mv1");
-	// モデルデータ読み込み失敗
-	if (mGoldModelHandle == -1)
-	{
-		printf("Error::Temp::Not Found GoldModel Data\n");
+			if (mRand == 0)
+			{
+				mAudienceModelHandle[i][j] = MV1LoadModel("data/model/audience/Gold.mv1");
+			}
+			if (mRand == 1)
+			{
+				mAudienceModelHandle[i][j] = MV1LoadModel("data/model/audience/Hat.mv1");
+			}
+			if (mRand == 2)
+			{
+				mAudienceModelHandle[i][j] = MV1LoadModel("data/model/audience/Man.mv1");
+			}
+			if (mRand == 3)
+			{
+				mAudienceModelHandle[i][j] = MV1LoadModel("data/model/audience/Silver.mv1");
+			}
+			if (mRand == 4)
+			{
+				mAudienceModelHandle[i][j] = MV1LoadModel("data/model/audience/Woman.mv1");
+			}
+			// モデルデータ読み込み失敗
+			if (mAudienceModelHandle[i][j] == -1)
+			{
+				printf("Error::Temp::Not Found GoldModel Data\n");
+			}
+			
+			mPos[i][j] = VGet(mStartPosX, mGroundHight[i], mStartPosZ);  //初期位置
+			mRote = VGet(0.0f, 0.0f, 0.0f);                              //回転値
+			mScale = VGet(1.0f, 1.0f, 1.0f);                             //各台地
+			mDownFlag[i][j] = false;         	                         //落下フラグ
+		}
 	}
-	// モデルデータ読み込み失敗
-	if (mHatModelHandle == -1)
-	{
-		printf("Error::Temp::Not Found HatModel Data\n");
-	}
-	// モデルデータ読み込み失敗
-	if (mManModelHandle == -1)
-	{
-		printf("Error::Temp::Not Found ManModel Data\n");
-	}
-	// モデルデータ読み込み失敗
-	if (mWomanModelHandle == -1)
-	{
-		printf("Error::Temp::Not Found WomanModel Data\n");
-	}
-	// モデルデータ読み込み失敗
-	if (mSilverModelHandle == -1)
-	{
-		printf("Error::Temp::Not Found SilverModel Data\n");
-	}
-
-	mAudienceBetween = 5.0f;	//観客同士の距離
-	mDownFlag = false;         	//落下フラグ
-	mDownInterval = 0.0;        //落下まで少し待つ
-	mGroundHight = 10.0f;	    //地面の高さ
-	mHighestJumpLine = 12.0f;	//最高ジャンプ高度
-	mNowState = Idol;	        //観客の状態
-	mStartPosZ = -35.0f;     	//観客の初期ｚ位置
-
-	mPos = VGet(-45.5f, 12.0f, -35.0f);  //初期位置
-	mRote = VGet(0.0f, 0.0f, 0.0f);      //回転値
-	mScale = VGet(1.0f, 1.0f, 1.0f);     //各台地
-
-	mExcitementJump = 0.2f;	//興奮時のジャンプ速度
-	mIdolJump = 0.05f;	    //待機時のジャンプ速度
-	mQuietJump = 0.02f;	    //しらけたジャンプ速度
 }
 /// <summary>
 /// モデルの削除
@@ -60,130 +68,157 @@ Audience::Audience()
 /// <returns></returns>
 Audience::~Audience()
 {
-	MV1DeleteModel(mGoldModelHandle);
-	MV1DeleteModel(mHatModelHandle);
-	MV1DeleteModel(mManModelHandle);
-	MV1DeleteModel(mSilverModelHandle);
-	MV1DeleteModel(mWomanModelHandle);
+	for (int i = 0; i < AudienceLine; i++)
+	{
+		for (int j = 0; j < AudienceNum; j++)
+		{
+			MV1DeleteModel(mAudienceModelHandle[i][j]);
+		}
+	}
 }
 /// <summary>
 /// メンバ変数の初期化
 /// </summary>
 void Audience::Init()
 {
-	mNowState = Idol;
+	mNowState = Normal;
 }
 /// <summary>
 /// 観客の動き
 /// </summary>
 void Audience::Update()
 {
-	//待機状態なら
-	if (mNowState == Idol)
+	for (int i = 0; i < AudienceLine; i++)
 	{
-		if (mDownFlag)
+		for (int j = 0; j < AudienceNum; j++)
 		{
-			mPos.y -= mIdolJump;
-		}
-		else
-		{
-			mPos.y += mIdolJump;
-		}
-		//地面についたなら
-		if (mGroundHight > mPos.y)
-		{
-			mDownFlag = false;
-			mNowState = Excitement;
-		}
-		//最高ジャンプ高度より上なら
-		if (mHighestJumpLine < mPos.y)
-		{
-			mDownFlag = true;
-		}
-	}
-	//興奮状態なら
-	if (mNowState == Excitement)
-	{
-		if (mDownFlag)
-		{
-			mPos.y -= mExcitementJump;
-		}
-		else
-		{
-			mPos.y += mExcitementJump;
-		}
-		//最高ジャンプ高度より上なら
-		if (mHighestJumpLine < mPos.y)
-		{
-			
-			mDownFlag = true;
-		}
-		//地面についたなら
-		if (mPos.y < mGroundHight)
-		{
-			mDownFlag = false;
-			mNowState = Quiet;
-		}
-	}
-	//しらけてるなら
-	if (mNowState == Quiet)
-	{
-		if (mDownFlag)
-		{
-			mPos.y -= mQuietJump;
-		}
-		else
-		{
-			mPos.y += mQuietJump;
-		}
-		//最高ジャンプ高度より上なら
-		if (mHighestJumpLine < mPos.y)
-		{
-			mDownFlag = true;
-		}
-		//地面についたなら
-		if (mPos.y < mGroundHight)
-		{
-			mDownFlag = false;
-			mNowState = Idol;
-		}
-	}
+			if (mSideAudienceState == Idol)
+			{
+				mNowState = Normal;
+			}
+			else if (!mSideAudienceState == Idol)
+			{
+				mNowState = Idol;
+			}
+			//通常状態なら
+			if (mNowState == Normal)
+			{
+				if (mDownFlag[i][j])
+				{
+					mPos[i][j].y -= mNormalJump;
+				}
+				else
+				{
+					mPos[i][j].y += mNormalJump;
+				}
+				//地面についたなら
+				if (mGroundHight[i] > mPos[i][j].y)
+				{
+					mDownFlag[i][j] = false;
+					//隣の観客の状態が待機なら
+					if (mSideAudienceState == Idol)
+					{
+						//この観客の状態を待機にする
+						mNowState = Idol;
+					}
+				}
+				//最高ジャンプ高度より上なら
+				if (mHighestJumpLine[i] < mPos[i][j].y)
+				{
+					mDownFlag[i][j] = true;
+				}
+			}
+			//興奮状態なら
+			if (mNowState == Excitement)
+			{
+				if (mDownFlag[i][j])
+				{
+					mPos[i][j].y -= mExcitementJump;
+				}
+				else
+				{
+					mPos[i][j].y += mExcitementJump;
+				}
+				//最高ジャンプ高度より上なら
+				if (mHighestJumpLine[i] < mPos[i][j].y)
+				{
+					mDownFlag[i][j] = true;
+				}
+				//地面についたなら
+				if (mGroundHight[i] < mPos[i][j].y)
+				{
+					mDownFlag[i][j] = false;
+
+					//隣の観客の状態が待機なら
+					if (mSideAudienceState == Idol)
+					{
+						//この観客の状態を待機にする
+						mNowState = Idol;
+					}
+				}
+			}
+			//しらけてるなら
+			if (mNowState == Quiet)
+			{
+				if (mDownFlag[i][j])
+				{
+					mPos[i][j].y -= mQuietJump;
+				}
+				else
+				{
+					mPos[i][j].y += mQuietJump;
+				}
+				//最高ジャンプ高度より上なら
+				if (mHighestJumpLine[i] < mPos[i][j].y)
+				{
+					mDownFlag[i][j] = true;
+				}
+				//地面についたなら
+				if (mGroundHight[i] < mPos[i][j].y)
+				{
+					mDownFlag[i][j] = false;
+
+					//隣の観客の状態が待機なら
+					if (mSideAudienceState == Idol)
+					{
+						//この観客の状態を待機にする
+						mNowState = Idol;
+					}
+				}
+			}
+			//この観客の状態を次の観客に渡す
+			mSideAudienceState = mNowState;
+		}//jが生きているのはここまで
+
+	}//iが生きているのはここまで
 }
 /// <summary>
 /// 観客の描画
 /// </summary>
 void Audience::Draw()
 {
-	mPos.z = mStartPosZ;
-	//金髪観客のセット
-	MV1SetPosition(mGoldModelHandle, mPos);
-	MV1SetScale(mGoldModelHandle, mScale);
-	MV1SetRotationXYZ(mGoldModelHandle, mRote);
-	mPos.z -= mAudienceBetween;				  //観客の位置調整
-	//帽子観客のセット
-	MV1SetPosition(mHatModelHandle, mPos);
-	MV1SetScale(mHatModelHandle, mScale);
-	MV1SetRotationXYZ(mHatModelHandle, mRote);
-	mPos.z -= mAudienceBetween;				  //観客の位置調整
-	//男性観客のセット
-	MV1SetPosition(mManModelHandle, mPos);
-	MV1SetScale(mHatModelHandle, mScale);
-	MV1SetRotationXYZ(mManModelHandle, mRote);
-	mPos.z -= mAudienceBetween;				  //観客の位置調整
-	//女性観客のセット
-	MV1SetPosition(mWomanModelHandle, mPos);
-	MV1SetScale(mWomanModelHandle, mScale);
-	MV1SetRotationXYZ(mWomanModelHandle, mRote);
-	mPos.z -= mAudienceBetween;				  //観客の位置調整
-	//銀髪観客のセット
-	MV1SetPosition(mSilverModelHandle, mPos);
-	MV1SetScale(mSilverModelHandle, mScale);
-	MV1SetRotationXYZ(mSilverModelHandle, mRote);
 	
-	//観客の描画
-	MV1DrawModel(mGoldModelHandle);			  
-	MV1DrawModel(mHatModelHandle);	
-	MV1DrawModel(mManModelHandle);	
-	MV1DrawModel(mWomanModelHandle);
-	MV1DrawModel(mSilverModelHandle);
+	//観客の位置指定
+	for (int i = 0; i < AudienceLine; i++)
+	{
+		for (int j = 0; j < AudienceNum; j++)
+		{
+			mPos[i][j].x = mStartPosX - mAudienceBetweenX * i;
+			mPos[i][j].z = mStartPosZ - mAudienceBetweenZ * j;
+			mPos[i][j].z  -= mAudienceBetweenZ * i;
+		}
+	}
+	for (int i = 0; i < AudienceLine; i++)
+	{
+		for (int j = 0; j < AudienceNum; j++)
+		{
+			//観客のセット
+			MV1SetPosition(mAudienceModelHandle[i][j], mPos[i][j]);
+			MV1SetScale(mAudienceModelHandle[i][j], mScale);
+			MV1SetRotationXYZ(mAudienceModelHandle[i][j], mRote);
+
+			//観客の描画
+			MV1DrawModel(mAudienceModelHandle[i][j]);
+		}
+	}
 }
