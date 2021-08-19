@@ -103,13 +103,10 @@
     <ClCompile Include="PlayCamera_shougo.cpp">
       <Filter>ソース ファイル\work_shougo\Camera</Filter>
     </ClCompile>
-    <ClCompile Include="PlaySound.cpp">
+    <ClCompile Include="SE.cpp">
       <Filter>ソース ファイル\work_kiyosumi\Sound</Filter>
     </ClCompile>
-    <ClCompile Include="ResultSound.cpp">
-      <Filter>ソース ファイル\work_kiyosumi\Sound</Filter>
-    </ClCompile>
-    <ClCompile Include="TitleSound.cpp">
+    <ClCompile Include="BGM.cpp">
       <Filter>ソース ファイル\work_kiyosumi\Sound</Filter>
     </ClCompile>
   </ItemGroup>
@@ -180,13 +177,10 @@
     <ClInclude Include="PlayCamera_shougo.h">
       <Filter>ソース ファイル\work_shougo\Camera</Filter>
     </ClInclude>
-    <ClInclude Include="PlaySound.h">
+    <ClInclude Include="SE.h">
       <Filter>ソース ファイル\work_kiyosumi\Sound</Filter>
     </ClInclude>
-    <ClInclude Include="ResultSound.h">
-      <Filter>ソース ファイル\work_kiyosumi\Sound</Filter>
-    </ClInclude>
-    <ClInclude Include="TitleSound.h">
+    <ClInclude Include="BGM.h">
       <Filter>ソース ファイル\work_kiyosumi\Sound</Filter>
     </ClInclude>
   </ItemGroup>

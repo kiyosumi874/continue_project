@@ -25,7 +25,9 @@ public:
 private:
     class TitleCamera* mTitleCamera;    // タイトルカメラクラスへのポインタメンバ変数
     class TitleUI*         mTitleUI;    // タイトルUIクラスへのポインタメンバ変数
+    class BGM*                 mBGM;
     float mDeltaTime;          // デルタタイム
+    bool mBGMFlag;
     bool  mInputReturnFlag;    // Enterキーの連続入力防止
     // スタートボタンのフラグ
     bool mStartButtonFlag;
@@ -35,10 +37,13 @@ private:
 
     // キャラ表示デバッグ用
     int mHandle;
-    float mRotate;
     int mAttachIndex;
     float mTotalTime;
     float mPlayTime;
     float x, z;
+
+    int mMoveSceneHandle;
+    float mAlphaPal;
+    bool mAlphaPalFlag;
 };
 

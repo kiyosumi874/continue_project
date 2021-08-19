@@ -26,5 +26,10 @@ private:
     float mDeltaTime;         // デルタタイム
     bool  mInputReturnFlag;   // Enterキーの連続入力防止
     int mScore;
+
+    int mMoveSceneHandle;
+    float mAlphaPal;
+    bool mAlphaPalFlag;
+    bool mCheckHitFlag;
 };
 

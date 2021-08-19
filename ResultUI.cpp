@@ -11,6 +11,7 @@ ResultUI::ResultUI()
 	, mDeltaTime(0.000001f)
 	, mScore(0)
 {
+	mFontHandle = CreateFontToHandle("data/Fonts/meiryob.tcc", 170 /** 2 / 3*/, -1, DX_FONTTYPE_ANTIALIASING_4X4, -1, 5, FALSE);
 }
 
 /// <summary>
@@ -18,6 +19,7 @@ ResultUI::ResultUI()
 /// </summary>
 ResultUI::~ResultUI()
 {
+	DeleteFontToHandle(mFontHandle);
 }
 
 /// <summary>
@@ -42,7 +44,7 @@ void ResultUI::Load()
 /// </summary>
 void ResultUI::Draw()
 {
-	DrawFormatString(700, 540, GetColor(0, 255, 0), "スコア：%d", mScore);
+	DrawFormatStringToHandle(400 /** 2 / 3*/, 540 /** 2 / 3*/, GetColor(0, 255, 0), mFontHandle, "スコア：%d", mScore);
 }
 
 /// <summary>

@@ -151,11 +151,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="BGM.cpp" />
     <ClCompile Include="PlayCamera.cpp" />
     <ClCompile Include="PlayCamera_shougo.cpp" />
-    <ClCompile Include="PlaySound.cpp" />
     <ClCompile Include="ResultCamera.cpp" />
-    <ClCompile Include="ResultSound.cpp" />
+    <ClCompile Include="SE.cpp" />
     <ClCompile Include="TitleCamera.cpp" />
     <ClCompile Include="main.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
@@ -182,11 +182,11 @@
     <ClCompile Include="TitleScene.cpp" />
     <ClCompile Include="TitleScene_kiyosumi.cpp" />
     <ClCompile Include="TitleScene_shougo.cpp" />
-    <ClCompile Include="TitleSound.cpp" />
     <ClCompile Include="TitleUI.cpp" />
     <ClCompile Include="UIBase.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="BGM.h" />
     <ClInclude Include="CameraBase.h" />
     <ClInclude Include="CameraBase_shougo.h" />
     <ClInclude Include="PlayCamera.h" />
@@ -201,21 +201,19 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClInclude>
-    <ClInclude Include="PlaySound.h" />
     <ClInclude Include="PlayUI.h" />
     <ClInclude Include="ResultCamera.h" />
     <ClInclude Include="ResultScene.h" />
     <ClInclude Include="ResultScene_kiyosumi.h" />
-    <ClInclude Include="ResultSound.h" />
     <ClInclude Include="ResultUI.h" />
     <ClInclude Include="SceneBase.h" />
     <ClInclude Include="SceneManager.h" />
     <ClInclude Include="SceneManager_kiyosumi.h" />
+    <ClInclude Include="SE.h" />
     <ClInclude Include="TitleCamera.h" />
     <ClInclude Include="TitleScene.h" />
     <ClInclude Include="TitleScene_kiyosumi.h" />
     <ClInclude Include="TitleScene_shougo.h" />
-    <ClInclude Include="TitleSound.h" />
     <ClInclude Include="TitleUI.h" />
     <ClInclude Include="UIBase.h" />
   </ItemGroup>

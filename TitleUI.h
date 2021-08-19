@@ -38,5 +38,7 @@ private:
 
 	bool mInputReturnFlag;    // EnterƒL[‚Ì˜A‘±“ü—Í–h~
 
+	int mFontHandle;
+
 
 };
