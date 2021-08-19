@@ -4,7 +4,7 @@
 #include "PlayUI.h"
 #include "PlayCamera_shougo.h"
 #include "Object_shougo.h"
-#include "Player_shougo.h"
+#include "Player.h"
 
 /// <summary>
 /// 初期化
@@ -113,7 +113,7 @@ void PlayScene_shougo::Load()
 	mPlayCamera = new PlayCamera_shougo;
 	mPlayUI = new PlayUI;
 	mObject = new Object_shougo;
-	mPlayer = new Player_shougo;
+	mPlayer = new Player;
 	// プレイカメラの初期化
 	mPlayCamera->Load();
 	// プレイUIの初期化

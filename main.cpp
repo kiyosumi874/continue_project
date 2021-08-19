@@ -6,14 +6,18 @@
 #include "PlayScene.h"
 #include "ResultScene.h"
 
+
+
 // SetGraphModeのパラメータ
-#define WINDOW_SCREEN_WIDTH  1920
-#define WINDOW_SCREEN_HEIGHT 1080
+#define WINDOW_SCREEN_WIDTH  1920/**2/3*/
+#define WINDOW_SCREEN_HEIGHT 1080/**2/3*/
 #define COLOR_BIT_NUM 16
 
 // メイン関数
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 {
+	int screenFlipCount;
+	float deltaTime, startTime;
 	// ＤＸライブラリ初期化処理
 	if (DxLib_Init() == -1)
 	{
@@ -26,26 +30,49 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 	ChangeWindowMode(TRUE);
 	// 裏画面の設定
 	SetDrawScreen(DX_SCREEN_BACK);
+	// 画面の背景色を設定する
+	SetBackgroundColor(255, 255, 255);
+	// 計測中に別のウインドウがアクティブになっても問題が無いように常時実行フラグをセット
+	SetAlwaysRunFlag(TRUE);
 
-	// デルタタイム管理用の変数をセット
-	LONGLONG nowTime;
-	LONGLONG time;
-	float    deltaTime;
+	// １フレームにかかる時間を計測
+	ScreenFlip();
+	screenFlipCount = 0;
+	startTime = GetNowHiPerformanceCount();
+	for (;;)
+	{
+		// 画面切り替えを行ってＶＹＳＮＣ待ちをする
+		ScreenFlip();
 
-	// システム時間を取得
-	time = GetNowHiPerformanceCount();
+		// １秒経過していたらループから抜ける
+		if (GetNowHiPerformanceCount() - startTime >= 1000000.0f)
+			break;
+
+		// ScreenFlip を行った回数をインクリメント
+		screenFlipCount++;
+	}
+
+	// 常時実行フラグを元に戻す
+	SetAlwaysRunFlag(FALSE);
+
+	// 計測時間を ScreenFlip を行った回数で割れば
+	// ScreenFlip 一回辺りの時間が取得できます
+	deltaTime = 1000000.0f / screenFlipCount;
 
 	// シーンマネージャークラスのインスタンスを生成
 	SceneManager* scene = new SceneManager;
 
+
 	// タイトルシーンをセット
 	scene->SetScene(new TitleScene);
 
-	deltaTime = 0.000001f;
+
+	/*deltaTime = 0.000001f;*/
 
 	// エスケープキーが押されるかウインドウが閉じられるまでループ
 	while (!ProcessMessage() && !CheckHitKey(KEY_INPUT_ESCAPE))
 	{
+
 		// 画面消去
 		ClearDrawScreen();
 
@@ -57,19 +84,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 
 		// BGM処理
 		scene->Sound();
-
+		printfDx("%f\n", deltaTime / 1000000.0f);
 		// 裏画面の内容を表画面に反映させる
 		ScreenFlip();
-
-		// 現在のシステム時間を取得
-		nowTime = GetNowHiPerformanceCount();
-
-		// 前回取得した時間からの経過時間を秒に変換してセット
-		// ( GetNowHiPerformanceCount で取得できる値はマイクロ秒単位なので 1000000 で割ることで秒単位になる )
-		deltaTime = (nowTime - time) / 1000000.0f;
-
-		//	今回取得した時間を保存
-		time = nowTime;
 
 	}
 

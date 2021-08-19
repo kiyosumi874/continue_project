@@ -109,6 +109,51 @@
     <ClCompile Include="BGM.cpp">
       <Filter>ソース ファイル\work_kiyosumi\Sound</Filter>
     </ClCompile>
+    <ClCompile Include="main_YanoHaruto.cpp">
+      <Filter>ソース ファイル\work_haruto</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayCamera_YanoHaruto.cpp">
+      <Filter>ソース ファイル\work_haruto</Filter>
+    </ClCompile>
+    <ClCompile Include="ResultScene_YanoHaruto.cpp">
+      <Filter>ソース ファイル\work_haruto</Filter>
+    </ClCompile>
+    <ClCompile Include="SceneManager_YanoHaruto.cpp">
+      <Filter>ソース ファイル\work_haruto</Filter>
+    </ClCompile>
+    <ClCompile Include="TitleScene_YanoHaruto.cpp">
+      <Filter>ソース ファイル\work_haruto</Filter>
+    </ClCompile>
+    <ClCompile Include="Audience.cpp">
+      <Filter>ソース ファイル\work_haruto</Filter>
+    </ClCompile>
+    <ClCompile Include="Pool.cpp">
+      <Filter>ソース ファイル\work_haruto</Filter>
+    </ClCompile>
+    <ClCompile Include="main_shougo.cpp">
+      <Filter>ソース ファイル\work_shougo\Scene_shougo</Filter>
+    </ClCompile>
+    <ClCompile Include="Object_shougo.cpp">
+      <Filter>ソース ファイル\work_shougo\Scene_shougo</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerActor.cpp">
+      <Filter>ソース ファイル\work_shougo\Scene_shougo</Filter>
+    </ClCompile>
+    <ClCompile Include="ResultScene_shougo.cpp">
+      <Filter>ソース ファイル\work_shougo\Scene_shougo</Filter>
+    </ClCompile>
+    <ClCompile Include="SceneManager_shougo.cpp">
+      <Filter>ソース ファイル\work_shougo\Scene_shougo</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>ソース ファイル\work_shougo\Scene_shougo</Filter>
+    </ClCompile>
+    <ClCompile Include="ResultCamera_shougo.cpp">
+      <Filter>ソース ファイル\work_shougo\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="TitleCamera_shougo.cpp">
+      <Filter>ソース ファイル\work_shougo\Camera</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SceneBase.h">
@@ -182,6 +227,45 @@
     </ClInclude>
     <ClInclude Include="BGM.h">
       <Filter>ソース ファイル\work_kiyosumi\Sound</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayCamera_YanoHaruto.h">
+      <Filter>ソース ファイル\work_haruto</Filter>
+    </ClInclude>
+    <ClInclude Include="ResultScene_YanoHaruto.h">
+      <Filter>ソース ファイル\work_haruto</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneManager_YanoHaruto.h">
+      <Filter>ソース ファイル\work_haruto</Filter>
+    </ClInclude>
+    <ClInclude Include="TitleScene_YanoHaruto.h">
+      <Filter>ソース ファイル\work_haruto</Filter>
+    </ClInclude>
+    <ClInclude Include="Audience.h">
+      <Filter>ソース ファイル\work_haruto</Filter>
+    </ClInclude>
+    <ClInclude Include="Pool.h">
+      <Filter>ソース ファイル\work_haruto</Filter>
+    </ClInclude>
+    <ClInclude Include="Object_shougo.h">
+      <Filter>ソース ファイル\work_shougo\Scene_shougo</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerActor.h">
+      <Filter>ソース ファイル\work_shougo\Scene_shougo</Filter>
+    </ClInclude>
+    <ClInclude Include="ResultScene_shougo.h">
+      <Filter>ソース ファイル\work_shougo\Scene_shougo</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneManager_shougo.h">
+      <Filter>ソース ファイル\work_shougo\Scene_shougo</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>ソース ファイル\work_shougo\Scene_shougo</Filter>
+    </ClInclude>
+    <ClInclude Include="ResultCamera_shougo.h">
+      <Filter>ソース ファイル\work_shougo\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="TitleCamera_shougo.h">
+      <Filter>ソース ファイル\work_shougo\Camera</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

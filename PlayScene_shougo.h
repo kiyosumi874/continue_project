@@ -24,7 +24,7 @@ private:
     class PlayCamera_shougo* mPlayCamera;    // プレイカメラクラスへのポインタメンバ変数
     class PlayUI* mPlayUI;                   // プレイUIクラスへのポインタメンバ変数
     class Object_shougo* mObject;            // オブジェクトクラスへのポインタメンバ変数
-    class Player_shougo* mPlayer;            // プレイヤークラスへのポインタメンバ変数
+    class Player* mPlayer;            // プレイヤークラスへのポインタメンバ変数
     float mDeltaTime;                        // デルタタイム
     bool  mInputReturnFlag;                  // Enterキーの連続入力防止
     bool  mGameCountFlag3;                   // 最後のミニゲームが終わったかどうかのFlag

@@ -19,6 +19,7 @@ public:
 	void Update()                override;    // 更新
 	void Load()                  override;    // ロード
 	void Draw()                  override;    // 描画
+	VECTOR SetTargetPos(const VECTOR& _pos) { return mCameraTarget = _pos; };
 
 private:
 	VECTOR mCameraPosition;    // カメラの位置

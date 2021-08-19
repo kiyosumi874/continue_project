@@ -1,6 +1,6 @@
 //----------------------------------------------------------------------------------//
-// @file         Player_shougo.h
-// @brief        Player_shougoクラス
+// @file         Player.h
+// @brief        Playerクラス
 // @note                       
 // @author       井口 翔悟 (shougo iguchi, @2021)
 // @changelog
@@ -8,13 +8,13 @@
 //----------------------------------------------------------------------------------//
 
 #pragma once
-
-class Player_shougo
+#include "DxLib.h"
+class Player
 {
 public:
 
-	 Player_shougo();    // コンストラクタ
-	~Player_shougo();    // デストラクタ
+	 Player();    // コンストラクタ
+	~Player();    // デストラクタ
 
 	void Update(float _deltaTime);    // 更新
 	void Draw()                  ;    // 描画
@@ -26,6 +26,7 @@ private:
 	float mDeltaTime;    // デルタタイム
 	// キャラ表示
 	VECTOR mPlayerPos;
+	VECTOR mScale;   // モデルの拡大値
 	int mModelHandle;
 	int mAttachIndex;
 	float mTotalTime;

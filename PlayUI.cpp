@@ -143,7 +143,7 @@ void PlayUI::Update(float _deltaTime)
 	//-----------//
 	if (mPlayGaugeGameFlag)
 	{
-		mGaugeInBeginY += -400.0f * mDeltaTime;
+		mGaugeInBeginY += -300.0f * mDeltaTime;
 		if (mGaugeInBeginY <= 360.0f)
 		{
 			mGaugeInBeginY = 720.0f;
@@ -206,7 +206,7 @@ void PlayUI::Update(float _deltaTime)
 		}
 		mPendulumInAngleSpeed += sub;
 
-		// Šp“x‚ÉŠp‘¬“x‚ð‰ÁŽZ
+		// Šp“x‚ÉŠp‘¬“x‚ð‰ÁŽZ                       speed(•Ï”‚É‚µ‚½‚¢)
 		mPendulumInAngle += mPendulumInAngleSpeed * 3.0f * mDeltaTime;
 
 		// V‚µ‚¢d‚è‚ÌˆÊ’u

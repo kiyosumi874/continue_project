@@ -1,13 +1,22 @@
 #include "DxLib.h"
 #include "ResultScene.h"
 #include "TitleScene.h"
+#include "ResultCamera.h"
+#include "ResultUI.h"
 
 /// <summary>
 /// 初期化
 /// </summary>
-ResultScene::ResultScene()
+ResultScene::ResultScene(int _score)
 	: mDeltaTime(0.000001f)
 	, mInputReturnFlag(false)
+	, mResultCamera(nullptr)
+	, mResultUI(nullptr)
+	, mScore(_score)
+	, mAlphaPal(255)
+	, mAlphaPalFlag(false)
+	, mMoveSceneHandle(LoadGraph("data/img/MoveScene.png"))
+	, mCheckHitFlag(false)
 {
 }
 
@@ -16,6 +25,8 @@ ResultScene::ResultScene()
 /// </summary>
 ResultScene::~ResultScene()
 {
+	delete mResultCamera;
+	delete mResultUI;
 }
 
 /// <summary>
@@ -28,7 +39,13 @@ ResultScene::~ResultScene()
 /// </returns>
 SceneBase* ResultScene::Update(float _deltaTime)
 {
-	mDeltaTime = _deltaTime;
+	mDeltaTime = _deltaTime / 1000000.0f;
+	// リザルトカメラの更新
+	mResultCamera->Update();
+	// リザルトUIの更新
+	mResultUI->Update(mDeltaTime);
+	// リザルトUIにスコアを渡す
+	mResultUI->LoadScore(mScore);
 
 	// Enterキーの連続入力防止
 	if (!CheckHitKey(KEY_INPUT_RETURN))
@@ -36,13 +53,28 @@ SceneBase* ResultScene::Update(float _deltaTime)
 		mInputReturnFlag = true;
 	}
 
-	// デバッグ用
-	printfDx("今ResultScene\n");
 
-	// シーン遷移条件
-	if (CheckHitKey(KEY_INPUT_RETURN) && mInputReturnFlag)
+	if (mAlphaPal >= 0 && !mAlphaPalFlag)
 	{
+		mAlphaPal -= 400.0f * mDeltaTime;
+	}
+	else
+	{
+		mAlphaPalFlag = true;
+	}
+
+	if (CheckHitKey(KEY_INPUT_RETURN) && mInputReturnFlag && mAlphaPalFlag)
+	{
+		mCheckHitFlag = true;
 		mInputReturnFlag = false;
+	}
+	if (mCheckHitFlag)
+	{
+		mAlphaPal += 400.0f * mDeltaTime;
+	}
+	// シーン遷移条件
+	if (mAlphaPal >= 255)
+	{
 		// 条件を満たしていたら次のシーンを生成してそのポインタを返す
 		return new TitleScene();
 	}
@@ -56,6 +88,13 @@ SceneBase* ResultScene::Update(float _deltaTime)
 /// </summary>
 void ResultScene::Draw()
 {
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 255);
+	// リザルトカメラの描画
+	mResultCamera->Draw();
+	// リザルトUIの描画
+	mResultUI->Draw();
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, mAlphaPal);
+	DrawGraph(0, 0, mMoveSceneHandle, FALSE);
 }
 
 /// <summary>
@@ -70,4 +109,14 @@ void ResultScene::Sound()
 /// </summary>
 void ResultScene::Load()
 {
+	////「読み込み中」の表示
+	//DrawString(0, 0, "Now Loading ...", GetColor(255, 255, 255));
+
+	mResultCamera = new ResultCamera;
+	mResultUI = new ResultUI;
+
+	// リザルトカメラの初期化
+	mResultCamera->Load();
+	// リザルトUIの初期化
+	mResultUI->Load();
 }
