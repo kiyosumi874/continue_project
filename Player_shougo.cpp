@@ -9,7 +9,7 @@
 Player_shougo::Player_shougo()
 	: mPlayerPos(VGet(0,-10,50))
 	, mDeltaTime(0.000001f)
-	, mModelHandle(MV1LoadModel("data/model/swim/player.pmx"))
+	, mModelHandle(MV1LoadModel("data/model/player5/水着くん.pmx"))
 	, mAttachIndex(NULL)
 	, mTotalTime(NULL) 
 	, mPlayTime(0.0f)
@@ -38,7 +38,6 @@ void Player_shougo::Update(float _deltaTime)
 	mDeltaTime = _deltaTime;
 
 	//mPlayTime += 0.5f;
-	mPlayerPos.z -= 0.1;
 
 	if (mPlayerPos.z < 30 && mJumpFlag == false)
 	{
@@ -48,7 +47,11 @@ void Player_shougo::Update(float _deltaTime)
 
 	if (mJumpFlag == true) //地面にめり込まない処理
 	{
-		mPlayerPos.y -= 0.05;		
+		mPlayerPos.y -= 0.4;		
+	}
+	else
+	{
+		mPlayerPos.z -= 0.1;
 	}
 
 	// 再生時間がアニメーションの総再生時間に達したら再生時間を0に戻す
