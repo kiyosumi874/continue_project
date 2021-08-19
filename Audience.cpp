@@ -5,26 +5,26 @@
 /// <returns></returns>
 Audience::Audience()
 {
-	mAudienceBetweenX = 7.0f;	     //観客同士のX距離
-	mAudienceBetweenY = 1.5f;	     //観客同士のY距離
+	mAudienceBetweenX = 6.0f;	     //観客同士のX距離
+	mAudienceBetweenY = 2.3f;	     //観客同士のY距離
 	mAudienceBetweenZ = 5.0f;	     //観客同士のZ距離
 	mDownInterval = 0.0;             //落下まで少し待つ
 								     
 	mNowState  = Normal;	             //観客の状態
 	mStartPosX = -45.5f;             //観客の初期x位置
 	mStartPosY = 10.0f;              //観客の初期y位置
-	mStartPosZ = -17.0f;     	     //観客の初期ｚ位置
+	mStartPosZ = -30.0f;     	     //観客の初期ｚ位置
 	mSideAudienceState = mNowState;	 //隣の観客の状態
 
-	mExcitementJump = 0.2f;	         //興奮時のジャンプ速度
-	mNormalJump     = 0.03f;	     //通常のジャンプ速度
+	mExcitementJump = 0.6f;	         //興奮時のジャンプ速度
+	mNormalJump     = 0.1f;	     //通常のジャンプ速度
 	mQuietJump      = 0.02f;	     //しらけたジャンプ速度
 
 	//モデルの読み込み
 	for (int i = 0; i < AudienceLine; i++)
 	{	
 		mGroundHight[i] = mStartPosY + i * mAudienceBetweenY;	    //列ごとの地面の高さ
-		mHighestJumpLine[i] = mGroundHight[i] + 1.0f;	            //最高ジャンプ高度
+		mHighestJumpLine[i] = mGroundHight[i] + 5.0f;	            //最高ジャンプ高度
 		for (int j = 0; j < AudienceNum; j++)
 		{
 			mRand = rand() % 5;
@@ -92,6 +92,10 @@ void Audience::Update()
 	{
 		for (int j = 0; j < AudienceNum; j++)
 		{
+			//if (mDownFlag[i][j])
+			//{
+			//	mPos[i][j].y -= 0.05f;
+			//}
 			if (mSideAudienceState == Idol)
 			{
 				mNowState = Normal;
@@ -126,6 +130,12 @@ void Audience::Update()
 				if (mHighestJumpLine[i] < mPos[i][j].y)
 				{
 					mDownFlag[i][j] = true;
+					//隣の観客の状態が待機なら
+					if (mSideAudienceState == Idol)
+					{
+						//この観客の状態を待機にする
+						mNowState = Idol;
+					}
 				}
 			}
 			//興奮状態なら
@@ -205,7 +215,10 @@ void Audience::Draw()
 		{
 			mPos[i][j].x = mStartPosX - mAudienceBetweenX * i;
 			mPos[i][j].z = mStartPosZ - mAudienceBetweenZ * j;
-			mPos[i][j].z  -= mAudienceBetweenZ * i;
+			if (i % 2)
+			{
+				mPos[i][j].z += mAudienceBetweenZ;
+			}
 		}
 	}
 	for (int i = 0; i < AudienceLine; i++)

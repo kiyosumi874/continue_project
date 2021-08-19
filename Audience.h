@@ -1,18 +1,17 @@
 #pragma once
 #include "DxLib.h"
-#define AudienceNum  8
-#define AudienceLine 3
+#define AudienceNum  14
+#define AudienceLine 5
 #define AudienceKind 5
 
 class Audience
 {
 	enum
 	{
-		Idol,      //‘Ò‹@
-		Excitement,//‹»•±
-		Quiet,     //’ÁÃ
-		Normal     //’Êíó‘Ô
-
+		Idol,         //‘Ò‹@
+		Excitement,   //‹»•±
+		Quiet,        //’ÁÃ
+		Normal,       //’Êíó‘Ô
 	};
 public:
 	Audience();
