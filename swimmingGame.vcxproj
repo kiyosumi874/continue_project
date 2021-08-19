@@ -151,26 +151,17 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="main_shougo.cpp" />
-    <ClCompile Include="Object_shougo.cpp" />
+    <ClCompile Include="BGM.cpp" />
     <ClCompile Include="PlayCamera.cpp" />
     <ClCompile Include="PlayCamera_shougo.cpp" />
-    <ClCompile Include="Player_shougo.cpp" />
     <ClCompile Include="ResultCamera.cpp" />
-    <ClCompile Include="ResultCamera_shougo.cpp" />
-    <ClCompile Include="ResultScene_shougo.cpp" />
-    <ClCompile Include="SceneManager_shougo.cpp" />
+    <ClCompile Include="SE.cpp" />
     <ClCompile Include="TitleCamera.cpp" />
     <ClCompile Include="main.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="main_kiyosumi.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </ClCompile>
+    <ClCompile Include="main_kiyosumi.cpp" />
     <ClCompile Include="PlayScene.cpp" />
     <ClCompile Include="PlayScene_kiyosumi.cpp" />
     <ClCompile Include="PlayScene_shougo.cpp">
@@ -193,15 +184,13 @@
     <ClCompile Include="TitleScene_shougo.cpp" />
     <ClCompile Include="TitleUI.cpp" />
     <ClCompile Include="UIBase.cpp" />
-    <ClCompile Include="TitleCamera_shougo.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="BGM.h" />
     <ClInclude Include="CameraBase.h" />
     <ClInclude Include="CameraBase_shougo.h" />
-    <ClInclude Include="Object_shougo.h" />
     <ClInclude Include="PlayCamera.h" />
     <ClInclude Include="PlayCamera_shougo.h" />
-    <ClInclude Include="Player_shougo.h" />
     <ClInclude Include="PlayScene_kiyosumi.h" />
     <ClInclude Include="PlayScene.h" />
     <ClInclude Include="PlayScene_shougo.h">
@@ -214,17 +203,14 @@
     </ClInclude>
     <ClInclude Include="PlayUI.h" />
     <ClInclude Include="ResultCamera.h" />
-    <ClInclude Include="ResultCamera_shougo.h" />
     <ClInclude Include="ResultScene.h" />
     <ClInclude Include="ResultScene_kiyosumi.h" />
-    <ClInclude Include="ResultScene_shougo.h" />
     <ClInclude Include="ResultUI.h" />
     <ClInclude Include="SceneBase.h" />
     <ClInclude Include="SceneManager.h" />
     <ClInclude Include="SceneManager_kiyosumi.h" />
-    <ClInclude Include="SceneManager_shougo.h" />
+    <ClInclude Include="SE.h" />
     <ClInclude Include="TitleCamera.h" />
-    <ClInclude Include="TitleCamera_shougo.h" />
     <ClInclude Include="TitleScene.h" />
     <ClInclude Include="TitleScene_kiyosumi.h" />
     <ClInclude Include="TitleScene_shougo.h" />

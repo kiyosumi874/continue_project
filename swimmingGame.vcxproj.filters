@@ -32,8 +32,8 @@
     <Filter Include="ソース ファイル\work_shougo\Scene_shougo">
       <UniqueIdentifier>{5c2e7aa5-7f9a-40a4-be0b-d9f9abda87e0}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ソース ファイル\work_shougo\Actor">
-      <UniqueIdentifier>{5dd649b7-0633-4b50-9d38-9afdf8161b39}</UniqueIdentifier>
+    <Filter Include="ソース ファイル\work_kiyosumi\Sound">
+      <UniqueIdentifier>{32c1396e-bc62-47f3-9d2a-132f90534556}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -94,35 +94,20 @@
     <ClCompile Include="ResultCamera.cpp">
       <Filter>ソース ファイル\work_kiyosumi\Camera</Filter>
     </ClCompile>
+    <ClCompile Include="PlayScene_shougo.cpp">
+      <Filter>ソース ファイル\work_shougo\Scene_shougo</Filter>
+    </ClCompile>
     <ClCompile Include="TitleScene_shougo.cpp">
       <Filter>ソース ファイル\work_shougo\Scene_shougo</Filter>
     </ClCompile>
     <ClCompile Include="PlayCamera_shougo.cpp">
       <Filter>ソース ファイル\work_shougo\Camera</Filter>
     </ClCompile>
-    <ClCompile Include="main_shougo.cpp">
-      <Filter>ソース ファイル\work_shougo</Filter>
+    <ClCompile Include="SE.cpp">
+      <Filter>ソース ファイル\work_kiyosumi\Sound</Filter>
     </ClCompile>
-    <ClCompile Include="TitleCamera_shougo.cpp">
-      <Filter>ソース ファイル\work_shougo\Camera</Filter>
-    </ClCompile>
-    <ClCompile Include="PlayScene_shougo.cpp">
-      <Filter>ソース ファイル\work_shougo\Scene_shougo</Filter>
-    </ClCompile>
-    <ClCompile Include="ResultCamera_shougo.cpp">
-      <Filter>ソース ファイル\work_shougo\Camera</Filter>
-    </ClCompile>
-    <ClCompile Include="SceneManager_shougo.cpp">
-      <Filter>ソース ファイル\work_shougo\Scene_shougo</Filter>
-    </ClCompile>
-    <ClCompile Include="ResultScene_shougo.cpp">
-      <Filter>ソース ファイル\work_shougo\Scene_shougo</Filter>
-    </ClCompile>
-    <ClCompile Include="Object_shougo.cpp">
-      <Filter>ソース ファイル\work_shougo\Actor</Filter>
-    </ClCompile>
-    <ClCompile Include="Player_shougo.cpp">
-      <Filter>ソース ファイル\work_shougo\Actor</Filter>
+    <ClCompile Include="BGM.cpp">
+      <Filter>ソース ファイル\work_kiyosumi\Sound</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -192,23 +177,11 @@
     <ClInclude Include="PlayCamera_shougo.h">
       <Filter>ソース ファイル\work_shougo\Camera</Filter>
     </ClInclude>
-    <ClInclude Include="TitleCamera_shougo.h">
-      <Filter>ソース ファイル\work_shougo\Camera</Filter>
+    <ClInclude Include="SE.h">
+      <Filter>ソース ファイル\work_kiyosumi\Sound</Filter>
     </ClInclude>
-    <ClInclude Include="ResultCamera_shougo.h">
-      <Filter>ソース ファイル\work_shougo\Camera</Filter>
-    </ClInclude>
-    <ClInclude Include="SceneManager_shougo.h">
-      <Filter>ソース ファイル\work_shougo\Scene_shougo</Filter>
-    </ClInclude>
-    <ClInclude Include="ResultScene_shougo.h">
-      <Filter>ソース ファイル\work_shougo\Scene_shougo</Filter>
-    </ClInclude>
-    <ClInclude Include="Object_shougo.h">
-      <Filter>ソース ファイル\work_shougo\Actor</Filter>
-    </ClInclude>
-    <ClInclude Include="Player_shougo.h">
-      <Filter>ソース ファイル\work_shougo\Actor</Filter>
+    <ClInclude Include="BGM.h">
+      <Filter>ソース ファイル\work_kiyosumi\Sound</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

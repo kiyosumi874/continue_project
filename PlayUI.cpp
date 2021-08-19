@@ -1,5 +1,6 @@
 #include "DxLib.h"
 #include "PlayUI.h"
+#include "SE.h"
 #include <math.h>
 
 #define GRAVITY 9.80665f
@@ -8,8 +9,7 @@
 /// èâä˙âª
 /// </summary>
 PlayUI::PlayUI()
-	: mHandle(0)
-	, mScore(0)
+	: mScore(0)
 	, mDeltaTime(0.000001f)
 	, mInputReturnFlag(false)
 	, mGameTransitionCount(0)
@@ -17,7 +17,11 @@ PlayUI::PlayUI()
 	, mGameCountFlag1(true)
 	, mGameCountFlag2(true)
 	, mGameCountFlag3(true)
+	, mClickNormalFlag(false)
+	, mClickCriticalFlag(false)
+	, mMetoronomeFlag(false)
 	// CircleGame
+	, mCircleSpeed(0)
 	, mCircleOutX(960)
 	, mCircleOutY(540)
 	, mCircleOutRadius(200)
@@ -29,9 +33,10 @@ PlayUI::PlayUI()
 	, mCircleInRadius(30)
 	, mCircleInColor(GetColor(255, 0, 0))
 	, mCircleInFillFlag(true)
-	, mPlayCircleGame(true)
-	, mDrawCircleGame(true)
+	, mPlayCircleGameFlag(true)
+	, mDrawCircleGameFlag(true)
 	// GaugeGame
+	, mGaugeSpeed(0)
 	, mGaugeOutBeginX(920)
 	, mGaugeOutBeginY(360)
 	, mGaugeOutEndX(1000)
@@ -44,18 +49,19 @@ PlayUI::PlayUI()
 	, mGaugeInEndY(720)
 	, mGaugeInColor(GetColor(255, 0, 0))
 	, mGaugeInFillFlag(true)
-	, mPlayGaugeGame(false)
-	, mDrawGaugeGame(false)
+	, mPlayGaugeGameFlag(false)
+	, mDrawGaugeGameFlag(false)
 	// PendulumGame
+	, mPendulumSpeed(0)
 	, mPendulumOutX(960)
 	, mPendulumOutY(700)
 	, mPendulumOutRadius(30)
 	, mPendulumOutColor(GetColor(0, 0, 255))
 	, mPendulumOutFillFlag(false)
 	, mPendulumOutLineThickness(2)
-	, mPendulumInX(960)
+	, mPendulumInX(960+300)
 	, mPendulumInFx(960)
-	, mPendulumInY(700)
+	, mPendulumInY(700-300)
 	, mPendulumInFy(400)
 	, mPendulumInAngle(0.0f)
 	, mPendulumInAngleSpeed(0.0f)
@@ -63,8 +69,12 @@ PlayUI::PlayUI()
 	, mPendulumInRadius(30)
 	, mPendulumInColor(GetColor(255, 0, 0))
 	, mPendulumInFillFlag(true)
-	, mPlayPendulumGame(false)
-	, mDrawPendulumGame(false)
+	, mPlayPendulumGameFlag(false)
+	, mDrawPendulumGameFlag(false)
+	, mMetoronome(nullptr)
+	, mClickNormal(nullptr)
+	, mClickClitical(nullptr)
+	, mFontHandle(-1)
 {
 }
 
@@ -73,6 +83,10 @@ PlayUI::PlayUI()
 /// </summary>
 PlayUI::~PlayUI()
 {
+	delete mMetoronome;
+	delete mClickNormal;
+	delete mClickClitical;
+	DeleteFontToHandle(mFontHandle);
 }
 
 /// <summary>
@@ -92,73 +106,78 @@ void PlayUI::Update(float _deltaTime)
 	//------------//
 	//-CircleGame-//
 	//------------//
-	if (mPlayCircleGame)
+	if (mPlayCircleGameFlag)
 	{
-		mCircleOutRadius += -200 * mDeltaTime;
+		mCircleOutRadius += -200.0f * mDeltaTime;
 		if (mCircleOutRadius <= 0)
 		{
-			mCircleOutRadius = 200;
+			mCircleOutRadius = 200.0f;
 		}
 
 		if (CheckHitKey(KEY_INPUT_RETURN) && mInputReturnFlag)
 		{
-			if (mCircleOutRadius <= 40)
+			if (mCircleOutRadius <= 40.0f)
 			{
 				mScore += 200;
-				mCircleOutRadius = 30;
+				mCircleOutRadius = 30.0f;
 				mCircleInColor = GetColor(0, 255, 0);
+				mClickCriticalFlag = true;
 			}
-			else if (mCircleOutRadius <= 120)
+			else if (mCircleOutRadius <= 120.0f)
 			{
 				mScore += 100;
+				mClickNormalFlag = true;
 			}
 			else
 			{
 				mScore += 0;
+				mClickNormalFlag = true;
 			}
 			mInputReturnFlag = false;
-			mPlayCircleGame = false;
+			mPlayCircleGameFlag = false;
 		}
 	}
 
 	//-----------//
 	//-GaugeGame-//
 	//-----------//
-	if (mPlayGaugeGame)
+	if (mPlayGaugeGameFlag)
 	{
-		mGaugeInBeginY += -400 * mDeltaTime;
-		if (mGaugeInBeginY <= 360)
+		mGaugeInBeginY += -400.0f * mDeltaTime;
+		if (mGaugeInBeginY <= 360.0f)
 		{
-			mGaugeInBeginY = 720;
+			mGaugeInBeginY = 720.0f;
 		}
 
 		if (CheckHitKey(KEY_INPUT_RETURN) && mInputReturnFlag)
 		{
-			if ((mGaugeInBeginY <= 370) || (710 <= mGaugeInBeginY && mGaugeInBeginY <= 720))
+			if ((mGaugeInBeginY <= 370.0f) || (710.0f <= mGaugeInBeginY && mGaugeInBeginY <= 720.0f))
 			{
 				mScore += 200;
-				mGaugeInBeginY = 360;
+				mGaugeInBeginY = 360.0f;
 				mGaugeInColor = GetColor(0, 255, 0);
+				mClickCriticalFlag = true;
 			}
-			else if (mGaugeInBeginY <= 560)
+			else if (mGaugeInBeginY <= 560.0f)
 			{
 				mScore += 100;
+				mClickNormalFlag = true;
 			}
 			else
 			{
 				mScore += 0;
+				mClickNormalFlag = true;
 			}
 			mInputReturnFlag = false;
-			mPlayGaugeGame = false;
+			mPlayGaugeGameFlag = false;
 		}
 	}
 
 	//--------------//
 	//-PendulumGame-//
 	//--------------//
-	if (mPlayPendulumGame)
+	if (mPlayPendulumGameFlag)
 	{
-
 		// åªç›ÇÃèdÇËÇÃà íu
 		auto rad = mPendulumInAngle * DX_PI_F / 180.0f;
 		auto px = mPendulumInFx + cos(rad) * mPendulumLength;
@@ -188,7 +207,7 @@ void PlayUI::Update(float _deltaTime)
 		mPendulumInAngleSpeed += sub;
 
 		// äpìxÇ…äpë¨ìxÇâ¡éZ
-		mPendulumInAngle += mPendulumInAngleSpeed * 3 * mDeltaTime;
+		mPendulumInAngle += mPendulumInAngleSpeed * 3.0f * mDeltaTime;
 
 		// êVÇµÇ¢èdÇËÇÃà íu
 		rad = mPendulumInAngle * DX_PI_F / 180.0f;
@@ -199,30 +218,38 @@ void PlayUI::Update(float _deltaTime)
 		mPendulumInX = px;
 		mPendulumInY = py;
 
+		
+		
 		if (CheckHitKey(KEY_INPUT_RETURN) && mInputReturnFlag)
 		{
-			if (940 <= mPendulumInX && mPendulumInX <= 980)
+			if (940.0f <= mPendulumInX && mPendulumInX <= 980.0f)
 			{
-				mPendulumInX = 960;
-				mPendulumInY = 700;
+				mPendulumInX = 960.0f;
+				mPendulumInY = 700.0f;
 				mScore += 200;
-				mPendulumInColor = GetColor(0, 255, 0);
+				mPendulumInColor = GetColor(0, 255, 0);		
+				mClickCriticalFlag = true;
+				
 			}
-			else if (820 <= mPendulumInX && mPendulumInX < 940 || 980 < mPendulumInX && mPendulumInX <= 1100)
+			else if (820.0f <= mPendulumInX && mPendulumInX < 940.0f || 980.0f < mPendulumInX && mPendulumInX <= 1100.0f)
 			{
 				mScore += 100;
+				mClickNormalFlag = true;
+				
 			}
 			else
 			{
 				mScore += 0;
+				mClickNormalFlag = true;
 			}
 			
 			mInputReturnFlag = false;
-			mPlayPendulumGame = false;
+			mPlayPendulumGameFlag = false;
 		}
+
 	}
 
-	if (!mPlayCircleGame && !mPlayGaugeGame && !mPlayPendulumGame)
+	if (!mPlayCircleGameFlag && !mPlayGaugeGameFlag && !mPlayPendulumGameFlag)
 	{
 		mGameTransitionCount += 1.0f * mDeltaTime;
 	}
@@ -234,22 +261,24 @@ void PlayUI::Update(float _deltaTime)
 	
 	if (mGameCount == 1 && mGameCountFlag1)
 	{
-		mDrawCircleGame = false;
-		mDrawGaugeGame = true;
-		mPlayGaugeGame = true;
+		mDrawCircleGameFlag = false;
+		mDrawGaugeGameFlag = true;
+		mPlayGaugeGameFlag = true;
 		mGameCountFlag1 = false;
+		
 	}
 	else if (mGameCount == 2 && mGameCountFlag2)
 	{
-		mDrawGaugeGame = false;
-		mDrawPendulumGame = true;
-		mPlayPendulumGame = true;
+		mDrawGaugeGameFlag = false;
+		mDrawPendulumGameFlag = true;
+		mPlayPendulumGameFlag = true;
 		mGameCountFlag2 = false;
 	}
 	else if (mGameCount == 3 && mGameCountFlag3)
 	{
-		mDrawPendulumGame = false;
+		mDrawPendulumGameFlag = false;
 		mGameCountFlag3 = false;
+		
 	}
 
 }
@@ -259,6 +288,13 @@ void PlayUI::Update(float _deltaTime)
 /// </summary>
 void PlayUI::Load()
 {
+	mMetoronome = new SE;
+	mClickNormal = new SE;
+	mClickClitical = new SE;
+	mMetoronome->LoadSound("data/sound/metronome_wood.wav");
+	mClickNormal->LoadSound("data/sound/click_normal.mp3");
+	mClickClitical->LoadSound("data/sound/click_critical.mp3");
+	mFontHandle = CreateFontToHandle("data/Fonts/meiryob.tcc", 170 * 2 / 3, -1, DX_FONTTYPE_ANTIALIASING_4X4, -1, 5, FALSE);
 }
 
 /// <summary>
@@ -267,44 +303,105 @@ void PlayUI::Load()
 void PlayUI::Draw()
 {
 	// ÉfÉoÉbÉOóp
-	SetFontSize(50);
-	DrawFormatString(0, 0, GetColor(0, 255, 0), "ÉXÉRÉAÅF%d", mScore);
+	DrawFormatStringToHandle(0, 0, GetColor(0, 255, 0), mFontHandle,"ÉXÉRÉAÅF%d", mScore);
+	// 1920 * 1080 * 2 / 3
+	////------------//
+	////-CircleGame-//
+	////------------//
+	//if (mDrawCircleGameFlag)
+	//{
+	//	// ì‡ë§ÇÃâ~
+	//	DrawCircleAA(mCircleInX*2/3, mCircleInY * 2 / 3, mCircleInRadius * 2 / 3, 64, mCircleInColor, mCircleInFillFlag);
+	//	// äOë§ÇÃâ~
+	//	DrawCircleAA(mCircleOutX * 2 / 3, mCircleOutY * 2 / 3, mCircleOutRadius * 2 / 3, 64, mCircleOutColor, mCircleOutFillFlag, mCircleOutLineThickness);
+	//}
+
+	////-----------//
+	////-GaugeGame-//
+	////-----------//
+	//if (mDrawGaugeGameFlag)
+	//{
+	//	// ì‡ë§ÇÃéläp
+	//	DrawBox(mGaugeInBeginX * 2 / 3, mGaugeInBeginY * 2 / 3, mGaugeInEndX * 2 / 3, mGaugeInEndY * 2 / 3, mGaugeInColor, mGaugeInFillFlag);
+	//	// äOë§ÇÃéläp
+	//	DrawBox(mGaugeOutBeginX * 2 / 3, mGaugeOutBeginY * 2 / 3, mGaugeOutEndX * 2 / 3, mGaugeOutEndY * 2 / 3, mGaugeOutColor, mGaugeOutFillFlag);
+	//	DrawBox(mGaugeOutBeginX * 2 / 3 - 1, mGaugeOutBeginY * 2 / 3 - 1, mGaugeOutEndX * 2 / 3 + 1, mGaugeOutEndY * 2 / 3 + 1, mGaugeOutColor, mGaugeOutFillFlag);
+	//	DrawBox(mGaugeOutBeginX * 2 / 3 -2, mGaugeOutBeginY * 2 / 3 -2, mGaugeOutEndX * 2 / 3 +2, mGaugeOutEndY * 2 / 3 +2, mGaugeOutColor, mGaugeOutFillFlag);
+	//}
+
+	////--------------//
+	////-PendulumGame-//
+	////--------------//
+	//if (mDrawPendulumGameFlag)
+	//{
+	//	// ì‡ë§ÇÃâ~
+	//	DrawCircleAA(mPendulumInX * 2 / 3, mPendulumInY * 2 / 3, mPendulumInRadius * 2 / 3, 64, mPendulumInColor, mPendulumInFillFlag);
+	//	// äOë§ÇÃâ~
+	//	DrawCircleAA(mPendulumOutX * 2 / 3, mPendulumOutY * 2 / 3, mPendulumOutRadius * 2 / 3, 64, mPendulumOutColor, mPendulumOutFillFlag, mPendulumOutLineThickness);
+	//}
 
 	//------------//
 	//-CircleGame-//
 	//------------//
-	if (mDrawCircleGame)
+	if (mDrawCircleGameFlag)
 	{
 		// ì‡ë§ÇÃâ~
-		DrawCircle(mCircleInX, mCircleInY, mCircleInRadius, mCircleInColor, mCircleInFillFlag);
+		DrawCircleAA(mCircleInX, mCircleInY, mCircleInRadius,64, mCircleInColor, mCircleInFillFlag);
 		// äOë§ÇÃâ~
-		DrawCircle(mCircleOutX, mCircleOutY, mCircleOutRadius, mCircleOutColor, mCircleOutFillFlag, mCircleOutLineThickness);
+		DrawCircleAA(mCircleOutX, mCircleOutY, mCircleOutRadius,64, mCircleOutColor, mCircleOutFillFlag, mCircleOutLineThickness);
 	}
 
 	//-----------//
 	//-GaugeGame-//
 	//-----------//
-	if (mDrawGaugeGame)
+	if (mDrawGaugeGameFlag)
 	{
 		// ì‡ë§ÇÃéläp
-		DrawBox(mGaugeInBeginX, mGaugeInBeginY, mGaugeInEndX, mGaugeInEndY, mGaugeInColor, mGaugeInFillFlag);
+		DrawBoxAA(mGaugeInBeginX, mGaugeInBeginY, mGaugeInEndX, mGaugeInEndY, mGaugeInColor, mGaugeInFillFlag);
 		// äOë§ÇÃéläp
-		DrawBox(mGaugeOutBeginX, mGaugeOutBeginY, mGaugeOutEndX, mGaugeOutEndY, mGaugeOutColor, mGaugeOutFillFlag);
-		DrawBox(mGaugeOutBeginX - 1, mGaugeOutBeginY - 1, mGaugeOutEndX + 1, mGaugeOutEndY + 1, mGaugeOutColor, mGaugeOutFillFlag);
-		DrawBox(mGaugeOutBeginX-2, mGaugeOutBeginY-2, mGaugeOutEndX+2, mGaugeOutEndY+2, mGaugeOutColor, mGaugeOutFillFlag);
+		DrawBoxAA(mGaugeOutBeginX, mGaugeOutBeginY, mGaugeOutEndX, mGaugeOutEndY, mGaugeOutColor, mGaugeOutFillFlag);
+		DrawBoxAA(mGaugeOutBeginX - 1, mGaugeOutBeginY - 1, mGaugeOutEndX + 1, mGaugeOutEndY + 1, mGaugeOutColor, mGaugeOutFillFlag);
+		DrawBoxAA(mGaugeOutBeginX - 2, mGaugeOutBeginY - 2, mGaugeOutEndX + 2, mGaugeOutEndY + 2, mGaugeOutColor, mGaugeOutFillFlag);
 	}
 
 	//--------------//
 	//-PendulumGame-//
 	//--------------//
-	if (mDrawPendulumGame)
+	if (mDrawPendulumGameFlag)
 	{
 		// ì‡ë§ÇÃâ~
-		DrawCircle(mPendulumInX, mPendulumInY, mPendulumInRadius, mPendulumInColor, mPendulumInFillFlag);
+		DrawCircleAA(mPendulumInX, mPendulumInY, mPendulumInRadius,64, mPendulumInColor, mPendulumInFillFlag);
 		// äOë§ÇÃâ~
-		DrawCircle(mPendulumOutX, mPendulumOutY, mPendulumOutRadius, mPendulumOutColor, mPendulumOutFillFlag, mPendulumOutLineThickness);
+		DrawCircleAA(mPendulumOutX, mPendulumOutY, mPendulumOutRadius,64, mPendulumOutColor, mPendulumOutFillFlag, mPendulumOutLineThickness);
 	}
 
 
 	
+}
+
+void PlayUI::Sound()
+{
+	
+	if (mClickCriticalFlag)
+	{
+		mClickClitical->Play();
+		mClickCriticalFlag = false;
+	}
+	if (mClickNormalFlag)
+	{
+		mClickNormal->Play();
+		mClickNormalFlag = false;
+	}
+	if (mPlayPendulumGameFlag)
+	{
+		if ((940 <= mPendulumInX && mPendulumInX <= 980) && !mMetoronomeFlag)
+		{
+			mMetoronome->Play();
+			mMetoronomeFlag = true;
+		}
+		if (!(940 <= mPendulumInX && mPendulumInX <= 980))
+		{
+			mMetoronomeFlag = false;
+		}
+	}
 }

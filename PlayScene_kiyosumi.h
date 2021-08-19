@@ -20,11 +20,22 @@ public:
     void       Draw()                  override;    // 描画
     void       Sound()                 override;    // 音楽
     void       Load()                  override;    // 初期化
+
 private:
     class PlayCamera* mPlayCamera;    // プレイカメラクラスへのポインタメンバ変数
     class PlayUI*         mPlayUI;    // プレイUIクラスへのポインタメンバ変数
+    class BGM*            mBGM;
     float mDeltaTime;          // デルタタイム
     bool  mInputReturnFlag;    // Enterキーの連続入力防止
     bool  mGameCountFlag3;     // 最後のミニゲームが終わったかどうかのFlag
     int   mScore;
+    bool mPlayCircleGameFlag;
+    bool mPlayGaugeGameFlag;
+    bool mPlayPendulumGameFlag;
+
+    int mMoveSceneHandle;
+    float mAlphaPal;
+    bool mAlphaPalFlag;
+
+    bool mBGMFlag;
 };

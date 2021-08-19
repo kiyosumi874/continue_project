@@ -13,6 +13,10 @@ ResultScene_kiyosumi::ResultScene_kiyosumi(int _score)
 	, mResultCamera(nullptr)
 	, mResultUI(nullptr)
 	, mScore(_score)
+	, mAlphaPal(255)
+	, mAlphaPalFlag(false)
+	, mMoveSceneHandle(LoadGraph("data/img/MoveScene.png"))
+	, mCheckHitFlag(false)
 {
 }
 
@@ -35,7 +39,7 @@ ResultScene_kiyosumi::~ResultScene_kiyosumi()
 /// </returns>
 SceneBase* ResultScene_kiyosumi::Update(float _deltaTime)
 {
-	mDeltaTime = _deltaTime;
+	mDeltaTime = _deltaTime / 1000000.0f;
 	// リザルトカメラの更新
 	mResultCamera->Update();
 	// リザルトUIの更新
@@ -50,11 +54,27 @@ SceneBase* ResultScene_kiyosumi::Update(float _deltaTime)
 	}
 
 	
-
-	// シーン遷移条件
-	if (CheckHitKey(KEY_INPUT_RETURN) && mInputReturnFlag)
+	if (mAlphaPal >= 0 && !mAlphaPalFlag)
 	{
+		mAlphaPal -= 400.0f * mDeltaTime;
+	}
+	else
+	{
+		mAlphaPalFlag = true;
+	}
+
+	if (CheckHitKey(KEY_INPUT_RETURN) && mInputReturnFlag && mAlphaPalFlag)
+	{
+		mCheckHitFlag = true;
 		mInputReturnFlag = false;
+	}
+	if (mCheckHitFlag)
+	{
+		mAlphaPal += 400.0f * mDeltaTime;
+	}
+	// シーン遷移条件
+	if (mAlphaPal >= 255)
+	{
 		// 条件を満たしていたら次のシーンを生成してそのポインタを返す
 		return new TitleScene_kiyosumi();
 	}
@@ -68,10 +88,13 @@ SceneBase* ResultScene_kiyosumi::Update(float _deltaTime)
 /// </summary>
 void ResultScene_kiyosumi::Draw()
 {
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 255);
 	// リザルトカメラの描画
 	mResultCamera->Draw();
 	// リザルトUIの描画
 	mResultUI->Draw();
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, mAlphaPal);
+	DrawGraph(0, 0, mMoveSceneHandle, FALSE);
 }
 
 /// <summary>
@@ -86,6 +109,9 @@ void ResultScene_kiyosumi::Sound()
 /// </summary>
 void ResultScene_kiyosumi::Load()
 {
+	////「読み込み中」の表示
+	//DrawString(0, 0, "Now Loading ...", GetColor(255, 255, 255));
+
 	mResultCamera = new ResultCamera;
 	mResultUI = new ResultUI;
 

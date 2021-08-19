@@ -26,4 +26,5 @@ private:
 	float mDeltaTime;    // デルタタイム
 	int   mHandle;       // ハンドル格納変数
 	int   mScore;        // スコア
+	int mFontHandle;
 };
