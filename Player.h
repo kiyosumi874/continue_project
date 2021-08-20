@@ -20,6 +20,9 @@ public:
 	void Draw()                  ;    // 描画
 	void Load()                  ;    // 初期化
 
+	// セッター
+	void SetFlag(const bool _PlayFlag) { mPlayFlag = _PlayFlag; }
+	// ゲッター
 	const VECTOR& PlayerGetPosition() const{return mPlayerPos;}
 
 private:
@@ -32,4 +35,5 @@ private:
 	float mTotalTime;
 	float mPlayTime;
 	bool mJumpFlag;
+	bool mPlayFlag;
 };

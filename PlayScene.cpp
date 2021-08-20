@@ -66,6 +66,8 @@ SceneBase* PlayScene::Update(float _deltaTime)
 	// プレイヤーの更新
 	mPlayer->Update(mDeltaTime);
 	mGameCountFlag3 = mPlayUI->GetGameCountFlag3();
+	// プレイヤーモーション開始
+	mPlayer->SetFlag(mGameCountFlag3);
 
 	mScore = mPlayUI->GetScore();
 
