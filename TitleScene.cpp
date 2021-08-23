@@ -7,6 +7,7 @@
 #include "TitleUI.h"
 #include "TitleCamera.h"
 #include "BGM.h"
+#include "SE.h"
 
 
 
@@ -25,14 +26,17 @@ TitleScene::TitleScene()
 	, mMoveSceneHandle(LoadGraph("data/img/MoveScene.png"))
 	, mBGMFlag(false)
 	, mBGM(nullptr)
+	, mClickNormal(nullptr)
+	, mClickNormalFlag(false)
+	, mFadeSpeed(3)
 {
 	// キャラ表示デバッグ用
-	mHandle = MV1LoadModel("data/model/player4/かれん.pmx");
+	mHandle = MV1LoadModel("data/model/podium/podium.mv1");
 	mAttachIndex = MV1AttachAnim(mHandle, 0, -1, FALSE);
 	mTotalTime = MV1GetAttachAnimTotalTime(mHandle, mAttachIndex);
 	mPlayTime = 0.0f;
-	MV1SetScale(mHandle, VGet(0.5f, 0.5f, 0.5f));
-	MV1SetPosition(mHandle, VGet(0, -7.0, 10));
+	MV1SetScale(mHandle, VGet(0.01f, 0.01f, 0.01f));
+	MV1SetPosition(mHandle, VGet(0, 0.0f, 10));
 	x = 0.0f;
 	z = 0.0f;
 }
@@ -45,6 +49,7 @@ TitleScene::~TitleScene()
 	delete mTitleCamera;
 	delete mTitleUI;
 	delete mBGM;
+	delete mClickNormal;
 	MV1DeleteModel(mHandle);
 	MV1DetachAnim(mHandle, mAttachIndex);
 }
@@ -71,7 +76,7 @@ SceneBase* TitleScene::Update(float _deltaTime)
 	MV1SetAttachAnimTime(mHandle, mAttachIndex, mPlayTime);
 	x += 150.0f * mDeltaTime;
 	z += 150.0f * mDeltaTime;
-	MV1SetPosition(mHandle, VGet(0.0f + 5.0f * sin(x * DX_PI_F / 180.0f), -7.0f, 10.0f + 5.0f * cos(z * DX_PI_F / 180.0f)));
+	MV1SetPosition(mHandle, VGet(0.0f + 5.0f * sin(x * DX_PI_F / 180.0f), 0.0f, 10.0f + 5.0f * cos(z * DX_PI_F / 180.0f)));
 
 	// タイトルカメラの更新
 	mTitleCamera->Update();
@@ -80,9 +85,9 @@ SceneBase* TitleScene::Update(float _deltaTime)
 	// タイトルUIの更新
 	mTitleUI->Update(mDeltaTime);
 	mStartButtonFlag = mTitleUI->GetStartButtonFlag();
-	if (mAlphaPal >= 0 && !mAlphaPalFlag)
+	if (0 <= mAlphaPal && !mAlphaPalFlag)
 	{
-		mAlphaPal -= 400.0f * mDeltaTime;
+		mAlphaPal -= mFadeSpeed;
 	}
 	else
 	{
@@ -90,7 +95,7 @@ SceneBase* TitleScene::Update(float _deltaTime)
 	}
 	if (mStartButtonFlag && mAlphaPalFlag)
 	{
-		mAlphaPal += 400.0f * mDeltaTime;
+		mAlphaPal += mFadeSpeed;
 	}
 
 	// シーン遷移条件
@@ -99,14 +104,6 @@ SceneBase* TitleScene::Update(float _deltaTime)
 		// 条件を満たしていたら次のシーンを生成してそのポインタを返す
 		return new PlayScene();
 	}
-
-	//// シーン遷移条件
-	//if (CheckHitKey(KEY_INPUT_RETURN) && mInputReturnFlag)
-	//{
-	//	mInputReturnFlag = false;
-	//	// 条件を満たしていたら次のシーンを生成してそのポインタを返す
-	//	return new PlayScene_kiyosumi();
-	//}
 
 	// シーンが変更されていなかったら自分のポインタを返す
 	return this;
@@ -150,6 +147,12 @@ void TitleScene::Sound()
 		mBGM->FadeInMusic(250, mDeltaTime);
 	}
 
+	if (mStartButtonFlag && mAlphaPalFlag && !mClickNormalFlag)
+	{
+		mClickNormalFlag = true;
+		mClickNormal->Play();
+	}
+
 	if (!mBGMFlag)
 	{
 		mBGM->Play();
@@ -165,11 +168,13 @@ void TitleScene::Load()
 	mTitleCamera = new TitleCamera;
 	mTitleUI = new TitleUI;
 	mBGM = new BGM;
+	mClickNormal = new SE;
 
 
 	// タイトルカメラの初期化
 	mTitleCamera->Load();
 	// タイトルUIの初期化
 	mTitleUI->Load();
+	mClickNormal->LoadSound("data/sound/click_normal.mp3");
 	mBGM->LoadMusic("data/sound/サイクリング_3.mp3");
 }

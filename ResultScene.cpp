@@ -3,6 +3,7 @@
 #include "TitleScene.h"
 #include "ResultCamera.h"
 #include "ResultUI.h"
+#include "Player.h"
 
 /// <summary>
 /// 初期化
@@ -17,6 +18,8 @@ ResultScene::ResultScene(int _score)
 	, mAlphaPalFlag(false)
 	, mMoveSceneHandle(LoadGraph("data/img/MoveScene.png"))
 	, mCheckHitFlag(false)
+	, mPlayer(nullptr)
+	, mFadeSpeed(3)
 {
 }
 
@@ -27,6 +30,7 @@ ResultScene::~ResultScene()
 {
 	delete mResultCamera;
 	delete mResultUI;
+	delete mPlayer;
 }
 
 /// <summary>
@@ -46,6 +50,7 @@ SceneBase* ResultScene::Update(float _deltaTime)
 	mResultUI->Update(mDeltaTime);
 	// リザルトUIにスコアを渡す
 	mResultUI->LoadScore(mScore);
+	mPlayer->Update(mDeltaTime);
 
 	// Enterキーの連続入力防止
 	if (!CheckHitKey(KEY_INPUT_RETURN))
@@ -56,7 +61,7 @@ SceneBase* ResultScene::Update(float _deltaTime)
 
 	if (mAlphaPal >= 0 && !mAlphaPalFlag)
 	{
-		mAlphaPal -= 400.0f * mDeltaTime;
+		mAlphaPal -= mFadeSpeed;
 	}
 	else
 	{
@@ -70,7 +75,7 @@ SceneBase* ResultScene::Update(float _deltaTime)
 	}
 	if (mCheckHitFlag)
 	{
-		mAlphaPal += 400.0f * mDeltaTime;
+		mAlphaPal += mFadeSpeed;
 	}
 	// シーン遷移条件
 	if (mAlphaPal >= 255)
@@ -89,6 +94,7 @@ SceneBase* ResultScene::Update(float _deltaTime)
 void ResultScene::Draw()
 {
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 255);
+	mPlayer->Draw();
 	// リザルトカメラの描画
 	mResultCamera->Draw();
 	// リザルトUIの描画
@@ -114,9 +120,13 @@ void ResultScene::Load()
 
 	mResultCamera = new ResultCamera;
 	mResultUI = new ResultUI;
+	mPlayer = new Player;
 
+	mPlayer->Load();
 	// リザルトカメラの初期化
 	mResultCamera->Load();
 	// リザルトUIの初期化
 	mResultUI->Load();
+
+	mResultCamera->SetTargetPos(mPlayer->PlayerGetPosition());
 }

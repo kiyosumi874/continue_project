@@ -14,7 +14,7 @@ Player::Player()
 	, mTotalTime(NULL)
 	, mPlayTime(0.0f)
 	, mJumpFlag(false)
-	, mScale(VGet(0.5f,0.5f,0.5f))
+	, mScale(VGet(0.5f, 0.5f, 0.5f))
 {
 	MV1SetPosition(mModelHandle, mPlayerPos);
 	MV1SetScale(mModelHandle, mScale);

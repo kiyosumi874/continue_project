@@ -35,6 +35,9 @@
     <Filter Include="ソース ファイル\work_kiyosumi\Sound">
       <UniqueIdentifier>{32c1396e-bc62-47f3-9d2a-132f90534556}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\work_kiyosumi\System">
+      <UniqueIdentifier>{bce8abf4-02fc-468c-8d9a-b2c08464a523}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -154,6 +157,9 @@
     <ClCompile Include="TitleCamera_shougo.cpp">
       <Filter>ソース ファイル\work_shougo\Camera</Filter>
     </ClCompile>
+    <ClCompile Include="Actor.cpp">
+      <Filter>ソース ファイル\work_kiyosumi\System</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SceneBase.h">
@@ -266,6 +272,9 @@
     </ClInclude>
     <ClInclude Include="TitleCamera_shougo.h">
       <Filter>ソース ファイル\work_shougo\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="Actor.h">
+      <Filter>ソース ファイル\work_kiyosumi\System</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

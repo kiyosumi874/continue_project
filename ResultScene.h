@@ -23,6 +23,7 @@ public:
 private:
     class ResultCamera* mResultCamera;    // リザルトカメラクラスへのポインタメンバ変数
     class ResultUI* mResultUI;        // リザルトUIクラスへのポインタメンバ変数
+    class Player* mPlayer;
     float mDeltaTime;         // デルタタイム
     bool  mInputReturnFlag;   // Enterキーの連続入力防止
     int mScore;
@@ -31,5 +32,8 @@ private:
     float mAlphaPal;
     bool mAlphaPalFlag;
     bool mCheckHitFlag;
+
+    int mFadeSpeed;
+
 };
 

@@ -26,9 +26,11 @@ private:
     class TitleCamera* mTitleCamera;    // タイトルカメラクラスへのポインタメンバ変数
     class TitleUI* mTitleUI;    // タイトルUIクラスへのポインタメンバ変数
     class BGM* mBGM;
+    class SE* mClickNormal;
     float mDeltaTime;          // デルタタイム
     bool mBGMFlag;
     bool  mInputReturnFlag;    // Enterキーの連続入力防止
+    bool mClickNormalFlag;
     // スタートボタンのフラグ
     bool mStartButtonFlag;
 
@@ -45,5 +47,8 @@ private:
     int mMoveSceneHandle;
     float mAlphaPal;
     bool mAlphaPalFlag;
+
+    int mFadeSpeed;
+
 };
 

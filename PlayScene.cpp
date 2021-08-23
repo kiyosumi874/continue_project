@@ -30,6 +30,7 @@ PlayScene::PlayScene()
 	, mPool(nullptr)
 	, mAudience(nullptr)
 	, mPlayer(nullptr)
+	, mFadeSpeed(3)
 {
 }
 
@@ -71,7 +72,7 @@ SceneBase* PlayScene::Update(float _deltaTime)
 
 	if (mAlphaPal >= 0 && !mAlphaPalFlag)
 	{
-		mAlphaPal -= 400.0f * mDeltaTime;
+		mAlphaPal -= mFadeSpeed;
 	}
 	else
 	{
@@ -79,7 +80,7 @@ SceneBase* PlayScene::Update(float _deltaTime)
 	}
 	if (!mGameCountFlag3)
 	{
-		mAlphaPal += 400.0f * mDeltaTime;
+		mAlphaPal += mFadeSpeed;
 	}
 	// ƒV[ƒ“‘JˆÚðŒ
 	if (mAlphaPal >= 255)
