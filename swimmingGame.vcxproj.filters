@@ -163,9 +163,6 @@
     <ClCompile Include="TitleCamera_shougo.cpp">
       <Filter>ソース ファイル\work_shougo\Camera</Filter>
     </ClCompile>
-    <ClCompile Include="Actor.cpp">
-      <Filter>ソース ファイル\work_kiyosumi\System</Filter>
-    </ClCompile>
     <ClCompile Include="StaticObjectActor.cpp">
       <Filter>ソース ファイル\work_kiyosumi\Object</Filter>
     </ClCompile>
@@ -176,6 +173,9 @@
       <Filter>ソース ファイル\work_kiyosumi\Camera</Filter>
     </ClCompile>
     <ClCompile Include="MathHelper.cpp">
+      <Filter>ソース ファイル\work_kiyosumi\System</Filter>
+    </ClCompile>
+    <ClCompile Include="Actor.cpp">
       <Filter>ソース ファイル\work_kiyosumi\System</Filter>
     </ClCompile>
   </ItemGroup>
@@ -291,9 +291,6 @@
     <ClInclude Include="TitleCamera_shougo.h">
       <Filter>ソース ファイル\work_shougo\Camera</Filter>
     </ClInclude>
-    <ClInclude Include="Actor.h">
-      <Filter>ソース ファイル\work_kiyosumi\System</Filter>
-    </ClInclude>
     <ClInclude Include="StaticObjectActor.h">
       <Filter>ソース ファイル\work_kiyosumi\Object</Filter>
     </ClInclude>
@@ -307,6 +304,9 @@
       <Filter>ソース ファイル\work_kiyosumi\System</Filter>
     </ClInclude>
     <ClInclude Include="common.h">
+      <Filter>ソース ファイル\work_kiyosumi\System</Filter>
+    </ClInclude>
+    <ClInclude Include="Actor.h">
       <Filter>ソース ファイル\work_kiyosumi\System</Filter>
     </ClInclude>
   </ItemGroup>
