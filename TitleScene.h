@@ -32,7 +32,7 @@ private:
     class TitleUI* mTitleUI;    // タイトルUIクラスへのポインタメンバ変数
     class BGM* mBGM;
     class SE* mClickNormal;
-    class PlayerActor_kiyosumi* mPlayer;
+    class PlayerActor* mPlayer;
     float mDeltaTime;          // デルタタイム
     bool mBGMFlag;
     bool  mInputReturnFlag;    // Enterキーの連続入力防止

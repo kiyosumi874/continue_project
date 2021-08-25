@@ -168,9 +168,8 @@
     <ClCompile Include="PlayCamera.cpp" />
     <ClCompile Include="PlayCamera_shougo.cpp" />
     <ClCompile Include="PlayCamera_YanoHaruto.cpp" />
-    <ClCompile Include="PlayerActor.cpp" />
     <ClCompile Include="Player.cpp" />
-    <ClCompile Include="PlayerActor_kiyosumi.cpp" />
+    <ClCompile Include="PlayerActor.cpp" />
     <ClCompile Include="Pool.cpp" />
     <ClCompile Include="ResultCamera.cpp" />
     <ClCompile Include="ResultCamera_shougo.cpp" />
@@ -227,9 +226,8 @@
     <ClInclude Include="PlayCamera.h" />
     <ClInclude Include="PlayCamera_shougo.h" />
     <ClInclude Include="PlayCamera_YanoHaruto.h" />
-    <ClInclude Include="PlayerActor.h" />
     <ClInclude Include="Player.h" />
-    <ClInclude Include="PlayerActor_kiyosumi.h" />
+    <ClInclude Include="PlayerActor.h" />
     <ClInclude Include="PlayScene_kiyosumi.h" />
     <ClInclude Include="PlayScene.h" />
     <ClInclude Include="PlayScene_shougo.h">

@@ -30,7 +30,7 @@ private:
     class Audience* mAudience;       //観客へのポインタ
     class Pool* mPool;           //プールへのポインタ
     //class Player* mPlayer;            // プレイヤークラスへのポインタメンバ変数
-    class PlayerActor_kiyosumi* mPlayer;
+    class PlayerActor* mPlayer;
    
     VECTOR       mTargetPos;        //プールの座標
 

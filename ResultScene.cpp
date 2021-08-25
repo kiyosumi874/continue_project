@@ -3,7 +3,7 @@
 #include "TitleScene.h"
 #include "Camera.h"
 #include "ResultUI.h"
-#include "PlayerActor_kiyosumi.h"
+#include "PlayerActor.h"
 #include "StaticObjectActor.h"
 
 //            «‚ÍTitleScene‚Å’è‹`‚µ‚Ä‚¢‚é‚Ì‚Å‘‚©‚È‚­‚Ä‚¢‚¢
@@ -60,7 +60,7 @@ SceneBase* ResultScene::Update(float _deltaTime)
 {
 	mDeltaTime = _deltaTime / 1000000.0f;
 
-	mPlayer->SetPlayerState(PlayerActor_kiyosumi::PLAYER_STATE::STATE_RESULT_IDLE);
+	mPlayer->SetPlayerState(PlayerActor::PLAYER_STATE::STATE_RESULT_IDLE);
 	mPlayer->UpdateActor(mDeltaTime);
 	mPlayer->Update(mDeltaTime);
 
@@ -154,7 +154,7 @@ void ResultScene::Load()
 
 	mCamera = new Camera;
 	mResultUI = new ResultUI;
-	mPlayer = new PlayerActor_kiyosumi;
+	mPlayer = new PlayerActor;
 	mStaticObjectActor = new StaticObjectActor;
 
 	// ƒŠƒUƒ‹ƒgUI‚Ì‰Šú‰»

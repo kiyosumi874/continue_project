@@ -145,9 +145,6 @@
     <ClCompile Include="Object_shougo.cpp">
       <Filter>ソース ファイル\work_shougo\Scene_shougo</Filter>
     </ClCompile>
-    <ClCompile Include="PlayerActor.cpp">
-      <Filter>ソース ファイル\work_shougo\Scene_shougo</Filter>
-    </ClCompile>
     <ClCompile Include="ResultScene_shougo.cpp">
       <Filter>ソース ファイル\work_shougo\Scene_shougo</Filter>
     </ClCompile>
@@ -166,9 +163,6 @@
     <ClCompile Include="StaticObjectActor.cpp">
       <Filter>ソース ファイル\work_kiyosumi\Object</Filter>
     </ClCompile>
-    <ClCompile Include="PlayerActor_kiyosumi.cpp">
-      <Filter>ソース ファイル\work_kiyosumi\Player</Filter>
-    </ClCompile>
     <ClCompile Include="Camera.cpp">
       <Filter>ソース ファイル\work_kiyosumi\Camera</Filter>
     </ClCompile>
@@ -177,6 +171,9 @@
     </ClCompile>
     <ClCompile Include="Actor.cpp">
       <Filter>ソース ファイル\work_kiyosumi\System</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerActor.cpp">
+      <Filter>ソース ファイル\work_kiyosumi\Player</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -273,9 +270,6 @@
     <ClInclude Include="Object_shougo.h">
       <Filter>ソース ファイル\work_shougo\Scene_shougo</Filter>
     </ClInclude>
-    <ClInclude Include="PlayerActor.h">
-      <Filter>ソース ファイル\work_shougo\Scene_shougo</Filter>
-    </ClInclude>
     <ClInclude Include="ResultScene_shougo.h">
       <Filter>ソース ファイル\work_shougo\Scene_shougo</Filter>
     </ClInclude>
@@ -294,9 +288,6 @@
     <ClInclude Include="StaticObjectActor.h">
       <Filter>ソース ファイル\work_kiyosumi\Object</Filter>
     </ClInclude>
-    <ClInclude Include="PlayerActor_kiyosumi.h">
-      <Filter>ソース ファイル\work_kiyosumi\Player</Filter>
-    </ClInclude>
     <ClInclude Include="Camera.h">
       <Filter>ソース ファイル\work_kiyosumi\Camera</Filter>
     </ClInclude>
@@ -308,6 +299,9 @@
     </ClInclude>
     <ClInclude Include="Actor.h">
       <Filter>ソース ファイル\work_kiyosumi\System</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerActor.h">
+      <Filter>ソース ファイル\work_kiyosumi\Player</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

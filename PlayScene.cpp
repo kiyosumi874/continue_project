@@ -6,7 +6,7 @@
 #include "BGM.h"
 #include "Audience.h"
 #include "Pool.h"
-#include "PlayerActor_kiyosumi.h"
+#include "PlayerActor.h"
 
 const VECTOR   PLAY_CAMERA_POS = VGet(0.0f, 1.0f, -2.0f);
 const VECTOR   PLAY_PLAYER_SCALE = VGet(0.05f, 0.05f, 0.05f);
@@ -69,7 +69,7 @@ SceneBase* PlayScene::Update(float _deltaTime)
 	// プレイUIの更新
 	mPlayUI->Update(mDeltaTime);
 	// プレイヤーの更新
-	mPlayer->SetPlayerState(PlayerActor_kiyosumi::PLAYER_STATE::STATE_PLAY_IDLE);
+	mPlayer->SetPlayerState(PlayerActor::PLAYER_STATE::STATE_PLAY_IDLE);
 	mPlayer->UpdateActor(mDeltaTime);
 	mPlayer->Update(mDeltaTime);
 
@@ -151,7 +151,7 @@ void PlayScene::Load()
 	mBGM = new BGM;
 	mPool = new Pool;
 	mAudience = new Audience;
-	mPlayer = new PlayerActor_kiyosumi;
+	mPlayer = new PlayerActor;
 
 	mPlayer->LoadModel(PLAYER_MODEL_HANDLE);
 	mPlayer->SetScale   (PLAY_PLAYER_SCALE);

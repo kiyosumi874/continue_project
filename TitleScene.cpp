@@ -7,7 +7,7 @@
 #include "TitleUI.h"
 #include "BGM.h"
 #include "SE.h"
-#include "PlayerActor_kiyosumi.h"
+#include "PlayerActor.h"
 #include "Camera.h"
 
 const float    FIRST_DELTA_TIME = 0.000001f;
@@ -69,7 +69,7 @@ SceneBase* TitleScene::Update(float _deltaTime)
 	mDeltaTime = _deltaTime / 1000000.0f;
 
 	// プレイヤーの更新
-	mPlayer->SetPlayerState(PlayerActor_kiyosumi::PLAYER_STATE::STATE_TITLE_IDLE);
+	mPlayer->SetPlayerState(PlayerActor::PLAYER_STATE::STATE_TITLE_IDLE);
 	mPlayer->UpdateActor(mDeltaTime);  // 1
 	mPlayer->Update(mDeltaTime);       // 2 この順番で書く
 
@@ -174,7 +174,7 @@ void TitleScene::Load()
 	mTitleUI = new TitleUI;
 	mBGM = new BGM;
 	mClickNormal = new SE;
-	mPlayer = new PlayerActor_kiyosumi;
+	mPlayer = new PlayerActor;
 	
 	mTitleUI->Load();
 	mClickNormal->LoadSound(SOUND_CLICK_HANDLE);

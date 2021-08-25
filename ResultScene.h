@@ -25,7 +25,7 @@ private:
     class ResultCamera* mResultCamera;    // リザルトカメラクラスへのポインタメンバ変数
     class Camera* mCamera;
     class ResultUI* mResultUI;        // リザルトUIクラスへのポインタメンバ変数
-    class PlayerActor_kiyosumi* mPlayer;
+    class PlayerActor* mPlayer;
     class StaticObjectActor* mStaticObjectActor;
     float mDeltaTime;         // デルタタイム
     bool  mInputReturnFlag;   // Enterキーの連続入力防止
