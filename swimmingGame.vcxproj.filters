@@ -306,5 +306,8 @@
     <ClInclude Include="MathHelper.h">
       <Filter>ソース ファイル\work_kiyosumi\System</Filter>
     </ClInclude>
+    <ClInclude Include="common.h">
+      <Filter>ソース ファイル\work_kiyosumi\System</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

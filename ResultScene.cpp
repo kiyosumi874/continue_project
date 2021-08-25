@@ -1,13 +1,21 @@
 #include "DxLib.h"
 #include "ResultScene.h"
 #include "TitleScene.h"
-#include "ResultCamera.h"
+#include "Camera.h"
 #include "ResultUI.h"
-#include "Player.h"
+#include "PlayerActor_kiyosumi.h"
 #include "StaticObjectActor.h"
 
-const char* MOVE_SCENE_IMG = "data/img/MoveScene.png";
+//            ↓はTitleSceneで定義しているので書かなくていい
+//const char* MOVE_SCENE_IMG = "data/img/MoveScene.png";
+//const float    FIRST_DELTA_TIME = 0.000001f;
+//const char* PLAYER_MODEL_HANDLE = "data/model/player5/waterboy.pmx";
+//const char* SOUND_CLICK_HANDLE = "data/sound/click_normal.mp3";
 const char* PODIUM_MODEL   = "data/model/podium/podium.mv1";
+const VECTOR   RESULT_CAMERA_POS = VGet(0.0f, 1.0f, -2.0f);
+const VECTOR   RESULT_PLAYER_SCALE = VGet(0.05f, 0.05f, 0.05f);
+const VECTOR   RESULT_PLAYER_ROTATE = VGet(0.0f, /*90.0f * DX_PI_F / 180.0f*/0.0f, 0.0f);
+const VECTOR   RESULT_PLAYER_POS = VGet(0.0f, 0.0f, 0.0f);
 
 /// <summary>
 /// 初期化
@@ -15,7 +23,6 @@ const char* PODIUM_MODEL   = "data/model/podium/podium.mv1";
 ResultScene::ResultScene(int _score)
 	: mDeltaTime(0.000001f)
 	, mInputReturnFlag(false)
-	, mResultCamera(nullptr)
 	, mResultUI(nullptr)
 	, mScore(_score)
 	, mAlphaPal(255)
@@ -25,6 +32,7 @@ ResultScene::ResultScene(int _score)
 	, mPlayer(nullptr)
 	, mFadeSpeed(3)
 	, mStaticObjectActor(nullptr)
+	, mCamera(nullptr)
 {
 }
 
@@ -36,6 +44,7 @@ ResultScene::~ResultScene()
 	delete mResultCamera;
 	delete mResultUI;
 	delete mPlayer;
+	delete mCamera;
 	delete mStaticObjectActor;
 }
 
@@ -50,14 +59,17 @@ ResultScene::~ResultScene()
 SceneBase* ResultScene::Update(float _deltaTime)
 {
 	mDeltaTime = _deltaTime / 1000000.0f;
-	// リザルトカメラの更新
-	mResultCamera->Update();
+
+	mPlayer->SetPlayerState(PlayerActor_kiyosumi::PLAYER_STATE::STATE_RESULT_IDLE);
+	mPlayer->UpdateActor(mDeltaTime);
+	mPlayer->Update(mDeltaTime);
+
 	// リザルトUIの更新
 	mResultUI->Update(mDeltaTime);
 	// リザルトUIにスコアを渡す
 	mResultUI->LoadScore(mScore);
-	mPlayer->Update(mDeltaTime);
 
+	mCamera->Update(RESULT_CAMERA_POS, mPlayer->GetPosition());
 
 	mStaticObjectActor->UpdateActor(mDeltaTime);
 	mStaticObjectActor->Update(mDeltaTime);
@@ -102,15 +114,25 @@ SceneBase* ResultScene::Update(float _deltaTime)
 /// </summary>
 void ResultScene::Draw()
 {
-#if DEBUG_MODE
-
+#ifdef _DEBUG
+	// デバッグモード時のみ実行
+	clsDx();
+	printfDx("CameraPosX:%f\n", mCamera->GetPositionX());
+	printfDx("CameraPosY:%f\n", mCamera->GetPositionY());
+	printfDx("CameraPosZ:%f\n", mCamera->GetPositionZ());
+	printfDx("CameraAimPosX:%f\n", mCamera->GetAimTargetPositionX());
+	printfDx("CameraAimPosY:%f\n", mCamera->GetAimTargetPositionY());
+	printfDx("CameraAimPosZ:%f\n", mCamera->GetAimTargetPositionZ());
+	printfDx("PlayerPosX:%f\n", mPlayer->GetPositionX());
+	printfDx("PlayerPosY:%f\n", mPlayer->GetPositionY());
+	printfDx("PlayerPosZ:%f\n", mPlayer->GetPositionZ());
 #endif
 
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 255);
 	mPlayer->Draw();
+
 	mStaticObjectActor->Draw();
-	// リザルトカメラの描画
-	mResultCamera->Draw();
+
 	// リザルトUIの描画
 	mResultUI->Draw();
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, mAlphaPal);
@@ -130,20 +152,22 @@ void ResultScene::Sound()
 void ResultScene::Load()
 {
 
-	mResultCamera = new ResultCamera;
+	mCamera = new Camera;
 	mResultUI = new ResultUI;
-	mPlayer = new Player;
+	mPlayer = new PlayerActor_kiyosumi;
 	mStaticObjectActor = new StaticObjectActor;
 
-	mPlayer->Load();
-	// リザルトカメラの初期化
-	mResultCamera->Load();
 	// リザルトUIの初期化
 	mResultUI->Load();
 	mMoveSceneHandle = LoadGraph(MOVE_SCENE_IMG);
+
+	mPlayer->LoadModel(PLAYER_MODEL_HANDLE);
+	mPlayer->SetScale(RESULT_PLAYER_SCALE);
+	mPlayer->SetRotation(RESULT_PLAYER_ROTATE);
+	mPlayer->SetPosition(RESULT_PLAYER_POS);
+
 	mStaticObjectActor->LoadModel(PODIUM_MODEL);
-	mStaticObjectActor->SetScale(VGet(0.01f, 0.01f, 0.01f));
+	mStaticObjectActor->SetScale(VGet(0.005f, 0.005f, 0.005f));
 	mStaticObjectActor->SetRotation(VGet(0.0f, 90.0f * DX_PI_F / 180.0f, 0.0f));
-	mStaticObjectActor->SetPosition(VGet(0.0f, 32.0f, -16.0f));
-	mResultCamera->SetTargetPos(mPlayer->PlayerGetPosition());
+	mStaticObjectActor->SetPosition(VGet(0.0f, -2.5f, 2.0f));
 }

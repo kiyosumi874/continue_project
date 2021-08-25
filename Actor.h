@@ -33,11 +33,16 @@ public:
 
 	// Getters/setters　ゲッター・セッター
 	const VECTOR& GetPosition()                const { return      mPosition; }    // 位置のゲット
+	float GetPositionX() { return mPosition.x; }    // 位置のゲット
+	float GetPositionY() { return mPosition.y; }    // 位置のゲット
+	float GetPositionZ() { return mPosition.z; }    // 位置のゲット
 	void          SetPosition(const VECTOR& _pos) { mPosition                = _pos;
 		                                            mRecomputeWorldTransform = true; }    // 位置のセット
+
 	const VECTOR& GetScale   ()                const { return      mScale;    }    // スケーリングのゲット
 	void          SetScale   (const VECTOR& _scale)  { mScale                   = _scale; 
 	                                                   mRecomputeWorldTransform = true;  }    // スケーリングのセット
+
 	const VECTOR& GetRotation()                const { return      mRotate;   }    // 回転のゲット
 	void          SetRotation(const VECTOR& _rotate) { mRotate                  = _rotate; 
 	                                                   mRecomputeWorldTransform = true; }    // 回転のセット

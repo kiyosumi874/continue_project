@@ -1,4 +1,6 @@
 #include "Actor.h"
+
+
 /// <summary>
 /// 初期化
 /// </summary>
@@ -36,20 +38,31 @@ Actor::~Actor()
        MV1DeleteModel(mMHandle);
     }
 }
-
+/// <summary>
+/// Update
+/// </summary>
+/// <param name="_deltaTime">デルタタイム</param>
 void Actor::Update(float _deltaTime)
 {
     ComputeWorldTransform();
 }
-
+/// <summary>
+/// モデルの描画
+/// </summary>
 void Actor::Draw()
 {
+
     if (mIsDrawable)
     {
        MV1DrawModel(mMHandle);
     }
 }
-
+/// <summary>
+/// ワールド座標に変換
+/// バカ重要↓
+/// ActorのScale,Rotate,Positionをいじった時に
+/// mRecomputeWorldTransform = trueにする
+/// </summary>
 void Actor::ComputeWorldTransform()
 {
     if (mRecomputeWorldTransform)
@@ -62,7 +75,10 @@ void Actor::ComputeWorldTransform()
     }
    
 }
-
+/// <summary>
+/// モデルデータをロードする
+/// </summary>
+/// <param name="_modelFile">"ファイルネーム"</param>
 void Actor::LoadModel(const TCHAR* _modelFile)
 {
     mMHandle = MV1LoadModel(_modelFile);
