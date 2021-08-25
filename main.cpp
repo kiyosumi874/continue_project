@@ -32,6 +32,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 	SetDrawScreen(DX_SCREEN_BACK);
 	// 画面の背景色を設定する
 	SetBackgroundColor(255, 255, 255);
+	/*SetBackgroundColor(0, 0, 0);*/
 	// 計測中に別のウインドウがアクティブになっても問題が無いように常時実行フラグをセット
 	SetAlwaysRunFlag(TRUE);
 
@@ -64,7 +65,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 
 
 	// タイトルシーンをセット
-	scene->SetScene(new TitleScene);
+	scene->SetScene(new PlayScene);
 
 
 	/*deltaTime = 0.000001f;*/
@@ -84,7 +85,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 
 		// BGM処理
 		scene->Sound();
-		printfDx("%f\n", deltaTime / 1000000.0f);
+		/*printfDx("%f\n", deltaTime / 1000000.0f);*/
 		// 裏画面の内容を表画面に反映させる
 		ScreenFlip();
 

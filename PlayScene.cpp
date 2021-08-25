@@ -1,12 +1,17 @@
 #include "PlayScene.h"
 #include "ResultScene.h"
+#include "TitleScene.h"
 #include "PlayUI.h"
-#include "PlayCamera.h"
+#include "Camera.h"
 #include "BGM.h"
 #include "Audience.h"
 #include "Pool.h"
-#include "Player.h"
+#include "PlayerActor.h"
 
+const VECTOR   PLAY_CAMERA_POS = VGet(0.0f, 1.0f, -2.0f);
+const VECTOR   PLAY_PLAYER_SCALE = VGet(0.05f, 0.05f, 0.05f);
+const VECTOR   PLAY_PLAYER_ROTATE = VGet(0.0f, /*90.0f * DX_PI_F / 180.0f*/0.0f, 0.0f);
+const VECTOR   PLAY_PLAYER_POS = VGet(0.0f, 0.0f, 0.0f);
 
 /// <summary>
 /// 初期化
@@ -14,7 +19,7 @@
 PlayScene::PlayScene()
 	: mDeltaTime(0.000001f)
 	, mInputReturnFlag(false)
-	, mPlayCamera(nullptr)
+	, mCamera(nullptr)
 	, mPlayUI(nullptr)
 	, mGameCountFlag3(true)
 	, mScore(0)
@@ -30,6 +35,7 @@ PlayScene::PlayScene()
 	, mPool(nullptr)
 	, mAudience(nullptr)
 	, mPlayer(nullptr)
+	, mFadeSpeed(3)
 {
 }
 
@@ -38,7 +44,8 @@ PlayScene::PlayScene()
 /// </summary>
 PlayScene::~PlayScene()
 {
-	delete mPlayCamera;
+	//delete mPlayCamera;
+	delete mCamera;
 	delete mPlayUI;
 	delete mBGM;
 	delete mPool;
@@ -57,21 +64,28 @@ PlayScene::~PlayScene()
 SceneBase* PlayScene::Update(float _deltaTime)
 {
 	mDeltaTime = _deltaTime / 1000000.0f;
-	// プレイカメラの更新
-	mPlayCamera->Update();
 	//観客の更新
 	mAudience->Update();
 	// プレイUIの更新
 	mPlayUI->Update(mDeltaTime);
 	// プレイヤーの更新
+	mPlayer->SetPlayerState(PlayerActor::PLAYER_STATE::STATE_PLAY_IDLE);
+	mPlayer->UpdateActor(mDeltaTime);
 	mPlayer->Update(mDeltaTime);
+
+	// カメラの更新
+	mCamera->Update(PLAY_CAMERA_POS, mTargetPos);
+
+	// 振り子ゲーム終了のフラグ
 	mGameCountFlag3 = mPlayUI->GetGameCountFlag3();
+	// プレイヤーモーション開始
+	mPlayer->SetFlag(mGameCountFlag3);
 
 	mScore = mPlayUI->GetScore();
 
 	if (mAlphaPal >= 0 && !mAlphaPalFlag)
 	{
-		mAlphaPal -= 400.0f * mDeltaTime;
+		mAlphaPal -= mFadeSpeed;
 	}
 	else
 	{
@@ -79,7 +93,7 @@ SceneBase* PlayScene::Update(float _deltaTime)
 	}
 	if (!mGameCountFlag3)
 	{
-		mAlphaPal += 400.0f * mDeltaTime;
+		mAlphaPal += mFadeSpeed;
 	}
 	// シーン遷移条件
 	if (mAlphaPal >= 255)
@@ -134,16 +148,20 @@ void PlayScene::Sound()
 /// </summary>
 void PlayScene::Load()
 {
-	mPlayCamera = new PlayCamera;
+	mCamera = new Camera;
 	mPlayUI = new PlayUI;
 	mBGM = new BGM;
 	mPool = new Pool;
 	mAudience = new Audience;
-	mPlayer = new Player;
-	// プレイカメラの初期化
-	mPlayCamera->Load();
+	mPlayer = new PlayerActor;
+
+	mPlayer->LoadModel(PLAYER_MODEL_HANDLE);
+	mPlayer->SetScale   (PLAY_PLAYER_SCALE);
+	mPlayer->SetRotation(PLAY_PLAYER_ROTATE);
+	mPlayer->SetPosition(PLAY_PLAYER_POS);
+
 	mTargetPos = mAudience->mGetAudiencePos();
-	mPlayCamera->SetTargetPos(mTargetPos);
+
 	// プレイUIの初期化
 	mPlayUI->Load();
 	mBGM->LoadMusic("data/sound/迅雷のユーロビート.mp3");
