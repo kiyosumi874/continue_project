@@ -23,10 +23,12 @@ public:
     void       Load()                  override;    // 初期化
 
 private:
-    class TitleCamera* mTitleCamera;    // タイトルカメラクラスへのポインタメンバ変数
+    //class TitleCamera* mTitleCamera;    // タイトルカメラクラスへのポインタメンバ変数
+    class Camera* mCamera;
     class TitleUI* mTitleUI;    // タイトルUIクラスへのポインタメンバ変数
     class BGM* mBGM;
     class SE* mClickNormal;
+    class Actor* mPlayer;
     float mDeltaTime;          // デルタタイム
     bool mBGMFlag;
     bool  mInputReturnFlag;    // Enterキーの連続入力防止
@@ -38,11 +40,10 @@ private:
     float mSceneTransitionCount;
 
     // キャラ表示デバッグ用
-    int mHandle;
-    int mAttachIndex;
-    float mTotalTime;
-    float mPlayTime;
-    float x, z;
+    //int mHandle;
+    //int mAttachIndex;
+    //float mTotalTime;
+    //float mPlayTime;
 
     int mMoveSceneHandle;
     float mAlphaPal;
