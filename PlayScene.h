@@ -23,14 +23,12 @@ public:
     void       Load()                  override;    // 初期化
 
 private:
-    //class PlayCamera* mPlayCamera;    // プレイカメラクラスへのポインタメンバ変数
-    class Camera* mCamera;
+    class PlayCamera* mPlayCamera;    // プレイカメラクラスへのポインタメンバ変数
     class PlayUI* mPlayUI;    // プレイUIクラスへのポインタメンバ変数
     class BGM* mBGM;
     class Audience* mAudience;       //観客へのポインタ
     class Pool* mPool;           //プールへのポインタ
-    //class Player* mPlayer;            // プレイヤークラスへのポインタメンバ変数
-    class PlayerActor_kiyosumi* mPlayer;
+    class Player* mPlayer;            // プレイヤークラスへのポインタメンバ変数
    
     VECTOR       mTargetPos;        //プールの座標
 

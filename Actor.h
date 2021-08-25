@@ -9,8 +9,6 @@
 
 #pragma once
 
-#include "DxLib.h"
-
 class Actor
 {
 public:
@@ -22,46 +20,22 @@ public:
 	};
 
 	Actor();
-	Actor(const TCHAR* _modelFile);
 	virtual ~Actor();
 
-	void Update(float _deltaTime);
-	virtual void UpdateActor(float _deltaTime) = 0;
-
-
-	void Draw();
+	virtual void Update(float _deltaTime) = 0;
 
 	// Getters/setters　ゲッター・セッター
 	const VECTOR& GetPosition()                const { return      mPosition; }    // 位置のゲット
-	float GetPositionX() { return mPosition.x; }    // 位置のゲット
-	float GetPositionY() { return mPosition.y; }    // 位置のゲット
-	float GetPositionZ() { return mPosition.z; }    // 位置のゲット
-	void          SetPosition(const VECTOR& _pos) { mPosition                = _pos;
-		                                            mRecomputeWorldTransform = true; }    // 位置のセット
-
+	void          SetPosition(const VECTOR& _pos)    { mPosition = _pos;      }    // 位置のセット
 	const VECTOR& GetScale   ()                const { return      mScale;    }    // スケーリングのゲット
-	void          SetScale   (const VECTOR& _scale)  { mScale                   = _scale; 
-	                                                   mRecomputeWorldTransform = true;  }    // スケーリングのセット
-
+	void          SetScale   (const VECTOR& _scale)  { mScale    = _scale;    }    // スケーリングのセット
 	const VECTOR& GetRotation()                const { return      mRotate;   }    // 回転のゲット
-	void          SetRotation(const VECTOR& _rotate) { mRotate                  = _rotate; 
-	                                                   mRecomputeWorldTransform = true; }    // 回転のセット
+	void          SetRotation(const VECTOR& _rotate) { mRotate   = _rotate;   }    // 回転のセット
 
-	void          SetIsDrawable(bool _isDrawable) { mIsDrawable = _isDrawable; }
-
-	void          ComputeWorldTransform();
-
-	void          LoadModel(const TCHAR* _modelFile);
 protected:
-	int    mMHandle;
-	bool   mIsDrawable;  // 描画可能かどうか
 	State  mState;
 	VECTOR mPosition;
 	VECTOR mRotate;
 	VECTOR mScale;
-
-	bool   mRecomputeWorldTransform;                                                    // ワールド変換の再計算が必要か？
-
-
 
 };

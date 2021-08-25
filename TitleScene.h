@@ -10,11 +10,6 @@
 #pragma once
 #include "SceneBase.h"
 
-extern const float FIRST_DELTA_TIME;
-extern const char* MOVE_SCENE_IMG;
-extern const char* PLAYER_MODEL_HANDLE;
-extern const char* SOUND_CLICK_HANDLE;
-
 class TitleScene : public SceneBase
 {
 public:
@@ -28,11 +23,10 @@ public:
     void       Load()                  override;    // 初期化
 
 private:
-    class Camera* mCamera;
+    class TitleCamera* mTitleCamera;    // タイトルカメラクラスへのポインタメンバ変数
     class TitleUI* mTitleUI;    // タイトルUIクラスへのポインタメンバ変数
     class BGM* mBGM;
     class SE* mClickNormal;
-    class PlayerActor_kiyosumi* mPlayer;
     float mDeltaTime;          // デルタタイム
     bool mBGMFlag;
     bool  mInputReturnFlag;    // Enterキーの連続入力防止
@@ -43,9 +37,15 @@ private:
     // スタートボタンを押したときのラグを作るCount
     float mSceneTransitionCount;
 
-  
+    // キャラ表示デバッグ用
+    int mHandle;
+    int mAttachIndex;
+    float mTotalTime;
+    float mPlayTime;
+    float x, z;
+
     int mMoveSceneHandle;
-    int mAlphaPal;
+    float mAlphaPal;
     bool mAlphaPalFlag;
 
     int mFadeSpeed;

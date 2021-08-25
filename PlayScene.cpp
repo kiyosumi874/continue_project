@@ -1,17 +1,12 @@
 #include "PlayScene.h"
 #include "ResultScene.h"
-#include "TitleScene.h"
 #include "PlayUI.h"
-#include "Camera.h"
+#include "PlayCamera.h"
 #include "BGM.h"
 #include "Audience.h"
 #include "Pool.h"
-#include "PlayerActor_kiyosumi.h"
+#include "Player.h"
 
-const VECTOR   PLAY_CAMERA_POS = VGet(0.0f, 1.0f, -2.0f);
-const VECTOR   PLAY_PLAYER_SCALE = VGet(0.05f, 0.05f, 0.05f);
-const VECTOR   PLAY_PLAYER_ROTATE = VGet(0.0f, /*90.0f * DX_PI_F / 180.0f*/0.0f, 0.0f);
-const VECTOR   PLAY_PLAYER_POS = VGet(0.0f, 0.0f, 0.0f);
 
 /// <summary>
 /// 初期化
@@ -19,7 +14,7 @@ const VECTOR   PLAY_PLAYER_POS = VGet(0.0f, 0.0f, 0.0f);
 PlayScene::PlayScene()
 	: mDeltaTime(0.000001f)
 	, mInputReturnFlag(false)
-	, mCamera(nullptr)
+	, mPlayCamera(nullptr)
 	, mPlayUI(nullptr)
 	, mGameCountFlag3(true)
 	, mScore(0)
@@ -44,8 +39,7 @@ PlayScene::PlayScene()
 /// </summary>
 PlayScene::~PlayScene()
 {
-	//delete mPlayCamera;
-	delete mCamera;
+	delete mPlayCamera;
 	delete mPlayUI;
 	delete mBGM;
 	delete mPool;
@@ -64,19 +58,14 @@ PlayScene::~PlayScene()
 SceneBase* PlayScene::Update(float _deltaTime)
 {
 	mDeltaTime = _deltaTime / 1000000.0f;
+	// プレイカメラの更新
+	mPlayCamera->Update();
 	//観客の更新
 	mAudience->Update();
 	// プレイUIの更新
 	mPlayUI->Update(mDeltaTime);
 	// プレイヤーの更新
-	mPlayer->SetPlayerState(PlayerActor_kiyosumi::PLAYER_STATE::STATE_PLAY_IDLE);
-	mPlayer->UpdateActor(mDeltaTime);
 	mPlayer->Update(mDeltaTime);
-
-	// カメラの更新
-	mCamera->Update(PLAY_CAMERA_POS, mTargetPos);
-
-	// 振り子ゲーム終了のフラグ
 	mGameCountFlag3 = mPlayUI->GetGameCountFlag3();
 
 	mScore = mPlayUI->GetScore();
@@ -146,20 +135,16 @@ void PlayScene::Sound()
 /// </summary>
 void PlayScene::Load()
 {
-	mCamera = new Camera;
+	mPlayCamera = new PlayCamera;
 	mPlayUI = new PlayUI;
 	mBGM = new BGM;
 	mPool = new Pool;
 	mAudience = new Audience;
-	mPlayer = new PlayerActor_kiyosumi;
-
-	mPlayer->LoadModel(PLAYER_MODEL_HANDLE);
-	mPlayer->SetScale   (PLAY_PLAYER_SCALE);
-	mPlayer->SetRotation(PLAY_PLAYER_ROTATE);
-	mPlayer->SetPosition(PLAY_PLAYER_POS);
-
+	mPlayer = new Player;
+	// プレイカメラの初期化
+	mPlayCamera->Load();
 	mTargetPos = mAudience->mGetAudiencePos();
-
+	mPlayCamera->SetTargetPos(mTargetPos);
 	// プレイUIの初期化
 	mPlayUI->Load();
 	mBGM->LoadMusic("data/sound/迅雷のユーロビート.mp3");

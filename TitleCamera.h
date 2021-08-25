@@ -10,7 +10,6 @@
 #pragma once
 #include "CameraBase.h"
 
-
 class TitleCamera : public CameraBase
 {
 public:

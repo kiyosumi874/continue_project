@@ -21,7 +21,9 @@ public:
 	virtual void       Sound()                  = 0;    // 音楽	  (オーバーライド必須)
 	virtual void       Load()                   = 0;    // 初期化 (オーバーライド必須)
 
-	protected:
+	int  GetVolume()            { return mVolumePal; }       // 音量のGetter
+	void SetVolume(int _volume) { mVolumePal = _volume; }    // 音量のセッター
+protected:
 	int mVolumePal     ;    // 音量
 	int mNormalFontSize;    // フォントサイズ
 };
