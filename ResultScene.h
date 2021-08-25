@@ -5,6 +5,7 @@
 // @author       椎原 清澄 (Kiyosumi Shiihara, @2021)
 // @changelog
 // 2021/ 7/29    新規作成
+// 2021/ 8/25    cameraとplayerのクラスを追加
 //----------------------------------------------------------------------------------//
 
 #pragma once
@@ -22,7 +23,10 @@ public:
     void       Load()                  override;    // 初期化
 private:
     class ResultCamera* mResultCamera;    // リザルトカメラクラスへのポインタメンバ変数
+    class Camera* mCamera;
     class ResultUI* mResultUI;        // リザルトUIクラスへのポインタメンバ変数
+    class PlayerActor* mPlayer;
+    class StaticObjectActor* mStaticObjectActor;
     float mDeltaTime;         // デルタタイム
     bool  mInputReturnFlag;   // Enterキーの連続入力防止
     int mScore;
@@ -31,5 +35,8 @@ private:
     float mAlphaPal;
     bool mAlphaPalFlag;
     bool mCheckHitFlag;
+
+    int mFadeSpeed;
+
 };
 

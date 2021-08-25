@@ -23,12 +23,14 @@ public:
     void       Load()                  override;    // 初期化
 
 private:
-    class PlayCamera* mPlayCamera;    // プレイカメラクラスへのポインタメンバ変数
+    //class PlayCamera* mPlayCamera;    // プレイカメラクラスへのポインタメンバ変数
+    class Camera* mCamera;
     class PlayUI* mPlayUI;    // プレイUIクラスへのポインタメンバ変数
     class BGM* mBGM;
     class Audience* mAudience;       //観客へのポインタ
     class Pool* mPool;           //プールへのポインタ
-    class Player* mPlayer;            // プレイヤークラスへのポインタメンバ変数
+    //class Player* mPlayer;            // プレイヤークラスへのポインタメンバ変数
+    class PlayerActor* mPlayer;
    
     VECTOR       mTargetPos;        //プールの座標
 
@@ -43,6 +45,7 @@ private:
     int mMoveSceneHandle;
     float mAlphaPal;
     bool mAlphaPalFlag;
+    int mFadeSpeed;
 
     bool mBGMFlag;
 };
