@@ -44,7 +44,7 @@ void Player::Update(float _deltaTime)
 	{
 		if (mPlayerPos.z < -17.f && mJumpFlag == false)
 		{
-			if (mPlayerPos.y > 36.0f)
+			if (mPlayerPos.y > 35.0f)
 			{
 				mJumpFlag = true;
 			}
@@ -70,6 +70,16 @@ void Player::Update(float _deltaTime)
 		{
 			mPlayTime += 40.0f * mDeltaTime;
 		}
+		mAttachIndex = MV1AttachAnim(mModelHandle, 0, -1, FALSE);
+	}
+	if(mPlayFlag == true)
+	{
+		mPlayTime += 15.0f * mDeltaTime;
+		if (mPlayTime >= mTotalTime)
+		{
+			mPlayTime = 0.0f;
+		}
+		mAttachIndex = MV1AttachAnim(mModelHandle, 1, -1, FALSE);
 	}
 
 	// Ä¶ŠÔ‚ğƒZƒbƒg‚·‚é

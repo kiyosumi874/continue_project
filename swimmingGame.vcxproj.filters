@@ -136,9 +136,6 @@
     <ClCompile Include="Object_shougo.cpp">
       <Filter>ソース ファイル\work_shougo\Scene_shougo</Filter>
     </ClCompile>
-    <ClCompile Include="PlayerActor.cpp">
-      <Filter>ソース ファイル\work_shougo\Scene_shougo</Filter>
-    </ClCompile>
     <ClCompile Include="ResultScene_shougo.cpp">
       <Filter>ソース ファイル\work_shougo\Scene_shougo</Filter>
     </ClCompile>
@@ -247,9 +244,6 @@
       <Filter>ソース ファイル\work_haruto</Filter>
     </ClInclude>
     <ClInclude Include="Object_shougo.h">
-      <Filter>ソース ファイル\work_shougo\Scene_shougo</Filter>
-    </ClInclude>
-    <ClInclude Include="PlayerActor.h">
       <Filter>ソース ファイル\work_shougo\Scene_shougo</Filter>
     </ClInclude>
     <ClInclude Include="ResultScene_shougo.h">
