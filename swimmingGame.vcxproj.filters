@@ -154,6 +154,9 @@
     <ClCompile Include="TitleCamera_shougo.cpp">
       <Filter>ソース ファイル\work_shougo\Camera</Filter>
     </ClCompile>
+    <ClCompile Include="Effect.cpp">
+      <Filter>ソース ファイル\work_haruto</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SceneBase.h">
@@ -266,6 +269,9 @@
     </ClInclude>
     <ClInclude Include="TitleCamera_shougo.h">
       <Filter>ソース ファイル\work_shougo\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="Effect.h">
+      <Filter>ソース ファイル\work_haruto</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

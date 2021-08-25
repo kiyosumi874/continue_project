@@ -17,7 +17,7 @@ public:
 	Audience();
 	~Audience();
 	void Init();
-	void Update();
+	void Update(int _score);
 	void Draw();
 	const VECTOR& mGetAudiencePos()const { return mPos[NULL][NULL]; };
 private:
@@ -29,8 +29,8 @@ private:
 	float mAudienceBetweenY;                                      //観客同士のY距離
 	float mAudienceBetweenZ;                                      //観客同士のZ距離
 
+	int   mClickCount;                                            //クリック回数カウント
 	bool  mDownFlag[AudienceLine][AudienceNum];		              //落下flag
-	float mDownInterval;		                                  //落下まで少し待つ
 	float mExcitementJump;                                        //興奮時の  跳ね方
 	float mGroundHight[AudienceLine];                             //観客の立つ地面の高さ
 	float mHighestJumpLine[AudienceLine];                         //最高ジャンプ高度
@@ -42,4 +42,5 @@ private:
 	float mStartPosX;				                              //観客の初期X位置
 	float mStartPosY;				                              //観客の初期Y位置
 	float mStartPosZ;		                                      //観客の初期Z位置
+
 };

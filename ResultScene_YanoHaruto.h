@@ -5,7 +5,7 @@
 class ResultScene_YanoHaruto : public SceneBase
 {
 public:
-    ResultScene_YanoHaruto();    // コンストラクタ
+    ResultScene_YanoHaruto(int _score);    // コンストラクタ
     ~ResultScene_YanoHaruto();    // デストラクタ
 
     SceneBase* Update(float _deltaTime)override;    // 更新
@@ -15,5 +15,6 @@ public:
 private:
     float mDeltaTime;         // デルタタイム
     bool  mInputReturnFlag;   // Enterキーの連続入力防止
+    int mScore;
 };
 

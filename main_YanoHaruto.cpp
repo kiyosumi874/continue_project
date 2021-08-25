@@ -5,6 +5,7 @@
 #include "TitleScene_YanoHaruto.h"
 #include "PlayScene_YanoHaruto.h"
 #include "ResultScene_YanoHaruto.h"
+#include "EffekseerForDXLib.h"
 
 // SetGraphModeのパラメータ
 #define WINDOW_SCREEN_WIDTH  1920
@@ -55,6 +56,12 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 		// 描画処理
 		scene->Draw();
 
+		// Effekseer側のカメラとDxライブラリ側のカメラを同期する
+		Effekseer_Sync3DSetting();
+		// Effekseerの更新
+		UpdateEffekseer3D();
+		// Effekseerの描画
+		DrawEffekseer3D();
 		// BGM処理
 		scene->Sound();
 
@@ -75,9 +82,50 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 
 	delete scene;
 
+	// Effekseerの終了
+	Effkseer_End();
 	// ＤＸライブラリの後始末
 	DxLib_End();
 
 	// ソフトの終了
 	return 0;
+}/// <summary>
+/// Effekseerの初期化
+/// </summary>
+void InitializeEffekseer()
+{
+	// DXライブラリとEffekseerの初期化処理
+	if (Effekseer_Init(8000) == -1)
+	{
+		printf("Effekseer初期化に失敗！\n");			                              // エラーが起きたら直ちに終了
+	}
+
+	//---------------------------------------------------+
+	// Effekseer関連の初期化
+	//---------------------------------------------------+
+	SetUseDirect3DVersion(DX_DIRECT3D_11);                    // DirectX11を使用
+	SetChangeScreenModeGraphicsSystemResetFlag(FALSE);
+	Effekseer_SetGraphicsDeviceLostCallbackFunctions();
+	SetUseZBuffer3D(TRUE);                                    // ZBufferを使用
+	SetWriteZBuffer3D(TRUE);                                  // ZBufferへの書き込みを許可
+}
+/// <summary>
+/// Effekseerの初期化
+/// </summary>
+void InitializeEffekseer()
+{
+	// DXライブラリとEffekseerの初期化処理
+	if (Effekseer_Init(8000) == -1)
+	{
+		printf("Effekseer初期化に失敗！\n");			                              // エラーが起きたら直ちに終了
+	}
+
+	//---------------------------------------------------+
+	// Effekseer関連の初期化
+	//---------------------------------------------------+
+	SetUseDirect3DVersion(DX_DIRECT3D_11);                    // DirectX11を使用
+	SetChangeScreenModeGraphicsSystemResetFlag(FALSE);
+	Effekseer_SetGraphicsDeviceLostCallbackFunctions();
+	SetUseZBuffer3D(TRUE);                                    // ZBufferを使用
+	SetWriteZBuffer3D(TRUE);                                  // ZBufferへの書き込みを許可
 }

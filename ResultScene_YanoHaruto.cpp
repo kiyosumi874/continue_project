@@ -5,9 +5,10 @@
 /// <summary>
 /// ‰Šú‰»
 /// </summary>
-ResultScene_YanoHaruto::ResultScene_YanoHaruto()
+ResultScene_YanoHaruto::ResultScene_YanoHaruto(int _score)
 	: mDeltaTime(0.000001f)
 	, mInputReturnFlag(false)
+	, mScore(_score)
 {
 }
 

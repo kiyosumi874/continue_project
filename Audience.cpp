@@ -8,17 +8,18 @@ Audience::Audience()
 	mAudienceBetweenX = 6.0f;	     //観客同士のX距離
 	mAudienceBetweenY = 2.3f;	     //観客同士のY距離
 	mAudienceBetweenZ = 5.0f;	     //観客同士のZ距離
-	mDownInterval = 0.0;             //落下まで少し待つ
 								     
-	mNowState  = Normal;	             //観客の状態
+	mClickCount = 0;                 //Enterを押した回数
+
 	mStartPosX = -45.5f;             //観客の初期x位置
 	mStartPosY = 10.0f;              //観客の初期y位置
 	mStartPosZ = -30.0f;     	     //観客の初期ｚ位置
+	mNowState  = Normal;	         //観客の状態
 	mSideAudienceState = mNowState;	 //隣の観客の状態
 
 	mExcitementJump = 0.6f;	         //興奮時のジャンプ速度
-	mNormalJump     = 0.1f;	     //通常のジャンプ速度
-	mQuietJump      = 0.02f;	     //しらけたジャンプ速度
+	mNormalJump     = 0.1f;	         //通常のジャンプ速度
+	mQuietJump      = 0.05f;	     //しらけたジャンプ速度
 
 	//モデルの読み込み
 	for (int i = 0; i < AudienceLine; i++)
@@ -82,25 +83,27 @@ Audience::~Audience()
 void Audience::Init()
 {
 	mNowState = Normal;
+	mSideAudienceState = Normal;
+	mClickCount = 0;
 }
 /// <summary>
 /// 観客の動き
 /// </summary>
-void Audience::Update()
+void Audience::Update(int _score)
 {
+	if (CheckHitKey(KEY_INPUT_RETURN))
+	{
+		mClickCount++;
+	}
 	for (int i = 0; i < AudienceLine; i++)
 	{
 		for (int j = 0; j < AudienceNum; j++)
 		{
-			//if (mDownFlag[i][j])
-			//{
-			//	mPos[i][j].y -= 0.05f;
-			//}
 			if (mSideAudienceState == Idol)
 			{
 				mNowState = Normal;
 			}
-			else if (!mSideAudienceState == Idol)
+			else if ((!mSideAudienceState == Idol))
 			{
 				mNowState = Idol;
 			}

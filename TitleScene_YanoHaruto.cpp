@@ -38,7 +38,7 @@ SceneBase* TitleScene_YanoHaruto::Update(float _deltaTime)
 	}
 
 	// デバッグ用
-	printfDx("今TitleScene\n");
+	printfDx("今TitleSceneYano\n");
 
 	// シーン遷移条件
 	if (CheckHitKey(KEY_INPUT_RETURN) && mInputReturnFlag)

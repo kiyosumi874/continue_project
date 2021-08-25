@@ -1,9 +1,12 @@
-#include "DxLib.h"
-#include "Audience.h"
-#include "ResultScene_YanoHaruto.h"
 #include "PlayScene_YanoHaruto.h"
-#include "PlayCamera_YanoHaruto.h"
+#include "ResultScene_YanoHaruto.h"
+#include "PlayUI.h"
+#include "PlayCamera.h"
+#include "BGM.h"
+#include "Audience.h"
 #include "Pool.h"
+#include "Player.h"
+
 
 /// <summary>
 /// 初期化
@@ -11,8 +14,23 @@
 PlayScene_YanoHaruto::PlayScene_YanoHaruto()
 	: mDeltaTime(0.000001f)
 	, mInputReturnFlag(false)
+	, mPlayCamera(nullptr)
+	, mPlayUI(nullptr)
+	, mGameCountFlag3(true)
+	, mScore(0)
+	, mPlayCircleGameFlag(true)
+	, mPlayGaugeGameFlag(false)
+	, mPlayPendulumGameFlag(false)
+	, mAlphaPal(255)
+	, mAlphaPalFlag(false)
+	, mMoveSceneHandle(LoadGraph("data/img/MoveScene.png"))
+	, mBGM(nullptr)
+	, mBGMFlag(false)
+	, mTargetPos(VGet(0.0f, 0.0f, 0.0f))
+	, mPool(nullptr)
+	, mAudience(nullptr)
+	, mPlayer(nullptr)
 {
-	mTargetPos = VGet(0.0f, 0.0f, 0.0f);
 }
 
 /// <summary>
@@ -20,6 +38,12 @@ PlayScene_YanoHaruto::PlayScene_YanoHaruto()
 /// </summary>
 PlayScene_YanoHaruto::~PlayScene_YanoHaruto()
 {
+	delete mPlayCamera;
+	delete mPlayUI;
+	delete mBGM;
+	delete mPool;
+	delete mAudience;
+	delete mPlayer;
 }
 
 /// <summary>
@@ -32,26 +56,38 @@ PlayScene_YanoHaruto::~PlayScene_YanoHaruto()
 /// </returns>
 SceneBase* PlayScene_YanoHaruto::Update(float _deltaTime)
 {
-	mDeltaTime = _deltaTime;
-	//プレイカメラの更新
+	// デバッグ用
+	printfDx("今PlaySceneYano\n");
+	mDeltaTime = _deltaTime / 1000000.0f;
+	// プレイカメラの更新
 	mPlayCamera->Update();
 	//観客の更新
-	mAudience->Update();
-	// Enterキーの連続入力防止
-	if (!CheckHitKey(KEY_INPUT_RETURN))
+	mAudience->Update(mScore);
+	// プレイUIの更新
+	mPlayUI->Update(mDeltaTime);
+	// プレイヤーの更新
+	mPlayer->Update(mDeltaTime);
+	mGameCountFlag3 = mPlayUI->GetGameCountFlag3();
+
+	mScore = mPlayUI->GetScore();
+
+	if (mAlphaPal >= 0 && !mAlphaPalFlag)
 	{
-		mInputReturnFlag = true;
+		mAlphaPal -= 400.0f * mDeltaTime;
 	}
-
-	// デバッグ用
-	printfDx("今PlayScene_YanoHaruto\n");
-
-	// シーン遷移条件
-	if (CheckHitKey(KEY_INPUT_RETURN) && mInputReturnFlag)
+	else
 	{
-		mInputReturnFlag = false;
+		mAlphaPalFlag = true;
+	}
+	if (!mGameCountFlag3)
+	{
+		mAlphaPal += 400.0f * mDeltaTime;
+	}
+	// シーン遷移条件
+	if (mAlphaPal >= 255)
+	{
 		// 条件を満たしていたら次のシーンを生成してそのポインタを返す
-		return new ResultScene_YanoHaruto();
+		return new ResultScene_YanoHaruto(mScore);
 	}
 
 	// シーンが変更されていなかったら自分のポインタを返す
@@ -59,13 +95,19 @@ SceneBase* PlayScene_YanoHaruto::Update(float _deltaTime)
 }
 
 /// <summary>
-/// 描画8/12追加
+/// 描画
 /// </summary>
 void PlayScene_YanoHaruto::Draw()
 {
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 255);
 	mAudience->Draw();
 	mPool->Draw();
-	mPlayCamera->Draw();
+	// プレイヤーの描画
+	mPlayer->Draw();
+	// プレイUIの描画
+	mPlayUI->Draw();
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, mAlphaPal);
+	DrawGraph(0, 0, mMoveSceneHandle, FALSE);
 }
 
 /// <summary>
@@ -73,16 +115,38 @@ void PlayScene_YanoHaruto::Draw()
 /// </summary>
 void PlayScene_YanoHaruto::Sound()
 {
+	if (!mGameCountFlag3)
+	{
+		mBGM->FadeOutMusic(500, mDeltaTime);
+	}
+	else
+	{
+		mBGM->FadeInMusic(250, mDeltaTime);
+	}
+	if (!mBGMFlag)
+	{
+		mBGM->Play();
+		mBGMFlag = true;
+	}
+	mPlayUI->Sound();
 }
 
 /// <summary>
-/// 初期化8/12追記
+/// 初期化
 /// </summary>
 void PlayScene_YanoHaruto::Load()
-{	
+{
+	mPlayCamera = new PlayCamera;
+	mPlayUI = new PlayUI;
+	mBGM = new BGM;
 	mPool = new Pool;
 	mAudience = new Audience;
-	mPlayCamera = new PlayCamera_YanoHaruto;
+	mPlayer = new Player;
+	// プレイカメラの初期化
+	mPlayCamera->Load();
 	mTargetPos = mAudience->mGetAudiencePos();
-	mPlayCamera->mSetTargetPos(mTargetPos);
+	mPlayCamera->SetTargetPos(mTargetPos);
+	// プレイUIの初期化
+	mPlayUI->Load();
+	mBGM->LoadMusic("data/sound/迅雷のユーロビート.mp3");
 }
