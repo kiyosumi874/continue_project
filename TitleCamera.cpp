@@ -1,19 +1,24 @@
 #include "DxLib.h"
 #include "TitleCamera.h"
 
-// SetCameraNearFarÇÃà¯êî
-#define NEAR  1.0f
-#define FAR 150.0f
+//---------------------------------------------
+// íËêî
+const float CAMERA_NEAR = 1.0f;
+const float CAMERA_FAR  = 150.0f;
+const VECTOR CAMERA_POSITION = VGet(0.0f, 0.0f, -1.0f);
+const VECTOR CAMERA_TARGET = VGet(0.0f, 0.0f, 0.0f);
+const VECTOR CAMERA_UP = VGet(0.0f, 1.0f, 0.0f);
+//---------------------------------------------
 
 /// <summary>
 /// èâä˙âª
 /// </summary>
 TitleCamera::TitleCamera()
-	: mCameraPosition(VGet(0.0f, 0.0f, -1.0f))
-	, mCameraTarget(VGet(0.0f, 0.0f, 0.0f))
-	, mCameraUp(VGet(0.0f, 1.0f, 0.0f))
+	: mCameraPosition(CAMERA_POSITION)
+	, mCameraTarget(CAMERA_TARGET)
+	, mCameraUp(CAMERA_UP)
 {
-	SetCameraNearFar(NEAR, FAR);
+	SetCameraNearFar(CAMERA_NEAR, CAMERA_FAR);
 }
 
 /// <summary>
