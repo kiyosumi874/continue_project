@@ -78,8 +78,6 @@ SceneBase* PlayScene::Update(float _deltaTime)
 
 	// 振り子ゲーム終了のフラグ
 	mGameCountFlag3 = mPlayUI->GetGameCountFlag3();
-	// プレイヤーモーション開始
-	mPlayer->SetFlag(mGameCountFlag3);
 
 	mScore = mPlayUI->GetScore();
 
