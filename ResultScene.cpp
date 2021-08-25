@@ -3,6 +3,11 @@
 #include "TitleScene.h"
 #include "ResultCamera.h"
 #include "ResultUI.h"
+#include "Player.h"
+#include "StaticObjectActor.h"
+
+const char* MOVE_SCENE_IMG = "data/img/MoveScene.png";
+const char* PODIUM_MODEL   = "data/model/podium/podium.mv1";
 
 /// <summary>
 /// 初期化
@@ -15,8 +20,11 @@ ResultScene::ResultScene(int _score)
 	, mScore(_score)
 	, mAlphaPal(255)
 	, mAlphaPalFlag(false)
-	, mMoveSceneHandle(LoadGraph("data/img/MoveScene.png"))
+	, mMoveSceneHandle(-1)
 	, mCheckHitFlag(false)
+	, mPlayer(nullptr)
+	, mFadeSpeed(3)
+	, mStaticObjectActor(nullptr)
 {
 }
 
@@ -27,6 +35,8 @@ ResultScene::~ResultScene()
 {
 	delete mResultCamera;
 	delete mResultUI;
+	delete mPlayer;
+	delete mStaticObjectActor;
 }
 
 /// <summary>
@@ -46,7 +56,11 @@ SceneBase* ResultScene::Update(float _deltaTime)
 	mResultUI->Update(mDeltaTime);
 	// リザルトUIにスコアを渡す
 	mResultUI->LoadScore(mScore);
+	mPlayer->Update(mDeltaTime);
 
+
+	mStaticObjectActor->UpdateActor(mDeltaTime);
+	mStaticObjectActor->Update(mDeltaTime);
 	// Enterキーの連続入力防止
 	if (!CheckHitKey(KEY_INPUT_RETURN))
 	{
@@ -56,7 +70,7 @@ SceneBase* ResultScene::Update(float _deltaTime)
 
 	if (mAlphaPal >= 0 && !mAlphaPalFlag)
 	{
-		mAlphaPal -= 400.0f * mDeltaTime;
+		mAlphaPal -= mFadeSpeed;
 	}
 	else
 	{
@@ -70,7 +84,7 @@ SceneBase* ResultScene::Update(float _deltaTime)
 	}
 	if (mCheckHitFlag)
 	{
-		mAlphaPal += 400.0f * mDeltaTime;
+		mAlphaPal += mFadeSpeed;
 	}
 	// シーン遷移条件
 	if (mAlphaPal >= 255)
@@ -88,7 +102,13 @@ SceneBase* ResultScene::Update(float _deltaTime)
 /// </summary>
 void ResultScene::Draw()
 {
+#if DEBUG_MODE
+
+#endif
+
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 255);
+	mPlayer->Draw();
+	mStaticObjectActor->Draw();
 	// リザルトカメラの描画
 	mResultCamera->Draw();
 	// リザルトUIの描画
@@ -109,14 +129,21 @@ void ResultScene::Sound()
 /// </summary>
 void ResultScene::Load()
 {
-	////「読み込み中」の表示
-	//DrawString(0, 0, "Now Loading ...", GetColor(255, 255, 255));
 
 	mResultCamera = new ResultCamera;
 	mResultUI = new ResultUI;
+	mPlayer = new Player;
+	mStaticObjectActor = new StaticObjectActor;
 
+	mPlayer->Load();
 	// リザルトカメラの初期化
 	mResultCamera->Load();
 	// リザルトUIの初期化
 	mResultUI->Load();
+	mMoveSceneHandle = LoadGraph(MOVE_SCENE_IMG);
+	mStaticObjectActor->LoadModel(PODIUM_MODEL);
+	mStaticObjectActor->SetScale(VGet(0.01f, 0.01f, 0.01f));
+	mStaticObjectActor->SetRotation(VGet(0.0f, 90.0f * DX_PI_F / 180.0f, 0.0f));
+	mStaticObjectActor->SetPosition(VGet(0.0f, 32.0f, -16.0f));
+	mResultCamera->SetTargetPos(mPlayer->PlayerGetPosition());
 }

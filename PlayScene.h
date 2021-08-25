@@ -45,6 +45,7 @@ private:
     int mMoveSceneHandle;
     float mAlphaPal;
     bool mAlphaPalFlag;
+    int mFadeSpeed;
 
     bool mBGMFlag;
 };

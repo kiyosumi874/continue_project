@@ -35,6 +35,15 @@
     <Filter Include="ソース ファイル\work_kiyosumi\Sound">
       <UniqueIdentifier>{32c1396e-bc62-47f3-9d2a-132f90534556}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\work_kiyosumi\System">
+      <UniqueIdentifier>{bce8abf4-02fc-468c-8d9a-b2c08464a523}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\work_kiyosumi\Object">
+      <UniqueIdentifier>{610c0a0b-413a-487d-a52f-848bd2783ee5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\work_kiyosumi\Player">
+      <UniqueIdentifier>{3400fe6c-b23e-40f8-9b37-8afae5839d39}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -154,6 +163,21 @@
     <ClCompile Include="TitleCamera_shougo.cpp">
       <Filter>ソース ファイル\work_shougo\Camera</Filter>
     </ClCompile>
+    <ClCompile Include="Actor.cpp">
+      <Filter>ソース ファイル\work_kiyosumi\System</Filter>
+    </ClCompile>
+    <ClCompile Include="StaticObjectActor.cpp">
+      <Filter>ソース ファイル\work_kiyosumi\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerActor_kiyosumi.cpp">
+      <Filter>ソース ファイル\work_kiyosumi\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera.cpp">
+      <Filter>ソース ファイル\work_kiyosumi\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="MathHelper.cpp">
+      <Filter>ソース ファイル\work_kiyosumi\System</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SceneBase.h">
@@ -266,6 +290,21 @@
     </ClInclude>
     <ClInclude Include="TitleCamera_shougo.h">
       <Filter>ソース ファイル\work_shougo\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="Actor.h">
+      <Filter>ソース ファイル\work_kiyosumi\System</Filter>
+    </ClInclude>
+    <ClInclude Include="StaticObjectActor.h">
+      <Filter>ソース ファイル\work_kiyosumi\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerActor_kiyosumi.h">
+      <Filter>ソース ファイル\work_kiyosumi\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera.h">
+      <Filter>ソース ファイル\work_kiyosumi\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="MathHelper.h">
+      <Filter>ソース ファイル\work_kiyosumi\System</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

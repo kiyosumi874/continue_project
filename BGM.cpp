@@ -41,7 +41,10 @@ void BGM::Stop()
 /// <param name="_deltaTime">デルタタイム</param>
 void BGM::FadeInMusic(int _fadeInTime, float _deltaTime)
 {
-	mVolumePal += _fadeInTime * _deltaTime;
+	if (160 >= mVolumePal)
+	{
+		mVolumePal += _fadeInTime * _deltaTime;
+	}
 	ChangeVolumeSoundMem(mVolumePal, mSHandle);
 }
 

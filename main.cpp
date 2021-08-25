@@ -85,7 +85,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 
 		// BGMˆ—
 		scene->Sound();
-		printfDx("%f\n", deltaTime / 1000000.0f);
+		/*printfDx("%f\n", deltaTime / 1000000.0f);*/
 		// — ‰æ–Ê‚Ì“à—e‚ð•\‰æ–Ê‚É”½‰f‚³‚¹‚é
 		ScreenFlip();
 

@@ -40,6 +40,7 @@ void SE::Stop()
 void SE::LoadSound(const char* _fileName)
 {
 	mSHandle = LoadSoundMem(_fileName);
+	ChangeVolumeSoundMem(180, mSHandle);
 }
 
 /// <summary>
