@@ -1,8 +1,21 @@
 #include "DxLib.h"
 #include "ResultScene_kiyosumi.h"
 #include "TitleScene_kiyosumi.h"
-#include "ResultCamera.h"
+#include "Camera.h"
 #include "ResultUI.h"
+#include "PlayerActor.h"
+#include "StaticObjectActor.h"
+
+//            ↓はTitleSceneで定義しているので書かなくていい
+//const char* MOVE_SCENE_IMG = "data/img/MoveScene.png";
+//const float    FIRST_DELTA_TIME = 0.000001f;
+//const char* PLAYER_MODEL_HANDLE = "data/model/player5/waterboy.pmx";
+//const char* SOUND_CLICK_HANDLE = "data/sound/click_normal.mp3";
+const char* PODIUM_MODEL = "data/model/podium/podium.mv1";
+const VECTOR   RESULT_CAMERA_POS = VGet(0.0f, 2.0f, -2.0f);
+const VECTOR   RESULT_PLAYER_SCALE = VGet(0.05f, 0.05f, 0.05f);
+const VECTOR   RESULT_PLAYER_ROTATE = VGet(0.0f, /*90.0f * DX_PI_F / 180.0f*/0.0f, 0.0f);
+const VECTOR   RESULT_PLAYER_POS = VGet(0.0f, 0.0f, 0.0f);
 
 /// <summary>
 /// 初期化
@@ -10,13 +23,16 @@
 ResultScene_kiyosumi::ResultScene_kiyosumi(int _score)
 	: mDeltaTime(0.000001f)
 	, mInputReturnFlag(false)
-	, mResultCamera(nullptr)
 	, mResultUI(nullptr)
 	, mScore(_score)
 	, mAlphaPal(255)
 	, mAlphaPalFlag(false)
-	, mMoveSceneHandle(LoadGraph("data/img/MoveScene.png"))
+	, mMoveSceneHandle(-1)
 	, mCheckHitFlag(false)
+	, mPlayer(nullptr)
+	, mFadeSpeed(3)
+	, mStaticObjectActor(nullptr)
+	, mCamera(nullptr)
 {
 }
 
@@ -27,6 +43,9 @@ ResultScene_kiyosumi::~ResultScene_kiyosumi()
 {
 	delete mResultCamera;
 	delete mResultUI;
+	delete mPlayer;
+	delete mCamera;
+	delete mStaticObjectActor;
 }
 
 /// <summary>
@@ -40,23 +59,30 @@ ResultScene_kiyosumi::~ResultScene_kiyosumi()
 SceneBase* ResultScene_kiyosumi::Update(float _deltaTime)
 {
 	mDeltaTime = _deltaTime / 1000000.0f;
-	// リザルトカメラの更新
-	mResultCamera->Update();
+
+	mPlayer->SetPlayerState(PlayerActor::PLAYER_STATE::STATE_RESULT_IDLE);
+	mPlayer->UpdateActor(mDeltaTime);
+	mPlayer->Update(mDeltaTime);
+
 	// リザルトUIの更新
 	mResultUI->Update(mDeltaTime);
 	// リザルトUIにスコアを渡す
 	mResultUI->LoadScore(mScore);
 
+	mCamera->Update(RESULT_CAMERA_POS, mPlayer->GetPosition());
+
+	mStaticObjectActor->UpdateActor(mDeltaTime);
+	mStaticObjectActor->Update(mDeltaTime);
 	// Enterキーの連続入力防止
 	if (!CheckHitKey(KEY_INPUT_RETURN))
 	{
 		mInputReturnFlag = true;
 	}
 
-	
+
 	if (mAlphaPal >= 0 && !mAlphaPalFlag)
 	{
-		mAlphaPal -= 400.0f * mDeltaTime;
+		mAlphaPal -= mFadeSpeed;
 	}
 	else
 	{
@@ -70,7 +96,7 @@ SceneBase* ResultScene_kiyosumi::Update(float _deltaTime)
 	}
 	if (mCheckHitFlag)
 	{
-		mAlphaPal += 400.0f * mDeltaTime;
+		mAlphaPal += mFadeSpeed;
 	}
 	// シーン遷移条件
 	if (mAlphaPal >= 255)
@@ -88,9 +114,58 @@ SceneBase* ResultScene_kiyosumi::Update(float _deltaTime)
 /// </summary>
 void ResultScene_kiyosumi::Draw()
 {
+#ifdef _DEBUG
+	// デバッグモード時のみ実行
+	clsDx();
+	printfDx("CameraPosX:%f\n", mCamera->GetPositionX());
+	printfDx("CameraPosY:%f\n", mCamera->GetPositionY());
+	printfDx("CameraPosZ:%f\n", mCamera->GetPositionZ());
+	printfDx("CameraAimPosX:%f\n", mCamera->GetAimTargetPositionX());
+	printfDx("CameraAimPosY:%f\n", mCamera->GetAimTargetPositionY());
+	printfDx("CameraAimPosZ:%f\n", mCamera->GetAimTargetPositionZ());
+	printfDx("PlayerPosX:%f\n", mPlayer->GetPositionX());
+	printfDx("PlayerPosY:%f\n", mPlayer->GetPositionY());
+	printfDx("PlayerPosZ:%f\n", mPlayer->GetPositionZ());
+	switch (mPlayer->GetPlayerState())
+	{
+	case PlayerActor::PLAYER_STATE::STATE_TITLE_IDLE:
+		printfDx("NowState:TITLE_IDLE\n");
+		break;
+
+	case PlayerActor::PLAYER_STATE::STATE_TITLE_JUMP:
+		printfDx("NowState:TITLE_JUMP\n");
+		break;
+
+	case PlayerActor::PLAYER_STATE::STATE_PLAY_IDLE:
+		printfDx("NowState:PLAY_IDLE\n");
+		break;
+
+	case PlayerActor::PLAYER_STATE::STATE_PLAY_GAME1:
+		printfDx("NowState:PLAY_GAME1\n");
+		break;
+
+	case PlayerActor::PLAYER_STATE::STATE_PLAY_GAME2:
+		printfDx("NowState:PLAY_GAME2\n");
+		break;
+
+	case PlayerActor::PLAYER_STATE::STATE_PLAY_GAME3:
+		printfDx("NowState:PLAY_GAME3\n");
+		break;
+
+	case PlayerActor::PLAYER_STATE::STATE_RESULT_IDLE:
+		printfDx("NowState:RESULT_IDLE\n");
+		break;
+
+	default:
+		break;
+	}
+#endif
+
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 255);
-	// リザルトカメラの描画
-	mResultCamera->Draw();
+	mPlayer->Draw();
+
+	mStaticObjectActor->Draw();
+
 	// リザルトUIの描画
 	mResultUI->Draw();
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, mAlphaPal);
@@ -109,14 +184,23 @@ void ResultScene_kiyosumi::Sound()
 /// </summary>
 void ResultScene_kiyosumi::Load()
 {
-	////「読み込み中」の表示
-	//DrawString(0, 0, "Now Loading ...", GetColor(255, 255, 255));
 
-	mResultCamera = new ResultCamera;
+	mCamera = new Camera;
 	mResultUI = new ResultUI;
+	mPlayer = new PlayerActor;
+	mStaticObjectActor = new StaticObjectActor;
 
-	// リザルトカメラの初期化
-	mResultCamera->Load();
 	// リザルトUIの初期化
 	mResultUI->Load();
+	mMoveSceneHandle = LoadGraph(MOVE_SCENE_IMG);
+
+	mPlayer->LoadModel(PLAYER_MODEL_HANDLE);
+	mPlayer->SetScale(RESULT_PLAYER_SCALE);
+	mPlayer->SetRotation(RESULT_PLAYER_ROTATE);
+	mPlayer->SetPosition(RESULT_PLAYER_POS);
+
+	mStaticObjectActor->LoadModel(PODIUM_MODEL);
+	mStaticObjectActor->SetScale(VGet(0.005f, 0.005f, 0.005f));
+	mStaticObjectActor->SetRotation(VGet(0.0f, 90.0f * DX_PI_F / 180.0f, 0.0f));
+	mStaticObjectActor->SetPosition(VGet(0.0f, -2.5f, 2.0f));
 }

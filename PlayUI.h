@@ -22,9 +22,12 @@ public:
 	void Sound();
 
 	// GameCountFlag3のフラグのゲッター
-	const bool& GetGameCountFlag3() const { return mGameCountFlag3; }
+	bool GetGameCountFlag1() { return mGameCountFlag1; }
+	bool GetGameCountFlag2() { return mGameCountFlag2; }
+	bool GetGameCountFlag3() { return mGameCountFlag3; }
 	// スコアのゲッター
-	const int& GetScore() const { return mScore; }
+	int GetScore() { return mScore; }
+
 
 
 private:
