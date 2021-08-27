@@ -67,9 +67,6 @@
     <ClCompile Include="PlayScene_YanoHaruto.cpp">
       <Filter>ソース ファイル\work_haruto</Filter>
     </ClCompile>
-    <ClCompile Include="TitleCamera.cpp">
-      <Filter>ソース ファイル\work_kiyosumi\Camera</Filter>
-    </ClCompile>
     <ClCompile Include="TitleUI.cpp">
       <Filter>ソース ファイル\work_kiyosumi\UI</Filter>
     </ClCompile>
@@ -96,12 +93,6 @@
     </ClCompile>
     <ClCompile Include="main_kiyosumi.cpp">
       <Filter>ソース ファイル\work_kiyosumi</Filter>
-    </ClCompile>
-    <ClCompile Include="PlayCamera.cpp">
-      <Filter>ソース ファイル\work_kiyosumi\Camera</Filter>
-    </ClCompile>
-    <ClCompile Include="ResultCamera.cpp">
-      <Filter>ソース ファイル\work_kiyosumi\Camera</Filter>
     </ClCompile>
     <ClCompile Include="PlayScene_shougo.cpp">
       <Filter>ソース ファイル\work_shougo\Scene_shougo</Filter>
@@ -195,12 +186,6 @@
     <ClInclude Include="PlayScene_YanoHaruto.h">
       <Filter>ソース ファイル\work_haruto</Filter>
     </ClInclude>
-    <ClInclude Include="CameraBase.h">
-      <Filter>ソース ファイル\work_kiyosumi\Camera</Filter>
-    </ClInclude>
-    <ClInclude Include="TitleCamera.h">
-      <Filter>ソース ファイル\work_kiyosumi\Camera</Filter>
-    </ClInclude>
     <ClInclude Include="UIBase.h">
       <Filter>ソース ファイル\work_kiyosumi\UI</Filter>
     </ClInclude>
@@ -224,12 +209,6 @@
     </ClInclude>
     <ClInclude Include="TitleScene_kiyosumi.h">
       <Filter>ソース ファイル\work_kiyosumi\Scene_kiyosumi</Filter>
-    </ClInclude>
-    <ClInclude Include="PlayCamera.h">
-      <Filter>ソース ファイル\work_kiyosumi\Camera</Filter>
-    </ClInclude>
-    <ClInclude Include="ResultCamera.h">
-      <Filter>ソース ファイル\work_kiyosumi\Camera</Filter>
     </ClInclude>
     <ClInclude Include="PlayScene_shougo.h">
       <Filter>ソース ファイル\work_shougo\Scene_shougo</Filter>

@@ -9,8 +9,8 @@
 
 
 // SetGraphModeのパラメータ
-#define WINDOW_SCREEN_WIDTH  1920/**2/3*/
-#define WINDOW_SCREEN_HEIGHT 1080/**2/3*/
+#define WINDOW_SCREEN_WIDTH  1920
+#define WINDOW_SCREEN_HEIGHT 1080
 #define COLOR_BIT_NUM 16
 
 // メイン関数
@@ -59,20 +59,12 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 	// ScreenFlip 一回辺りの時間が取得できます
 	deltaTime = 1000000.0f / screenFlipCount;
 
-	//// デルタタイム管理用の変数をセット
-	//LONGLONG nowTime;
-	//LONGLONG time;
-	//float    deltaTime;
-
-	//// システム時間を取得
-	//time = GetNowHiPerformanceCount();
-
 	// シーンマネージャークラスのインスタンスを生成
 	SceneManager_kiyosumi* scene = new SceneManager_kiyosumi;
 	
 
 	// タイトルシーンをセット
-	scene->SetScene(new PlayScene_kiyosumi);
+	scene->SetScene(new TitleScene_kiyosumi);
 	
 
 	/*deltaTime = 0.000001f;*/
@@ -92,19 +84,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 
 		// BGM処理
 		scene->Sound();
-		printfDx("%f\n",deltaTime/1000000.0f);
+
 		// 裏画面の内容を表画面に反映させる
 		ScreenFlip();
-
-		//// 現在のシステム時間を取得
-		//nowTime = GetNowHiPerformanceCount();
-
-		//// 前回取得した時間からの経過時間を秒に変換してセット
-		//// ( GetNowHiPerformanceCount で取得できる値はマイクロ秒単位なので 1000000 で割ることで秒単位になる )
-		//deltaTime = (nowTime - time) / 1000000.0f;
-
-		////	今回取得した時間を保存
-		//time = nowTime;
 
 	}
 

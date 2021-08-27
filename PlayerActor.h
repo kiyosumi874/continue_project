@@ -21,6 +21,9 @@ public:
 		STATE_TITLE_JUMP,
 
 		STATE_PLAY_IDLE,
+		STATE_PLAY_GAME1,
+		STATE_PLAY_GAME2,
+		STATE_PLAY_GAME3,
 
 		STATE_RESULT_IDLE,
 
@@ -31,22 +34,33 @@ public:
 	~PlayerActor();
 
 	void UpdateActor(float _deltaTime)override;
-	void SetPlayerState(PLAYER_STATE _nowState) { mNowState = _nowState; }
 
+	void LoadGameCount(bool _gameCountFlag1, bool _gameCountFlag2, bool _gameCountFlag3);
+
+	// セッター/ゲッター
+	void SetPlayerState(PLAYER_STATE _nowState) { mNowState = _nowState; }
+	PLAYER_STATE GetPlayerState() { return mNowState; }    
+
+	PLAYER_STATE mNowState;
 private:
 	void TitleIdleBehavior(float _deltaTime);
 	void TitleJumpBehavior(float _deltaTime);
 
 	void PlayIdleBehavior(float _deltaTime);
+	void PlayGame1Behavior(float _deltaTime);
+	void PlayGame2Behavior(float _deltaTime);
+	void PlayGame3Behavior(float _deltaTime);
 
 	void ResultIdleBehavior(float _deltaTime);
 
 	int   mAttachIndex;
 	float mTotalTime;
 	float mPlayTime;
-	bool  mJumpFlag;
 
-	PLAYER_STATE mNowState;
+	bool mGameCountFlag1;
+	bool mGameCountFlag2;
+	bool mGameCountFlag3;
+
 	PLAYER_STATE mPrevState;
 
 };
