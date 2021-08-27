@@ -78,7 +78,7 @@ void PlayerActor::TitleIdleBehavior(float _deltaTime)
 	if (mNowState != mPrevState)
 	{
 		MV1DetachAnim(mMHandle, mAttachIndex);
-		mAttachIndex = MV1AttachAnim(mMHandle, 0/*Idleのアニメーション番号*/, -1, FALSE);
+		mAttachIndex = MV1AttachAnim(mMHandle, 4/*Idleのアニメーション番号*/, -1, FALSE);
 		mTotalTime = MV1GetAttachAnimTotalTime(mMHandle, mAttachIndex);
 		mPrevState = mNowState;
 	}
@@ -221,7 +221,7 @@ void PlayerActor::PlayGame3Behavior(float _deltaTime)
 	if (mNowState != mPrevState)
 	{
 		MV1DetachAnim(mMHandle, mAttachIndex);
-		mAttachIndex = MV1AttachAnim(mMHandle, 2/*Idleのアニメーション番号*/, -1, FALSE);
+		mAttachIndex = MV1AttachAnim(mMHandle, 4/*Idleのアニメーション番号*/, -1, FALSE);
 		mTotalTime = MV1GetAttachAnimTotalTime(mMHandle, mAttachIndex);
 		mPrevState = mNowState;
 	}

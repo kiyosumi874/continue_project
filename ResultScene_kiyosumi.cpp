@@ -5,6 +5,7 @@
 #include "ResultUI.h"
 #include "PlayerActor.h"
 #include "StaticObjectActor.h"
+#include "Effect.h"
 
 //            ↓はTitleSceneで定義しているので書かなくていい
 //const char* MOVE_SCENE_IMG = "data/img/MoveScene.png";
@@ -33,6 +34,7 @@ ResultScene_kiyosumi::ResultScene_kiyosumi(int _score)
 	, mFadeSpeed(3)
 	, mStaticObjectActor(nullptr)
 	, mCamera(nullptr)
+	, mFireWorks(nullptr)
 {
 }
 
@@ -46,6 +48,7 @@ ResultScene_kiyosumi::~ResultScene_kiyosumi()
 	delete mPlayer;
 	delete mCamera;
 	delete mStaticObjectActor;
+	delete mFireWorks;
 }
 
 /// <summary>
@@ -166,6 +169,11 @@ void ResultScene_kiyosumi::Draw()
 
 	mStaticObjectActor->Draw();
 
+	if (mFireWorks->GetNowPlaying2D())
+	{
+		mFireWorks->PlayEffekseer2D(VGet(rand() % 1920, rand() % 1080 , 0));
+	}
+
 	// リザルトUIの描画
 	mResultUI->Draw();
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, mAlphaPal);
@@ -189,6 +197,7 @@ void ResultScene_kiyosumi::Load()
 	mResultUI = new ResultUI;
 	mPlayer = new PlayerActor;
 	mStaticObjectActor = new StaticObjectActor;
+	mFireWorks = new Effect("data/effect/hanabi.efk", 40.0f);
 
 	// リザルトUIの初期化
 	mResultUI->Load();
