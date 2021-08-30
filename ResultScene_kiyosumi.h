@@ -27,6 +27,7 @@ private:
     class ResultUI* mResultUI;        // リザルトUIクラスへのポインタメンバ変数
     class PlayerActor* mPlayer;
     class StaticObjectActor* mStaticObjectActor;
+    class Effect* mFireWorks;
     float mDeltaTime;         // デルタタイム
     bool  mInputReturnFlag;   // Enterキーの連続入力防止
     int mScore;

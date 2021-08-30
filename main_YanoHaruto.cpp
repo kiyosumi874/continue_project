@@ -5,7 +5,9 @@
 #include "TitleScene_YanoHaruto.h"
 #include "PlayScene_YanoHaruto.h"
 #include "ResultScene_YanoHaruto.h"
+#include "EffekseerForDXLib.h"
 
+void InitializeEffekseer();
 // SetGraphModeのパラメータ
 #define WINDOW_SCREEN_WIDTH  1920
 #define WINDOW_SCREEN_HEIGHT 1080
@@ -19,6 +21,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 	{
 		return -1;    // エラーが起きたら直ちに終了
 	}
+	InitializeEffekseer();
 
 	// 画面モードのセット
 	SetGraphMode(WINDOW_SCREEN_WIDTH, WINDOW_SCREEN_HEIGHT, COLOR_BIT_NUM);
@@ -39,7 +42,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 	SceneManager_YanoHaruto* scene = new SceneManager_YanoHaruto;
 
 	// タイトルシーンをセット
-	scene->SetScene(new TitleScene_YanoHaruto);
+	scene->SetScene(new ResultScene_YanoHaruto(0));
 
 	deltaTime = 0.000001f;
 
@@ -55,6 +58,14 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 		// 描画処理
 		scene->Draw();
 
+		// Effekseer側のカメラとDxライブラリ側のカメラを同期する
+		Effekseer_Sync3DSetting();
+		// Effekseerの更新
+		UpdateEffekseer2D();
+		UpdateEffekseer3D();
+		// Effekseerの描画
+		DrawEffekseer2D();
+		DrawEffekseer3D();
 		// BGM処理
 		scene->Sound();
 
@@ -75,9 +86,31 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 
 	delete scene;
 
+	// Effekseerの終了
+	Effkseer_End();
 	// ＤＸライブラリの後始末
 	DxLib_End();
 
 	// ソフトの終了
 	return 0;
+}/// <summary>
+/// Effekseerの初期化
+/// </summary>
+void InitializeEffekseer()
+{
+	// DXライブラリとEffekseerの初期化処理
+	if (Effekseer_Init(8000) == -1)
+	{
+		printf("Effekseer初期化に失敗！\n");			                              // エラーが起きたら直ちに終了
+	}
+
+	//---------------------------------------------------+
+	// Effekseer関連の初期化
+	//---------------------------------------------------+
+	SetUseDirect3DVersion(DX_DIRECT3D_11);                    // DirectX11を使用
+	SetChangeScreenModeGraphicsSystemResetFlag(FALSE);
+	Effekseer_SetGraphicsDeviceLostCallbackFunctions();
+	Effekseer_Set2DSetting(WINDOW_SCREEN_WIDTH, WINDOW_SCREEN_HEIGHT);
+	SetUseZBuffer3D(TRUE);                                    // ZBufferを使用
+	SetWriteZBuffer3D(TRUE);                                  // ZBufferへの書き込みを許可
 }

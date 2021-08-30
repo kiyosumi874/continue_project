@@ -166,6 +166,9 @@
     <ClCompile Include="PlayerActor.cpp">
       <Filter>ソース ファイル\work_kiyosumi\Player</Filter>
     </ClCompile>
+    <ClCompile Include="Effect.cpp">
+      <Filter>ソース ファイル\work_haruto</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SceneBase.h">
@@ -281,6 +284,9 @@
     </ClInclude>
     <ClInclude Include="PlayerActor.h">
       <Filter>ソース ファイル\work_kiyosumi\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Effect.h">
+      <Filter>ソース ファイル\work_haruto</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
