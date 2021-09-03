@@ -45,9 +45,9 @@ void SceneManager_kiyosumi::Draw()
 /// <summary>
 /// ‰¹Šy
 /// </summary>
-void SceneManager_kiyosumi::Sound()
+void SceneManager_kiyosumi::Sound(float _deltaTime)
 {
-	mScene->Sound();    // BGM‚ð—¬‚·
+	mScene->Sound(_deltaTime);    // BGM‚ð—¬‚·
 }
 
 /// <summary>

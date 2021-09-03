@@ -11,6 +11,17 @@
 #include "DxLib.h"
 #include "SceneBase.h"
 
+enum class GAME_MODE_STATE : unsigned char
+{
+    FADE_IN,
+    CAMERA_MOVE,
+    WAIT,
+    CIRCLE_GAME,
+    GAUGE_GAME,
+    PENDULUM_GAME,
+    FADE_OUT
+};
+
 class PlayScene_kiyosumi : public SceneBase
 {
 public:
@@ -19,30 +30,38 @@ public:
 
     SceneBase* Update(float _deltaTime)override;    // 更新
     void       Draw()                  override;    // 描画
-    void       Sound()                 override;    // 音楽
+    void       Sound(float _deltaTime) override;    // 音楽
     void       Load()                  override;    // 初期化
 
 private:
+    void GameModeFadeInBehavior(float _deltaTime);
+    void GameModeCameraMoveBehavior(float _deltaTime);
+    void GameModeWaitBehavior(float _deltaTime);
+    void GameModeCircleGameBehavior(float _deltaTime);
+    void GameModeGaugeGameBehavior(float _deltaTime);
+    void GameModePendulumGameBehavior(float _deltaTime);
+    void GameModeFadeOutBehavior(float _deltaTime);
+
+    GAME_MODE_STATE mGameMode;
+
     //class PlayCamera* mPlayCamera;    // プレイカメラクラスへのポインタメンバ変数
     class Camera* mCamera;
     class PlayUI* mPlayUI;    // プレイUIクラスへのポインタメンバ変数
     class BGM* mBGM;
     class Audience* mAudience;       //観客へのポインタ
-    class Pool* mPool;           //プールへのポインタ
-    //class Player* mPlayer;            // プレイヤークラスへのポインタメンバ変数
+    class StaticObjectActor* mPool;
     class PlayerActor* mPlayer;
+    class SE* mMetoronome;
+    class SE* mClickNormal;
+    class SE* mClickClitical;
 
-    VECTOR       mTargetPos;        //プールの座標
+    VECTOR       mTargetPos;        //カメラの見ている座標
 
-    float mDeltaTime;          // デルタタイム
     bool  mInputReturnFlag;    // Enterキーの連続入力防止
-    bool  mGameCountFlag1;     // ミニゲームが終わったかどうかのFlag
-    bool  mGameCountFlag2;     // ミニゲームが終わったかどうかのFlag
-    bool  mGameCountFlag3;     // 最後のミニゲームが終わったかどうかのFlag
+
     int   mScore;
-    bool mPlayCircleGameFlag;
-    bool mPlayGaugeGameFlag;
-    bool mPlayPendulumGameFlag;
+
+    int mStopCount;
 
     int mMoveSceneHandle;
     float mAlphaPal;
@@ -50,4 +69,8 @@ private:
     int mFadeSpeed;
 
     bool mBGMFlag;
+
+    int mGameWaitCount;
+
+    float mJumpPower;
 };

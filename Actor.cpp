@@ -6,6 +6,7 @@
 /// </summary>
 Actor::Actor()
     : mMHandle(-1)
+    , mTexHandle(-1)
     , mIsDrawable(true)
     , mState(State::Active)
     , mPosition(VGet(0.0f, 0.0f, 0.0f))
@@ -82,4 +83,11 @@ void Actor::ComputeWorldTransform()
 void Actor::LoadModel(const TCHAR* _modelFile)
 {
     mMHandle = MV1LoadModel(_modelFile);
+}
+
+void Actor::LoadModelTex(const TCHAR* _modelFile, const TCHAR* _texFile)
+{
+    mMHandle = MV1LoadModel(_modelFile);
+    mTexHandle = LoadGraph(_texFile);
+    MV1SetTextureGraphHandle(mMHandle, 0, mTexHandle, TRUE);
 }

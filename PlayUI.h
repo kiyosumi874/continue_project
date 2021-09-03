@@ -10,6 +10,15 @@
 #pragma once
 #include "UIBase.h"
 
+enum class DRAW_GAME_STATE : unsigned char
+{
+	DRAW_CIRCLE_GAME,
+	DRAW_GAUGE_GAME,
+	DRAW_PENDULUM_GAME,
+	DRAW_NULL
+};
+
+
 class PlayUI : public UIBase
 {
 public:
@@ -19,30 +28,30 @@ public:
 	void Update(float _deltaTime)override;    // 更新
 	void Load()                  override;    // ロード
 	void Draw()                  override;    // 描画
-	void Sound();
+	void Sound(class SE* _metoronome, class SE* _clickNormal, class SE* _clickClitical);
 
-	// GameCountFlag3のフラグのゲッター
-	bool GetGameCountFlag1() { return mGameCountFlag1; }
-	bool GetGameCountFlag2() { return mGameCountFlag2; }
-	bool GetGameCountFlag3() { return mGameCountFlag3; }
+
+	bool GetPlayCircleGameFlag() { return mPlayCircleGameFlag; }
+	bool GetPlayGaugeGameFlag() { return mPlayGaugeGameFlag; }
+	bool GetPlayPendulumGameFlag() { return mPlayPendulumGameFlag; }
+
+	void SetDrawGameState(DRAW_GAME_STATE _drawGameState) { mDrawGameState = _drawGameState; }
+
 	// スコアのゲッター
 	int GetScore() { return mScore; }
 
 
+	void CircleGameBehavior(float _deltaTime);
+	void GaugeGameBehavior(float _deltaTime);
+	void PendulumGameBehavior(float _deltaTime);
 
 private:
-	class SE* mMetoronome;
-	class SE* mClickNormal;
-	class SE* mClickClitical;
 
-	float mDeltaTime;    // デルタタイム
+
+	DRAW_GAME_STATE mDrawGameState;
+
 	int   mScore;        // スコア
 	bool  mInputReturnFlag;    // Enterキーの連続入力防止
-	float mGameTransitionCount;// 止めるカウント
-	int   mGameCount;          // 増えると次のミニゲームに遷移する
-	bool  mGameCountFlag1;     // 増えると次のミニゲームに遷移するFlag
-	bool  mGameCountFlag2;     // 増えると次のミニゲームに遷移するFlag
-	bool  mGameCountFlag3;     // 最後のミニゲームが終わったかどうかのFlag
 	int   mFontHandle;
 	bool mClickNormalFlag;
 	bool mClickCriticalFlag;
@@ -66,7 +75,6 @@ private:
 	int mCircleInFillFlag;          // TRUE(1の意)で円の中身も塗りつぶし、FALSE(0の意)で輪郭のみ
 
 	bool mPlayCircleGameFlag;           // サークルゲームをしているかしていないかのFlag
-	bool mDrawCircleGameFlag;           // サークルゲームを描画しているかしていないかのFlag
 
 	//-----------//
 	//-GaugeGame-//
@@ -87,7 +95,6 @@ private:
 	int mGaugeInFillFlag;          // 四角の中身を塗りつぶすか、のフラグ。TRUEで塗りつぶし、FALSEで塗りつぶさない
 
 	bool mPlayGaugeGameFlag;    // ゲージゲームをしているかしていないかのFlag
-	bool mDrawGaugeGameFlag;    // ゲージゲームを描画しているかしていないかのFlag
 
 	//--------------//
 	//-PendulumGame-//
@@ -112,6 +119,5 @@ private:
 	int mPendulumInFillFlag;          // TRUE(1の意)で円の中身も塗りつぶし、FALSE(0の意)で輪郭のみ
 	
 	bool mPlayPendulumGameFlag;           // 振り子ゲームをしているかしていないかのFlag
-	bool mDrawPendulumGameFlag;           // 振り子ゲームを描画しているかしていないかのFlag
 
 };

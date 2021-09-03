@@ -13,17 +13,16 @@
 //const char* PLAYER_MODEL_HANDLE = "data/model/player5/waterboy.pmx";
 //const char* SOUND_CLICK_HANDLE = "data/sound/click_normal.mp3";
 const char* PODIUM_MODEL = "data/model/podium/podium.mv1";
-const VECTOR   RESULT_CAMERA_POS = VGet(0.0f, 2.0f, -2.0f);
+const VECTOR   RESULT_CAMERA_POS = VGet(2.0f, 1.0f, -3.0f);
 const VECTOR   RESULT_PLAYER_SCALE = VGet(0.05f, 0.05f, 0.05f);
 const VECTOR   RESULT_PLAYER_ROTATE = VGet(0.0f, /*90.0f * DX_PI_F / 180.0f*/0.0f, 0.0f);
-const VECTOR   RESULT_PLAYER_POS = VGet(0.0f, 0.0f, 0.0f);
+const VECTOR   RESULT_PLAYER_POS = VGet(0.0f, 0.76f, 0.0f);
 
 /// <summary>
 /// 初期化
 /// </summary>
 ResultScene_kiyosumi::ResultScene_kiyosumi(int _score)
-	: mDeltaTime(0.000001f)
-	, mInputReturnFlag(false)
+	: mInputReturnFlag(false)
 	, mResultUI(nullptr)
 	, mScore(_score)
 	, mAlphaPal(255)
@@ -32,9 +31,10 @@ ResultScene_kiyosumi::ResultScene_kiyosumi(int _score)
 	, mCheckHitFlag(false)
 	, mPlayer(nullptr)
 	, mFadeSpeed(3)
-	, mStaticObjectActor(nullptr)
+	, mPodium(nullptr)
 	, mCamera(nullptr)
 	, mFireWorks(nullptr)
+	, mPool(nullptr)
 {
 }
 
@@ -47,8 +47,9 @@ ResultScene_kiyosumi::~ResultScene_kiyosumi()
 	delete mResultUI;
 	delete mPlayer;
 	delete mCamera;
-	delete mStaticObjectActor;
+	delete mPodium;
 	delete mFireWorks;
+	delete mPool;
 }
 
 /// <summary>
@@ -61,21 +62,20 @@ ResultScene_kiyosumi::~ResultScene_kiyosumi()
 /// </returns>
 SceneBase* ResultScene_kiyosumi::Update(float _deltaTime)
 {
-	mDeltaTime = _deltaTime / 1000000.0f;
+	mPodium->Update(_deltaTime);
+	mPool->Update(_deltaTime);
 
 	mPlayer->SetPlayerState(PlayerActor::PLAYER_STATE::STATE_RESULT_IDLE);
-	mPlayer->UpdateActor(mDeltaTime);
-	mPlayer->Update(mDeltaTime);
+	mPlayer->UpdateActor(_deltaTime);
+	mPlayer->Update(_deltaTime);
 
 	// リザルトUIの更新
-	mResultUI->Update(mDeltaTime);
+	mResultUI->Update(_deltaTime);
 	// リザルトUIにスコアを渡す
 	mResultUI->LoadScore(mScore);
 
 	mCamera->Update(RESULT_CAMERA_POS, mPlayer->GetPosition());
 
-	mStaticObjectActor->UpdateActor(mDeltaTime);
-	mStaticObjectActor->Update(mDeltaTime);
 	// Enterキーの連続入力防止
 	if (!CheckHitKey(KEY_INPUT_RETURN))
 	{
@@ -135,10 +135,6 @@ void ResultScene_kiyosumi::Draw()
 		printfDx("NowState:TITLE_IDLE\n");
 		break;
 
-	case PlayerActor::PLAYER_STATE::STATE_TITLE_JUMP:
-		printfDx("NowState:TITLE_JUMP\n");
-		break;
-
 	case PlayerActor::PLAYER_STATE::STATE_PLAY_IDLE:
 		printfDx("NowState:PLAY_IDLE\n");
 		break;
@@ -165,9 +161,10 @@ void ResultScene_kiyosumi::Draw()
 #endif
 
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 255);
+	mPool->Draw();
 	mPlayer->Draw();
 
-	mStaticObjectActor->Draw();
+	mPodium->Draw();
 
 	if (mFireWorks->GetNowPlaying2D())
 	{
@@ -183,7 +180,7 @@ void ResultScene_kiyosumi::Draw()
 /// <summary>
 /// 音楽
 /// </summary>
-void ResultScene_kiyosumi::Sound()
+void ResultScene_kiyosumi::Sound(float _deltaTime)
 {
 }
 
@@ -196,7 +193,8 @@ void ResultScene_kiyosumi::Load()
 	mCamera = new Camera;
 	mResultUI = new ResultUI;
 	mPlayer = new PlayerActor;
-	mStaticObjectActor = new StaticObjectActor;
+	mPodium = new StaticObjectActor;
+	mPool = new StaticObjectActor;
 	mFireWorks = new Effect("data/effect/hanabi.efk", 40.0f);
 
 	// リザルトUIの初期化
@@ -208,8 +206,13 @@ void ResultScene_kiyosumi::Load()
 	mPlayer->SetRotation(RESULT_PLAYER_ROTATE);
 	mPlayer->SetPosition(RESULT_PLAYER_POS);
 
-	mStaticObjectActor->LoadModel(PODIUM_MODEL);
-	mStaticObjectActor->SetScale(VGet(0.005f, 0.005f, 0.005f));
-	mStaticObjectActor->SetRotation(VGet(0.0f, 90.0f * DX_PI_F / 180.0f, 0.0f));
-	mStaticObjectActor->SetPosition(VGet(0.0f, -2.5f, 2.0f));
+	mPodium->LoadModelTex("data/model/podium/Stand.mv1", "data/model/podium/podium.png");
+	mPodium->SetScale(VGet(0.15f, 0.15f, 0.15f));
+	mPodium->SetRotation(VGet(0.0f, 270.0f * DX_PI_F / 180.0f, 0.0f));
+	mPodium->SetPosition(VGet(0.0f, 0.0f, 0.0f));
+
+	mPool->LoadModelTex("data/model/pool/Stadium.mv1", "data/model/pool/Pool.png");
+	mPool->SetScale(VGet(1.0f, 1.0f,1.0f));
+	mPool->SetRotation((VGet(0.0f, 0.0f, 0.0f)));
+	mPool->SetPosition((VGet(0.0f, 0.0f, 0.0f)));
 }
