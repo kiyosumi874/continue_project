@@ -3,7 +3,7 @@
 
 // SetCameraNearFarÇÃà¯êî
 #define NEAR  1.0f
-#define FAR   150.0f
+#define FAR 200.0f
 
 /// <summary>
 /// èâä˙âª
@@ -13,7 +13,7 @@ PlayCamera_YanoHaruto::PlayCamera_YanoHaruto()
 	, mCameraTarget(VGet(0.0f, 0.0f, 0.0f))
 	, mCameraUp(VGet(0.0f, 1.0f, 0.0f))
 {
-	SetCameraNearFar(NEAR,FAR);
+	SetCameraNearFar(NEAR, FAR);
 }
 
 /// <summary>
@@ -28,7 +28,7 @@ PlayCamera_YanoHaruto::~PlayCamera_YanoHaruto()
 /// </summary>
 void PlayCamera_YanoHaruto::Update()
 {
-	
+	SetCameraPositionAndTargetAndUpVec(mCameraPosition, mCameraTarget, mCameraUp);
 }
 
 /// <summary>
@@ -43,6 +43,5 @@ void PlayCamera_YanoHaruto::Load()
 /// </summary>
 void PlayCamera_YanoHaruto::Draw()
 {
-	SetCameraPositionAndTargetAndUpVec(mCameraPosition, mCameraTarget, mCameraUp);
 }
 

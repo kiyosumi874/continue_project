@@ -7,7 +7,6 @@
 #include "ResultScene_YanoHaruto.h"
 #include "EffekseerForDXLib.h"
 
-void InitializeEffekseer();
 // SetGraphModeのパラメータ
 #define WINDOW_SCREEN_WIDTH  1920
 #define WINDOW_SCREEN_HEIGHT 1080
@@ -16,12 +15,13 @@ void InitializeEffekseer();
 // メイン関数
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 {
+	int screenFlipCount;
+	float deltaTime, startTime;
 	// ＤＸライブラリ初期化処理
 	if (DxLib_Init() == -1)
 	{
 		return -1;    // エラーが起きたら直ちに終了
 	}
-	InitializeEffekseer();
 
 	// 画面モードのセット
 	SetGraphMode(WINDOW_SCREEN_WIDTH, WINDOW_SCREEN_HEIGHT, COLOR_BIT_NUM);
@@ -29,26 +29,57 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 	ChangeWindowMode(TRUE);
 	// 裏画面の設定
 	SetDrawScreen(DX_SCREEN_BACK);
+	// 画面の背景色を設定する
+	SetBackgroundColor(255, 255, 255);
+	// 計測中に別のウインドウがアクティブになっても問題が無いように常時実行フラグをセット
+	SetAlwaysRunFlag(TRUE);
 
-	// デルタタイム管理用の変数をセット
-	LONGLONG nowTime;
-	LONGLONG time;
-	float    deltaTime;
+	// １フレームにかかる時間を計測
+	ScreenFlip();
+	screenFlipCount = 0;
+	startTime = GetNowHiPerformanceCount();
+	for (;;)
+	{
+		// 画面切り替えを行ってＶＹＳＮＣ待ちをする
+		ScreenFlip();
 
-	// システム時間を取得
-	time = GetNowHiPerformanceCount();
+		// １秒経過していたらループから抜ける
+		if (GetNowHiPerformanceCount() - startTime >= 1000000.0f)
+			break;
+
+		// ScreenFlip を行った回数をインクリメント
+		screenFlipCount++;
+	}
+
+	// 常時実行フラグを元に戻す
+	SetAlwaysRunFlag(FALSE);
+
+	// 計測時間を ScreenFlip を行った回数で割れば
+	// ScreenFlip 一回辺りの時間が取得できます
+	deltaTime = 1000000.0f / screenFlipCount;
+
+	//// デルタタイム管理用の変数をセット
+	//LONGLONG nowTime;
+	//LONGLONG time;
+	//float    deltaTime;
+
+	//// システム時間を取得
+	//time = GetNowHiPerformanceCount();
 
 	// シーンマネージャークラスのインスタンスを生成
 	SceneManager_YanoHaruto* scene = new SceneManager_YanoHaruto;
 
-	// タイトルシーンをセット
-	scene->SetScene(new ResultScene_YanoHaruto(0));
 
-	deltaTime = 0.000001f;
+	// タイトルシーンをセット
+	scene->SetScene(new PlayScene_YanoHaruto);
+
+
+	/*deltaTime = 0.000001f;*/
 
 	// エスケープキーが押されるかウインドウが閉じられるまでループ
 	while (!ProcessMessage() && !CheckHitKey(KEY_INPUT_ESCAPE))
 	{
+
 		// 画面消去
 		ClearDrawScreen();
 
@@ -58,59 +89,29 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 		// 描画処理
 		scene->Draw();
 
-		// Effekseer側のカメラとDxライブラリ側のカメラを同期する
-		Effekseer_Sync3DSetting();
-		// Effekseerの更新
-		UpdateEffekseer2D();
-		UpdateEffekseer3D();
-		// Effekseerの描画
-		DrawEffekseer2D();
-		DrawEffekseer3D();
 		// BGM処理
 		scene->Sound();
-
+		printfDx("%f\n", deltaTime / 1000000.0f);
 		// 裏画面の内容を表画面に反映させる
 		ScreenFlip();
 
-		// 現在のシステム時間を取得
-		nowTime = GetNowHiPerformanceCount();
+		//// 現在のシステム時間を取得
+		//nowTime = GetNowHiPerformanceCount();
 
-		// 前回取得した時間からの経過時間を秒に変換してセット
-		// ( GetNowHiPerformanceCount で取得できる値はマイクロ秒単位なので 1000000 で割ることで秒単位になる )
-		deltaTime = (nowTime - time) / 1000000.0f;
+		//// 前回取得した時間からの経過時間を秒に変換してセット
+		//// ( GetNowHiPerformanceCount で取得できる値はマイクロ秒単位なので 1000000 で割ることで秒単位になる )
+		//deltaTime = (nowTime - time) / 1000000.0f;
 
-		//	今回取得した時間を保存
-		time = nowTime;
+		////	今回取得した時間を保存
+		//time = nowTime;
 
 	}
 
 	delete scene;
 
-	// Effekseerの終了
-	Effkseer_End();
 	// ＤＸライブラリの後始末
 	DxLib_End();
 
 	// ソフトの終了
 	return 0;
-}/// <summary>
-/// Effekseerの初期化
-/// </summary>
-void InitializeEffekseer()
-{
-	// DXライブラリとEffekseerの初期化処理
-	if (Effekseer_Init(8000) == -1)
-	{
-		printf("Effekseer初期化に失敗！\n");			                              // エラーが起きたら直ちに終了
-	}
-
-	//---------------------------------------------------+
-	// Effekseer関連の初期化
-	//---------------------------------------------------+
-	SetUseDirect3DVersion(DX_DIRECT3D_11);                    // DirectX11を使用
-	SetChangeScreenModeGraphicsSystemResetFlag(FALSE);
-	Effekseer_SetGraphicsDeviceLostCallbackFunctions();
-	Effekseer_Set2DSetting(WINDOW_SCREEN_WIDTH, WINDOW_SCREEN_HEIGHT);
-	SetUseZBuffer3D(TRUE);                                    // ZBufferを使用
-	SetWriteZBuffer3D(TRUE);                                  // ZBufferへの書き込みを許可
 }

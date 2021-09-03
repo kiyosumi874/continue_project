@@ -65,7 +65,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 
 
 	// タイトルシーンをセット
-	scene->SetScene(new TitleScene);
+	scene->SetScene(new PlayScene);
 
 
 	/*deltaTime = 0.000001f;*/
