@@ -52,8 +52,10 @@ public:
 	void          ComputeWorldTransform();
 
 	void          LoadModel(const TCHAR* _modelFile);
+	void          LoadModelTex(const TCHAR* _modelFile, const TCHAR* _texFile);
 protected:
 	int    mMHandle;
+	int    mTexHandle;
 	bool   mIsDrawable;  // •`‰æ‰Â”\‚©‚Ç‚¤‚©
 	State  mState;
 	VECTOR mPosition;

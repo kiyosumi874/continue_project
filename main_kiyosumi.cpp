@@ -68,6 +68,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 
 	// タイトルシーンをセット
 	scene->SetScene(new TitleScene_kiyosumi);
+	//scene->SetScene(new ResultScene_kiyosumi(0));
 	
 
 	/*deltaTime = 0.000001f;*/
@@ -78,9 +79,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 
 		// 画面消去
 		ClearDrawScreen();
-
+		float perfDelta = deltaTime / 1000000.0f;
 		// シーン制御
-		scene->Update(deltaTime);
+		scene->Update(perfDelta);
 
 		// 描画処理
 		scene->Draw();
@@ -95,7 +96,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 		DrawEffekseer3D();
 
 		// BGM処理
-		scene->Sound();
+		scene->Sound(perfDelta);
 
 		// 裏画面の内容を表画面に反映させる
 		ScreenFlip();
