@@ -95,7 +95,7 @@ SceneBase* PlayScene_kiyosumi::Update(float _deltaTime)
 
 	mPool->Update(_deltaTime);
 	//観客の更新
-	mAudience->Update(_deltaTime);
+	mAudience->Update();
 
 	// プレイヤーの更新
 	mPlayer->UpdateActor(_deltaTime);
