@@ -65,7 +65,7 @@ SceneBase* PlayScene::Update(float _deltaTime)
 {
 	mDeltaTime = _deltaTime / 1000000.0f;
 	//観客の更新
-	mAudience->Update();
+	mAudience->Update(0);
 	// プレイUIの更新
 	mPlayUI->Update(mDeltaTime);
 	// プレイヤーの更新
@@ -78,8 +78,8 @@ SceneBase* PlayScene::Update(float _deltaTime)
 
 	// 振り子ゲーム終了のフラグ
 	mGameCountFlag3 = mPlayUI->GetGameCountFlag3();
-	// プレイヤーモーション開始
-	mPlayer->SetFlag(mGameCountFlag3);
+	//// プレイヤーモーション開始
+	//mPlayer->SetFlag(mGameCountFlag3);
 
 	mScore = mPlayUI->GetScore();
 

@@ -4,7 +4,7 @@
 //-----------------------------------------------------------------------+
 
 // インクルードファイル
-#include "Effect.h"
+#include "PlayEffect.h"
 
 // コンストラクタ
 PlayEffect::PlayEffect(const char* sourceEffectHandle)
@@ -46,11 +46,14 @@ PlayEffect::~PlayEffect()
 // 解放処理
 void PlayEffect::Delete()
 {
-	if (GetNowPlaying() == 0)
+	if (GetNowPlaying2D() == 0)
 	{
 		StopEffect();
 	}
-
+	if (GetNowPlaying3D() == 0)
+	{
+		StopEffect();
+	}
 	DeleteEffekseerEffect(m_effectHandle);
 }
 
@@ -58,6 +61,7 @@ void PlayEffect::Delete()
 void PlayEffect::StopEffect()
 {
 	StopEffekseer3DEffect(m_playingEffect);
+	StopEffekseer2DEffect(m_playingEffect);
 	m_playingEffect = IsEffekseer3DEffectPlaying(m_playingEffect);
 }
 
@@ -65,9 +69,17 @@ void PlayEffect::StopEffect()
 /// 再生中かを調べる
 /// </summary>
 /// <returns> 再生中：0, それ以外：1 </returns>
-const int PlayEffect::GetNowPlaying()
+const int PlayEffect::GetNowPlaying3D()
 {
 	return IsEffekseer3DEffectPlaying(m_playingEffect);
+}
+
+/// 再生中かを調べる
+/// </summary>
+/// <returns> 再生中：0, それ以外：1 </returns>
+const int PlayEffect::GetNowPlaying2D()
+{
+	return IsEffekseer2DEffectPlaying(m_playingEffect);
 }
 
 /// <summary>
@@ -100,7 +112,7 @@ void PlayEffect::PlayEffekseer(const VECTOR in_playPos)
 
 	// エフェクトの描画
 	m_playingEffect = PlayEffekseer3DEffect(m_effectHandle);
-
+	m_playingEffect = PlayEffekseer2DEffect(m_effectHandle);
 	// エフェクトを再生する座標を指定
 	SetPosPlayingEffekseer3DEffect(m_playingEffect, m_playPos.x, m_playPos.y, m_playPos.z);
 }

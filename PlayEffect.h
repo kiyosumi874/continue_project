@@ -31,7 +31,10 @@ public:
 
 	void StopEffect();
 
-	const int GetNowPlaying();    // エフェクトが再生中かどうか(0:再生中  1:再生されていない)
+	// エフェクトが再生中かどうか(0:再生中  1:再生されていない)
+	const int GetNowPlaying3D();
+
+	const int GetNowPlaying2D();
 
 	// 再生中のエフェクトの座標セッター
 	void SetPlayingEffectPos(const VECTOR& _playPos);
