@@ -8,6 +8,7 @@ Yutaro_TestScene::Yutaro_TestScene()
     ,mWater(nullptr)
     ,mPool(nullptr)
 {
+
     mCamera = new Camera;
     mWater = new WaterObject;
     mWater->SetPosition(VGet(-10.0f, 0.0f, 0.0f));
