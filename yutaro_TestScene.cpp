@@ -8,12 +8,14 @@ Yutaro_TestScene::Yutaro_TestScene()
     ,mWater(nullptr)
     ,mPool(nullptr)
 {
-
+    // カメラ(水面シェーダーの情報に必要)
     mCamera = new Camera;
+    // 水面オブジェクト(モデルはペライチの正方形)
     mWater = new WaterObject;
-    mWater->SetPosition(VGet(-10.0f, 0.0f, 0.0f));
+    mWater->SetScale(VGet(150.0f, 1.0f, 225.0f));
+    mWater->SetPosition(VGet(0.0f, -5.25f, -55.0f));
 
-
+    // プール場
     mPool = new StaticObjectActor;
     mPool->LoadModelTex("data/model/pool/Stadium.mv1", "data/model/pool/Pool.png");
 }
@@ -29,9 +31,12 @@ SceneBase* Yutaro_TestScene::Update(float _deltaTime)
 {
     // カメラの更新
     mCamera->Update(VGet(50.0f, 30.0f, -80.0f), VGet(0.0f, -1.0f, -50.0f));
-
+    // プール場の更新
     mPool->Update(_deltaTime);
-   //mWater->Update(_deltaTime);
+
+    // 水面シェーダーの更新
+    mWater->Update(_deltaTime);
+    mWater->UpdateWaterShader(_deltaTime);     // 水面用シェーダーへ情報をセットする
 
     return this;
 }
@@ -41,7 +46,6 @@ void Yutaro_TestScene::Draw()
     mPool->Draw();
 
     // 水面の描画
-    mWater->ActivateWaterShader();
     mWater->DrawWater();
 }
 

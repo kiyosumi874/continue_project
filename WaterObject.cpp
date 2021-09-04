@@ -1,15 +1,18 @@
 #include "WaterObject.h"
 
+//----------------------------------------------------------------------------------------------//
+//
 // ！※！ DxLib_Init()の前にこれを忘れずに → SetUseDirect3DVersion( DX_DIRECT3D_9EX );
+//
+//---------------------------------------------------------------------------------------------//
 WaterObject::WaterObject()
 	:mNowTime(GetNowCount())
 	,mOldTime(GetNowCount())
 {
 	mFGameTimes = { 0.0f, 0.0f, 0.0f, 0.0f };
-	// モデル(キューブ)
+
+	// モデル読み込み
 	mMHandle = MV1LoadModel("data/Shaders/Water.mv1");
-	MV1SetPosition(mMHandle, VGet(0.0f, -6.5f, -55.0f));
-	MV1SetScale(mMHandle, VGet(150.0f, 1.0f, 220.0f));
 
 	// 各シェーダーの読み込み
 	mPsHandle = LoadPixelShader("data/Shaders/WaterShader_pixel.pso");
@@ -23,11 +26,10 @@ WaterObject::WaterObject()
 		printf("ERROR::WaterObject::VertexShader Load Failed\n");
 	}
 
-	// テクスチャ読み込み
+	// マテリアル読み込み
 	mDiffuseHandle = LoadGraph("data/Shaders/Water_002_COLOR.jpg");
 	mNormalHandle = LoadGraph("data/Shaders/Water_002_NORM.jpg");
 	mHeightHandle = LoadGraph("data/Shaders/Water_002_ROUGH.jpg");
-
 
 }
 
@@ -47,7 +49,11 @@ void WaterObject::UpdateActor(float _deltaTime)
 {
 }
 
-void WaterObject::ActivateWaterShader()
+/// <summary>
+/// 水面用シェーダー用の情報更新と送信処理
+/// </summary>
+/// <param name="_deltaTime"> 波長算出の時に使用する </param>
+void WaterObject::UpdateWaterShader(float _deltaTime)
 {
 	//---------------------------------------------------------//
 	// 時間制御
@@ -58,7 +64,7 @@ void WaterObject::ActivateWaterShader()
 	mNowTime = Time - mOldTime;
 	// 現在の時間を保存
 	mOldTime = Time;
-	mFGameTimes.x += (float)mNowTime / 12500.0f;
+	mFGameTimes.x += (float)mNowTime / 250.0f * _deltaTime;
 	//--------------------------------------------------------//
     // カメラの視線ベクトルとライトの方向ベクトルの送信
     //カメラの位置
@@ -79,6 +85,7 @@ void WaterObject::ActivateWaterShader()
 	FLOAT4 ld = { V_ld.x,V_ld.y,V_ld.z,1.0f };
 	//--------------------------------------------------------//
 	// シェーダーへ情報を送信
+	// シェーダー有効化
 	MV1SetUseOrigShader(TRUE);
 	SetUseVertexShader(mVsHandle);
 	SetUsePixelShader(mPsHandle);
@@ -107,6 +114,9 @@ void WaterObject::ActivateWaterShader()
 	MV1SetUseOrigShader(FALSE);
 }
 
+/// <summary>
+/// 水面シェーダー固有の描画処理
+/// </summary>
 void WaterObject::DrawWater()
 {
 	// オリジナルシェーダー仕様の有効化
@@ -116,6 +126,17 @@ void WaterObject::DrawWater()
 	SetUsePixelShader(mPsHandle);
 
 	// 描画
+	// タイル状に設置(現段階では非推奨)
+	for (int i = 0; i < 16; i++)
+	{
+		for (int j = 0; j < 8; j++)
+		{
+			//MV1SetPosition(mMHandle, VGet((-35.0f) + 8.0f * j, -6.5f, (-12.0f) + -9.0f * i));
+			//MV1DrawModel(mMHandle);
+		}
+	}
+
+	// 一個だけ
 	MV1DrawModel(mMHandle);
 
 	// オリジナルシェーダーの無効化
