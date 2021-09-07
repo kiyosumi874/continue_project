@@ -11,22 +11,21 @@ class ResultScene_YanoHaruto : public SceneBase
 {
 public:
     ResultScene_YanoHaruto(int _score);    // コンストラクタ
-    ~ResultScene_YanoHaruto();             // デストラクタ
+    ~ResultScene_YanoHaruto();    // デストラクタ
 
     SceneBase* Update(float _deltaTime)override;    // 更新
     void       Draw()                  override;    // 描画
-    void       Sound()                 override;    // 音楽
+    void       Sound(float _deltaTime)                 override;    // 音楽
     void       Load()                  override;    // 初期化
 private:
-    class Camera*                      mCamera;
-    class PlayerActor*                 mPlayer;
-    class PlayEffect*                  mFireWork[FIREWORKS]; //花火
-    class PlayEffect*                  mConfetti[CONFETTIES];//紙吹雪
-    class StaticObjectActor*           mPool;                //プールのポインタ
-    class ResultCamera*                mResultCamera;    // リザルトカメラクラスへのポインタメンバ変数
-    class ResultUI*                    mResultUI;        // リザルトUIクラスへのポインタメンバ変数
-    class StaticObjectActor*           mStaticObjectActor;
-    float mDeltaTime;         // デルタタイム
+    class ResultCamera* mResultCamera;    // リザルトカメラクラスへのポインタメンバ変数
+    class Camera* mCamera;
+    class ResultUI* mResultUI;        // リザルトUIクラスへのポインタメンバ変数
+    class PlayerActor* mPlayer;
+    class StaticObjectActor* mPodium;
+    class StaticObjectActor* mPool;
+    class Effect* mFireWorks;
+
     bool  mInputReturnFlag;   // Enterキーの連続入力防止
     int mScore;
 
@@ -36,4 +35,6 @@ private:
     bool mCheckHitFlag;
 
     int mFadeSpeed;
+
 };
+

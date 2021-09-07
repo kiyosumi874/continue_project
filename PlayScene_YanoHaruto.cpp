@@ -1,58 +1,53 @@
-//------------------------------------------+
-//8/30スタティックオブジェクトを使ったプールのモデル追加
-//８/30アクターを使った観客の追加
-//8/30インクルードしたaudience.h移動
-//by 矢野
-//------------------------------------------+
-
 #include "PlayScene_YanoHaruto.h"
 #include "ResultScene_YanoHaruto.h"
-#include "TitleScene.h"
-#include "PlayUI.h"
+#include "TitleScene_YanoHaruto.h"
+#include "PlayUI_YanoHaruto.h"
 #include "Camera.h"
 #include "BGM.h"
+#include "Audience.h"
 #include "StaticObjectActor.h"
-#include "PlayerActor.h"
+#include "PlayerActor_YanoHaruto.h"
+#include "SE.h"
+#include "Effect.h"
 
-const VECTOR   PLAY_CAMERA_POS = VGet(0.0f, 1.0f, -2.0f);
-const VECTOR   PLAY_PLAYER_SCALE = VGet(0.05f, 0.05f, 0.05f);
+const VECTOR   PLAY_CAMERA_POS = VGet(45.0f, 53.0f, -18.0f);
+const VECTOR   PLAY_PLAYER_SCALE = VGet(0.5f, 0.5f, 0.5f);
 const VECTOR   PLAY_PLAYER_ROTATE = VGet(0.0f, /*90.0f * DX_PI_F / 180.0f*/0.0f, 0.0f);
-const VECTOR   PLAY_PLAYER_POS = VGet(0.0f, 0.0f, 0.0f);
-
-//プールのモデル
-const char* POOL_MODEL = "data/model/pool/pool.mv1";
+const VECTOR   PLAY_PLAYER_POS = VGet(0.0f, 32.0f, 0.0f);
+const VECTOR   PLAY_POOL_SCALE = VGet(1.0f, 1.0f, 1.0f);
+const VECTOR   PLAY_POOL_ROTATE = VGet(0.0f, /*90.0f * DX_PI_F / 180.0f*/0.0f, 0.0f);
+const VECTOR   PLAY_POOL_POS = VGet(0.0f, 0.0f, 0.0f);
 
 /// <summary>
 /// 初期化
 /// </summary>
 PlayScene_YanoHaruto::PlayScene_YanoHaruto()
-	: mDeltaTime(0.000001f)
-	, mInputReturnFlag(false)
+	: mInputReturnFlag(false)
 	, mCamera(nullptr)
+	, mClickClitical(nullptr)
+	, mClickNormal(nullptr)
 	, mPlayUI(nullptr)
-	, mGameCountFlag3(true)
 	, mScore(0)
-	, mPlayCircleGameFlag(true)
-	, mPlayGaugeGameFlag(false)
-	, mPlayPendulumGameFlag(false)
 	, mAlphaPal(255)
 	, mAlphaPalFlag(false)
-	//-------------------------------------------------------------------
-	//8/30追加分矢野
-	, mAudiencePos(VGet(-45.5f, 10.0f, -30.0f))
-	, mAudienceGroundHeight(10.0f)  //最初に実体化させた観客の高さ
-	, mAudienceHighestJumpLine(5.0f)
-	, mAudienceJumpPower(0.1f)
-	, mAudienceDownFlag(false)
-	, mPool(nullptr)
-	, mAudience()
-	//-------------------------------------------------------------------
 	, mMoveSceneHandle(LoadGraph("data/img/MoveScene.png"))
 	, mBGM(nullptr)
 	, mBGMFlag(false)
 	, mTargetPos(VGet(0.0f, 0.0f, 0.0f))
+	, mPool(nullptr)
+	, mAudience(nullptr)
 	, mPlayer(nullptr)
 	, mFadeSpeed(3)
+	, mFeather(nullptr)
+	, mMetoronome(nullptr)
+	, mGameMode(GAME_MODE_STATE::FADE_IN)
+	, mGameWaitCount(0)
+	, mBigSplash(nullptr)
+	, mNormalSplash(nullptr)
+	, mSmalleSplash(nullptr)
+	, mStopCount(NULL)
+	, mEnterCount(0)
+	, mJumpPower(NULL)
 {
 }
 
@@ -61,20 +56,28 @@ PlayScene_YanoHaruto::PlayScene_YanoHaruto()
 /// </summary>
 PlayScene_YanoHaruto::~PlayScene_YanoHaruto()
 {
-	//delete mPlayCamera;
-	delete mCamera;
-	delete mPlayUI;
+
+	delete mAudience;
 	delete mBGM;
-	delete mPool;
-	//観客の消去
-	for (int i = 0; i < AudienceLine; i++)
-	{
-		for (int j = 0; j < AudienceNum; j++)
-		{
-			delete mAudience[i][j];
-		}
-	}
+	delete mCamera;
+	delete mClickClitical;
+	delete mClickNormal;
+	delete mMetoronome;
 	delete mPlayer;
+	delete mPlayUI;
+	delete mPool;
+	mBigSplash->StopEffect3D();
+	mBigSplash->Delete();
+	delete mBigSplash;
+	mNormalSplash->StopEffect3D();
+	mNormalSplash->Delete();
+	delete mNormalSplash;
+	mSmalleSplash->StopEffect3D();
+	mSmalleSplash->Delete();
+	delete mSmalleSplash;
+	mFeather->StopEffect3D();
+	mFeather->Delete();
+	delete mFeather;
 }
 
 /// <summary>
@@ -87,54 +90,53 @@ PlayScene_YanoHaruto::~PlayScene_YanoHaruto()
 /// </returns>
 SceneBase* PlayScene_YanoHaruto::Update(float _deltaTime)
 {
-	mDeltaTime = _deltaTime / 1000000.0f;
-	//観客の更新
-	//8/30矢野------------------------------------------------
-	for (int i = 0; i < AudienceLine; i++)
+	switch (mGameMode)
 	{
-		for (int j = 0; j < AudienceNum; j++)
-		{
-			mAudienceDownFlag = mAudience[i][j]->GetDownFlag();
-			mAudience[i][j]->Update(_deltaTime);
-			if (mAudienceDownFlag)
-			{
-				mAudiencePos.y -= mAudienceJumpPower;
-			}
-			else
-			{
-				mAudiencePos.y += mAudienceJumpPower;
-			}
-		}
+	case GAME_MODE_STATE::FADE_IN:
+		GameModeFadeInBehavior(_deltaTime);
+		break;
+	case GAME_MODE_STATE::CAMERA_MOVE:
+		GameModeCameraMoveBehavior(_deltaTime);
+		break;
+	case GAME_MODE_STATE::WAIT:
+		GameModeWaitBehavior(_deltaTime);
+		break;
+	case GAME_MODE_STATE::CIRCLE_GAME:
+		GameModeCircleGameBehavior(_deltaTime);
+		break;
+	case GAME_MODE_STATE::GAUGE_GAME:
+		GameModeGaugeGameBehavior(_deltaTime);
+		break;
+	case GAME_MODE_STATE::PENDULUM_GAME:
+		GameModePendulumGameBehavior(_deltaTime);
+		break;
+	case GAME_MODE_STATE::FADE_OUT:
+		GameModeFadeOutBehavior(_deltaTime);
+		break;
+	default:
+		break;
 	}
-	//-------------------------------------------------------------
-	// プレイUIの更新
-	mPlayUI->Update(mDeltaTime);
+
+	mPool->Update(_deltaTime);
+	//観客の更新
+	mAudience->Update();
+
 	// プレイヤーの更新
-	mPlayer->SetPlayerState(PlayerActor::PLAYER_STATE::STATE_PLAY_IDLE);
-	mPlayer->UpdateActor(mDeltaTime);
-	mPlayer->Update(mDeltaTime);
+	mPlayer->UpdateActor(_deltaTime);
+	mPlayer->Update(_deltaTime);
 
 	// カメラの更新
 	mCamera->Update(PLAY_CAMERA_POS, mTargetPos);
 
-	// 振り子ゲーム終了のフラグ
-	mGameCountFlag3 = mPlayUI->GetGameCountFlag3();
-	//// プレイヤーモーション開始
-	//mPlayer->SetFlag(mGameCountFlag3);
 
 	mScore = mPlayUI->GetScore();
-
-	if (mAlphaPal >= 0 && !mAlphaPalFlag)
+	if (!CheckHitKey(KEY_INPUT_RETURN))
 	{
-		mAlphaPal -= mFadeSpeed;
+		mInputReturnFlag = true;
 	}
-	else
+	if (CheckHitKey(KEY_INPUT_RETURN) && mInputReturnFlag)
 	{
-		mAlphaPalFlag = true;
-	}
-	if (!mGameCountFlag3)
-	{
-		mAlphaPal += mFadeSpeed;
+		mEnterCount++;
 	}
 	// シーン遷移条件
 	if (mAlphaPal >= 255)
@@ -152,22 +154,92 @@ SceneBase* PlayScene_YanoHaruto::Update(float _deltaTime)
 /// </summary>
 void PlayScene_YanoHaruto::Draw()
 {
-	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 255);
-	//観客の描画 8/30
-	//---------------------------------------------------------
-	for (int i = 0; i < AudienceLine; i++)
+#ifdef _DEBUG
+	// デバッグモード時のみ実行
+	clsDx();
+	printfDx("CameraPosX:%f\n", mCamera->GetPositionX());
+	printfDx("CameraPosY:%f\n", mCamera->GetPositionY());
+	printfDx("CameraPosZ:%f\n", mCamera->GetPositionZ());
+	printfDx("CameraAimPosX:%f\n", mCamera->GetAimTargetPositionX());
+	printfDx("CameraAimPosY:%f\n", mCamera->GetAimTargetPositionY());
+	printfDx("CameraAimPosZ:%f\n", mCamera->GetAimTargetPositionZ());
+	printfDx("PlayerPosX:%f\n", mPlayer->GetPositionX());
+	printfDx("PlayerPosY:%f\n", mPlayer->GetPositionY());
+	printfDx("PlayerPosZ:%f\n", mPlayer->GetPositionZ());
+	printfDx("PlayTime:%f\n", mPlayer->GetPlayTime());
+	switch (mPlayer->GetPlayerState())
 	{
-		for (int j = 0; j < AudienceNum; j++)
-		{
-			mAudience[i][j]->Draw();
-		}
+	case PlayerActor_YanoHaruto::PLAYER_STATE::STATE_TITLE_IDLE:
+		printfDx("NowState:TITLE_IDLE\n");
+		break;
+
+	case PlayerActor_YanoHaruto::PLAYER_STATE::STATE_PLAY_IDLE:
+		printfDx("NowState:PLAY_IDLE\n");
+		break;
+
+	case PlayerActor_YanoHaruto::PLAYER_STATE::STATE_PLAY_GAME1:
+		printfDx("NowState:PLAY_GAME1\n");
+		break;
+
+	case PlayerActor_YanoHaruto::PLAYER_STATE::STATE_PLAY_GAME2:
+		printfDx("NowState:PLAY_GAME2\n");
+		break;
+
+	case PlayerActor_YanoHaruto::PLAYER_STATE::STATE_PLAY_GAME3:
+		printfDx("NowState:PLAY_GAME3\n");
+		break;
+
+	case PlayerActor_YanoHaruto::PLAYER_STATE::STATE_RESULT_IDLE:
+		printfDx("NowState:RESULT_IDLE\n");
+		break;
+
+	default:
+		break;
 	}
-	//---------------------------------------------------------
+#endif
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 255);
 	mPool->Draw();
+	mAudience->Draw();
 	// プレイヤーの描画
 	mPlayer->Draw();
 	// プレイUIの描画
 	mPlayUI->Draw();
+	//エンターキーを三回押したなら
+	if (3 < mEnterCount)
+	{
+		if (mFeather->GetNowPlaying3D())
+		{
+			mFeather->PlayEffekseer(mPlayer->GetPosition());
+		}
+	}
+	//水面に飛び込んだら
+	if (10 > mPlayer->GetPositionY())
+	{
+		//500点以上なら
+		if (mScore >= 500)
+		{
+			if (mSmalleSplash->GetNowPlaying3D())
+			{
+				mSmalleSplash->PlayEffekseer(VGet(mPlayer->GetPositionX(), mPlayer->GetPositionY(), mPlayer->GetPositionZ()));
+			}
+		}
+		//200点以上なら
+		else if (mScore >= 200)
+		{
+			if (mNormalSplash->GetNowPlaying3D())
+			{
+				mNormalSplash->PlayEffekseer(VGet(mPlayer->GetPositionX(), mPlayer->GetPositionY(), mPlayer->GetPositionZ()));
+			}
+		}
+		//200以下なら
+		else if (mScore < 200)
+		{
+			if (mBigSplash->GetNowPlaying3D())
+			{
+				mBigSplash->PlayEffekseer(VGet(mPlayer->GetPositionX(), mPlayer->GetPositionY(), mPlayer->GetPositionZ()));
+			}
+		}
+	}
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, mAlphaPal);
 	DrawGraph(0, 0, mMoveSceneHandle, FALSE);
 }
@@ -175,22 +247,22 @@ void PlayScene_YanoHaruto::Draw()
 /// <summary>
 /// 音楽
 /// </summary>
-void PlayScene_YanoHaruto::Sound()
+void PlayScene_YanoHaruto::Sound(float _deltaTime)
 {
-	if (!mGameCountFlag3)
+	if (mGameMode == GAME_MODE_STATE::FADE_OUT)
 	{
-		mBGM->FadeOutMusic(500, mDeltaTime);
+		mBGM->FadeOutMusic(500, _deltaTime);
 	}
 	else
 	{
-		mBGM->FadeInMusic(250, mDeltaTime);
+		mBGM->FadeInMusic(250, _deltaTime);
 	}
 	if (!mBGMFlag)
 	{
 		mBGM->Play();
 		mBGMFlag = true;
 	}
-	mPlayUI->Sound();
+	mPlayUI->Sound(mMetoronome, mClickNormal, mClickClitical);
 }
 
 /// <summary>
@@ -198,41 +270,147 @@ void PlayScene_YanoHaruto::Sound()
 /// </summary>
 void PlayScene_YanoHaruto::Load()
 {
+	mEnterCount = 0;
+
 	mCamera = new Camera;
-	mPlayUI = new PlayUI;
+	mPlayUI = new PlayUI_YanoHaruto;
 	mBGM = new BGM;
 	mPool = new StaticObjectActor;
+	mAudience = new Audience;
+	mPlayer = new PlayerActor_YanoHaruto;
+	mFeather = new Effect("data/effect/FeatherBanish.efk");
+	mBigSplash = new Effect("data/effect/BigSplash.efk");
+	mNormalSplash = new Effect("data/effect/NormalSplash.efk");
+	mSmalleSplash = new Effect("data/effect/SmalleSplash.efk");
 
-	//観客の実体化 8/30
-	//-------------------------------------------------------------------------------------------------
-	for (int i = 0; i < AudienceLine; i++)
-	{
-		for (int j = 0; j < AudienceNum; j++)
-		{
-			mAudience[i][j] = new Audience(mAudienceGroundHeight,mAudienceHighestJumpLine);
-		}
-	}
-	//-------------------------------------------------------------------------------------------------
-	
-	mPlayer = new PlayerActor;
 
-	//プールの実体化　8/30
-	//-------------------------------------------------------------------------------------------------
-	mPool->LoadModel(POOL_MODEL);
-	mPool->SetScale(VGet(0.005f, 0.005f, 0.005f));
-	mPool->SetRotation(VGet(0.0f, 0.0f, 0.0f));
-	mPool->SetPosition(VGet(0.0f, 0.0f, 0.0f));
-	//-------------------------------------------------------------------------------------------------
-	
+	mPlayer->SetPlayerState(PlayerActor_YanoHaruto::PLAYER_STATE::STATE_PLAY_IDLE);
+	mPlayer->Load();
 	mPlayer->LoadModel(PLAYER_MODEL_HANDLE);
 	mPlayer->SetScale(PLAY_PLAYER_SCALE);
 	mPlayer->SetRotation(PLAY_PLAYER_ROTATE);
 	mPlayer->SetPosition(PLAY_PLAYER_POS);
 
-	
-	mTargetPos = mAudience[0][0]->GetPosition();
+	mTargetPos = mAudience->mGetAudiencePos();
+
+	mPool->LoadModelTex("data/model/pool/pool2.mv1", "data/model/pool/Pool.png");
+	mPool->SetScale(PLAY_POOL_SCALE);
+	mPool->SetRotation(PLAY_POOL_ROTATE);
+	mPool->SetPosition(PLAY_POOL_POS);
 
 	// プレイUIの初期化
 	mPlayUI->Load();
+	mMetoronome = new SE;
+	mClickNormal = new SE;
+	mClickClitical = new SE;
+	mMetoronome->LoadSound("data/sound/metronome_wood.wav");
+	mClickNormal->LoadSound("data/sound/click_normal.wav");
+	mClickClitical->LoadSound("data/sound/click_critical.wav");
 	mBGM->LoadMusic("data/sound/迅雷のユーロビート.mp3");
+}
+
+void PlayScene_YanoHaruto::GameModeFadeInBehavior(float _deltaTime)
+{
+	mAlphaPal -= mFadeSpeed;
+	if (mAlphaPal <= 0)
+	{
+		mGameMode = GAME_MODE_STATE::CIRCLE_GAME;
+	}
+
+}
+
+void PlayScene_YanoHaruto::GameModeCameraMoveBehavior(float _deltaTime)
+{
+}
+
+void PlayScene_YanoHaruto::GameModeWaitBehavior(float _deltaTime)
+{
+	if (((!mClickClitical->IsPlaying()) && (!mClickNormal->IsPlaying())) && mGameWaitCount == 1)
+	{
+		VECTOR tmpPos = mPlayer->GetPosition();
+		tmpPos.z -= 3 * _deltaTime;
+		if (tmpPos.z <= -8)
+		{
+			mGameMode = GAME_MODE_STATE::GAUGE_GAME;
+			return;
+		}
+		mPlayUI->SetDrawGameState(DRAW_GAME_STATE::DRAW_NULL);
+		mPlayer->SetPlayerState(PlayerActor_YanoHaruto::PLAYER_STATE::STATE_PLAY_RUN);
+		mPlayer->SetPosition(tmpPos);
+	}
+
+	if (((!mClickClitical->IsPlaying()) && (!mClickNormal->IsPlaying())) && mGameWaitCount == 2)
+	{
+		VECTOR tmpPos = mPlayer->GetPosition();
+		tmpPos.z -= 3 * _deltaTime;
+		if (tmpPos.z <= -16)
+		{
+			mGameMode = GAME_MODE_STATE::PENDULUM_GAME;
+			return;
+		}
+		mPlayUI->SetDrawGameState(DRAW_GAME_STATE::DRAW_NULL);
+		mPlayer->SetPlayerState(PlayerActor_YanoHaruto::PLAYER_STATE::STATE_PLAY_RUN);
+		mPlayer->SetPosition(tmpPos);
+	}
+
+	if (((!mClickClitical->IsPlaying()) && (!mClickNormal->IsPlaying())) && mGameWaitCount == 3)
+	{
+		if (mPlayer->GetPlayTime() >= 45)
+		{
+			VECTOR tmpPos = mPlayer->GetPosition();
+			tmpPos.z -= 5 * _deltaTime;
+			tmpPos.y += mJumpPower * _deltaTime;
+			if (tmpPos.y <= 0.0f)
+			{
+				mGameMode = GAME_MODE_STATE::FADE_OUT;
+			}
+			mPlayUI->SetDrawGameState(DRAW_GAME_STATE::DRAW_NULL);
+			mPlayer->SetPlayerState(PlayerActor_YanoHaruto::PLAYER_STATE::STATE_PLAY_JUMP);
+			mJumpPower -= 9.8 * _deltaTime;
+			// 更新分の座標のSet
+			mPlayer->SetPosition(tmpPos);
+		}
+	}
+}
+
+void PlayScene_YanoHaruto::GameModeCircleGameBehavior(float _deltaTime)
+{
+	mPlayUI->CircleGameBehavior(_deltaTime);
+	mPlayUI->SetDrawGameState(DRAW_GAME_STATE::DRAW_CIRCLE_GAME);
+	mPlayer->SetPlayerState(PlayerActor_YanoHaruto::PLAYER_STATE::STATE_PLAY_GAME1);
+	if (!mPlayUI->GetPlayCircleGameFlag())
+	{
+		mGameMode = GAME_MODE_STATE::WAIT;
+		mGameWaitCount += 1;
+	}
+}
+
+void PlayScene_YanoHaruto::GameModeGaugeGameBehavior(float _deltaTime)
+{
+	mPlayUI->GaugeGameBehavior(_deltaTime);
+	mPlayUI->SetDrawGameState(DRAW_GAME_STATE::DRAW_GAUGE_GAME);
+	mPlayer->SetPlayerState(PlayerActor_YanoHaruto::PLAYER_STATE::STATE_PLAY_GAME2);
+	if (!mPlayUI->GetPlayGaugeGameFlag())
+	{
+		mGameMode = GAME_MODE_STATE::WAIT;
+		mGameWaitCount += 1;
+	}
+}
+
+void PlayScene_YanoHaruto::GameModePendulumGameBehavior(float _deltaTime)
+{
+	mPlayUI->PendulumGameBehavior(_deltaTime);
+	mPlayUI->SetDrawGameState(DRAW_GAME_STATE::DRAW_PENDULUM_GAME);
+	mPlayer->SetPlayerState(PlayerActor_YanoHaruto::PLAYER_STATE::STATE_PLAY_GAME3);
+	if (!mPlayUI->GetPlayPendulumGameFlag())
+	{
+		mGameMode = GAME_MODE_STATE::WAIT;
+		mGameWaitCount += 1;
+		mJumpPower = 10.0f;
+	}
+}
+
+void PlayScene_YanoHaruto::GameModeFadeOutBehavior(float _deltaTime)
+{
+	mAlphaPal += mFadeSpeed;
 }

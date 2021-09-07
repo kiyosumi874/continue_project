@@ -169,6 +169,12 @@
     <ClCompile Include="Effect.cpp">
       <Filter>ソース ファイル\work_haruto</Filter>
     </ClCompile>
+    <ClCompile Include="PlayUI_YanoHaruto.cpp">
+      <Filter>ソース ファイル\work_haruto</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerActor_YanoHaruto.cpp">
+      <Filter>ソース ファイル\work_haruto</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SceneBase.h">
@@ -286,6 +292,12 @@
       <Filter>ソース ファイル\work_kiyosumi\Player</Filter>
     </ClInclude>
     <ClInclude Include="Effect.h">
+      <Filter>ソース ファイル\work_haruto</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayUI_YanoHaruto.h">
+      <Filter>ソース ファイル\work_haruto</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerActor_YanoHaruto.h">
       <Filter>ソース ファイル\work_haruto</Filter>
     </ClInclude>
   </ItemGroup>

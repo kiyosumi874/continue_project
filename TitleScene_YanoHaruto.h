@@ -2,7 +2,7 @@
 // @file         TitleScene_YanoHaruto.h
 // @brief        TitleScene_YanoHarutoクラス
 // @note         継承元:SceneBaseクラス              
-// @author       椎原 清澄 (Kiyosumi Shiihara, @2021)
+// @author       椎原 清澄 (YanoHaruto Shiihara, @2021)
 // @changelog
 // 2021/ 7/29    新規作成 8/30 矢野　タイトルシーンから
 //----------------------------------------------------------------------------------//
@@ -23,7 +23,7 @@ public:
 
     SceneBase* Update(float _deltaTime)override;    // 更新
     void       Draw()                  override;    // 描画
-    void       Sound()                 override;    // 音楽
+    void       Sound(float _deltaTime)                 override;    // 音楽
     void       Load()                  override;    // 初期化
 
 private:
@@ -32,7 +32,21 @@ private:
     class BGM* mBGM;
     class SE* mClickNormal;
     class PlayerActor* mPlayer;
-    float mDeltaTime;          // デルタタイム
+    class StaticObjectActor* mPool;
+
+    typedef struct MoveCircle
+    {
+        float mPosX;
+        float mPosY;
+        float mPosZ;
+        float mCenterX;
+        float mCenterY;
+        float mCenterZ;
+        float mAngle;
+        float mLength;
+    };
+    MoveCircle mMoveCircle;
+
     bool mBGMFlag;
     bool  mInputReturnFlag;    // Enterキーの連続入力防止
     bool mClickNormalFlag;
@@ -50,3 +64,4 @@ private:
     int mFadeSpeed;
 
 };
+
