@@ -33,7 +33,9 @@ private:
     class BGM* mBGM;
     class SE* mClickNormal;
     class PlayerActor* mPlayer;
+    class StaticObjectActor* mSky;
     class StaticObjectActor* mPool;
+    class Audience* mAudience;       //観客へのポインタ
 
     typedef struct MoveCircle
     {
@@ -46,7 +48,15 @@ private:
         float mAngle;
         float mLength;
     };
+
+    enum class CAMERA_TYPE : unsigned char
+    {
+        CAMERA_1,
+        CAMERA_2,
+        CAMERA_3
+    };
     MoveCircle mMoveCircle;
+    CAMERA_TYPE mCameraType;
 
     bool mBGMFlag;
     bool  mInputReturnFlag;    // Enterキーの連続入力防止

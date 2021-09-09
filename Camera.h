@@ -14,11 +14,24 @@ public:
     float   GetAimTargetPositionX() const { return mAimTargetPos.x; }                       // ílÇï‘Ç∑
     float   GetAimTargetPositionY() const { return mAimTargetPos.y; }                      // ílÇï‘Ç∑
     float   GetAimTargetPositionZ() const { return mAimTargetPos.z; }                       // ílÇï‘Ç∑
+    void SetPos(const VECTOR& _Pos) { mNowPos = _Pos; }
+    void SetFuturePos(const VECTOR& _futurePos) { mFuturePos = _futurePos; }
+    const VECTOR& GetFuturePos() const { return mFuturePos; }
+    const VECTOR& GetFutureTarget() const { return mFutureTarget; }
+    void SetTarget(const VECTOR& _Target) { mAimTargetPos = _Target; }
+    void SetFutureTarget(const VECTOR& _futureTarget) { mFutureTarget = _futureTarget; }
     void    Update(const VECTOR& _inPosition,          // êßå‰
-                   const VECTOR& _inTarget);
+                   const VECTOR& _inTarget,
+                          float _deltaTime);
 
+    void SetSpeed(float _speed) { mSpeed = _speed; }
 private:
     VECTOR mAimTargetPos;
     VECTOR mNowPos;
+
+    VECTOR mFuturePos;
+    VECTOR mFutureTarget;
+
+    float mSpeed;
 
 };

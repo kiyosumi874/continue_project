@@ -10,6 +10,7 @@
 #include "PlayerActor.h"
 #include "Camera.h"
 #include "StaticObjectActor.h"
+#include "Audience.h"
 
 const char* MOVE_SCENE_IMG = "data/img/MoveScene.png";
 const char* PLAYER_MODEL_HANDLE = "data/model/player5/waterboy.pmx";
@@ -35,6 +36,7 @@ TitleScene_kiyosumi::TitleScene_kiyosumi()
 	, mPlayer(nullptr)
 	, mClickNormal(nullptr)
 	, mPool(nullptr)
+	, mSky(nullptr)
 	, mInputReturnFlag(false)
 	, mStartButtonFlag(false)
 	, mAlphaPalFlag(false)
@@ -44,12 +46,13 @@ TitleScene_kiyosumi::TitleScene_kiyosumi()
 	, mMoveSceneHandle(NULL)
 	, mAlphaPal(MAX_ALPHA_PAL)
 	, mFadeSpeed(IMG_FADE_SPEED)
+	, mCameraType(CAMERA_TYPE::CAMERA_1)
 {
-	mMoveCircle.mPosX = 0.0f;
-	mMoveCircle.mPosY = 31.5f;
-	mMoveCircle.mPosZ = 0.0f;
-	mMoveCircle.mAngle = 0.0f;
-	mMoveCircle.mLength = 25.0f;
+	//mMoveCircle.mPosX = 0.0f;
+	//mMoveCircle.mPosY = 31.5f;
+	//mMoveCircle.mPosZ = 0.0f;
+	//mMoveCircle.mAngle = 0.0f;
+	//mMoveCircle.mLength = 25.0f;
 }
 
 /// <summary>
@@ -63,6 +66,7 @@ TitleScene_kiyosumi::~TitleScene_kiyosumi()
 	delete mClickNormal;
 	delete mPlayer;
 	delete mPool;
+	delete mSky;
 }
 
 /// <summary>
@@ -77,28 +81,28 @@ SceneBase* TitleScene_kiyosumi::Update(float _deltaTime)
 {
 	static VECTOR cameraPos = VGet(0.0f, 40.0f, -25.0f);
 	
-	mMoveCircle.mCenterX = mPlayer->GetPositionX();
-	mMoveCircle.mCenterY = mPlayer->GetPositionY();
-	mMoveCircle.mCenterZ = mPlayer->GetPositionZ();
-	
+	//mMoveCircle.mCenterX = mPlayer->GetPositionX();
+	//mMoveCircle.mCenterY = mPlayer->GetPositionY();
+	//mMoveCircle.mCenterZ = mPlayer->GetPositionZ();
+	//
 
-	// 中心座標に角度と長さを使用した円の位置を加算する
-	// 度数法の角度を弧度法に変換
-	float radius = mMoveCircle.mAngle * DX_PI_F / 180.0f;
+	//// 中心座標に角度と長さを使用した円の位置を加算する
+	//// 度数法の角度を弧度法に変換
+	//float radius = mMoveCircle.mAngle * DX_PI_F / 180.0f;
 
-	// 三角関数を使用し、円の位置を割り出す。
-	float add_x = cos(radius) * mMoveCircle.mLength;
-	float add_z = sin(radius) * mMoveCircle.mLength;
+	//// 三角関数を使用し、円の位置を割り出す。
+	//float add_x = cos(radius) * mMoveCircle.mLength;
+	//float add_z = sin(radius) * mMoveCircle.mLength;
 
-	// 結果ででた位置を中心位置に加算し、それを描画位置とする
-	mMoveCircle.mPosX = mMoveCircle.mCenterX + add_x * _deltaTime;
-	mMoveCircle.mPosZ = mMoveCircle.mCenterZ + add_z * _deltaTime;
+	//// 結果ででた位置を中心位置に加算し、それを描画位置とする
+	//mMoveCircle.mPosX = mMoveCircle.mCenterX + add_x * _deltaTime;
+	//mMoveCircle.mPosZ = mMoveCircle.mCenterZ + add_z * _deltaTime;
 
 	// 角度更新
 	mMoveCircle.mAngle += 1.0f;
-
+	mSky->Update(_deltaTime);
 	mPool->Update(_deltaTime);
-
+	mAudience->Update();
 	// プレイヤーの更新
 	mPlayer->UpdateActor(_deltaTime);  // 1
 	mPlayer->Update(_deltaTime);       // 2 この順番で書く
@@ -106,7 +110,45 @@ SceneBase* TitleScene_kiyosumi::Update(float _deltaTime)
 	mTitleUI->Update(_deltaTime);
 	cameraPos = VAdd(cameraPos, VGet(mMoveCircle.mPosX, 0.0f,mMoveCircle.mPosZ));
 	// カメラの更新
-	mCamera->Update(cameraPos, mPlayer->GetPosition());
+	if (mCameraType == CAMERA_TYPE::CAMERA_1)
+	{
+		mCamera->SetSpeed(0.2f);
+		mCamera->SetPos(VAdd(TITLE_CAMERA_POS, VGet(5.0f, 5.0f, 0.0f)));
+		mCamera->SetTarget(VAdd(TITLE_POOL_POS, VGet(0.0f, 20.0f, -30.0f)));
+		if (mCamera->GetFuturePos().z >= -25.0f -10.0f)
+		{
+			mCameraType = CAMERA_TYPE::CAMERA_2;
+			mCamera->SetFuturePos(VGet(-25.0f, 50.0f, -20.0f));
+			mCamera->SetFutureTarget(mPlayer->GetPosition());
+		}
+	}
+	if (mCameraType == CAMERA_TYPE::CAMERA_2)
+	{
+		mCamera->SetSpeed(0.2f);
+		mCamera->SetPos(VAdd(VGet(-25.0f, 50.0f, -20.0f), VGet(50.0f, 0.0f, 0.0f)));
+		mCamera->SetTarget(VAdd(mPlayer->GetPosition(), VGet(0.0f, 0.0f, 0.0f)));
+		if (mCamera->GetFuturePos().x >= 17.0f)
+		{
+			mCameraType = CAMERA_TYPE::CAMERA_3;
+			mCamera->SetFuturePos(VGet(30.0f, 20.0f, 0.0f));
+			mCamera->SetFutureTarget(VGet(50.0f, 20.0f, -10.0f));
+		}
+	}
+	if (mCameraType == CAMERA_TYPE::CAMERA_3)
+	{
+		mCamera->SetSpeed(0.1f);
+		mCamera->SetPos(VAdd(VGet(30.0f, 20.0f, 0.0f), VGet(0.0f, 0.0f, -100.0f)));
+		mCamera->SetTarget(VAdd(VGet(50.0f, 20.0f, -10.0f), VGet(0.0f, 0.0f, -100.0f)));
+		if (mCamera->GetFuturePos().z <= -85.0f)
+		{
+			mCameraType = CAMERA_TYPE::CAMERA_1;
+			mCamera->SetFuturePos(VAdd(TITLE_CAMERA_POS, VGet(-30.0f, 20.0f, -130.0f)));
+			mCamera->SetFutureTarget(VAdd(TITLE_POOL_POS, VGet(0.0f, 20.0f, -30.0f)));
+		}
+
+	}
+
+	mCamera->Update(cameraPos, mPlayer->GetPosition(), _deltaTime);
 	// フェードイン
 	if (0 <= mAlphaPal && !mAlphaPalFlag)
 	{
@@ -128,7 +170,7 @@ SceneBase* TitleScene_kiyosumi::Update(float _deltaTime)
 	if (mAlphaPal >= 255)
 	{
 		// 条件を満たしていたら次のシーンを生成してそのポインタを返す
-		return new PlayScene_kiyosumi();
+		return new PlayScene_kiyosumi(_deltaTime);
 	}
 
 	// シーンが変更されていなかったら自分のポインタを返す
@@ -184,7 +226,9 @@ void TitleScene_kiyosumi::Draw()
 #endif
 
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 255);
+	mSky->Draw();
 	mPool->Draw();
+	mAudience->Draw();
 	// プレイヤーの描画
 	mPlayer->Draw();
 	// タイトルUIの描画
@@ -235,6 +279,8 @@ void TitleScene_kiyosumi::Load()
 	mClickNormal = new SE;
 	mPlayer = new PlayerActor;
 	mPool = new StaticObjectActor;
+	mSky = new StaticObjectActor;
+	mAudience = new Audience;
 	mTitleUI->Load();
 	mClickNormal->LoadSound(SOUND_CLICK_HANDLE);
 	mBGM->LoadMusic(BGM_HANDLE);
@@ -245,6 +291,13 @@ void TitleScene_kiyosumi::Load()
 	mPool->SetRotation(TITLE_POOL_ROTATE);
 	mPool->SetPosition(TITLE_POOL_POS);
 
+	mSky->LoadModel("data/model/Skydome_X5/Dome_X501.pmx");
+	
+	mCamera->SetFuturePos(VAdd(TITLE_CAMERA_POS, VGet(-30.0f, 20.0f, -130.0f)));
+	mCamera->SetFutureTarget(VAdd(TITLE_POOL_POS, VGet(0.0f,20.0f, -30.0f)));
+	mCamera->SetPos(VAdd(TITLE_CAMERA_POS, VGet(5.0f, 5.0f, -5.0f)));
+	mCamera->SetTarget(VGet(-45.5f, 10.0f, -30.0f));
+	
 	mPlayer->SetPlayerState(PlayerActor::PLAYER_STATE::STATE_TITLE_IDLE);
 	mPlayer->LoadModel(PLAYER_MODEL_HANDLE);
 	mPlayer->SetScale(TITLE_PLAYER_SCALE);

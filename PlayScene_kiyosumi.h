@@ -19,6 +19,7 @@ enum class GAME_MODE_STATE : unsigned char
     CIRCLE_GAME,
     GAUGE_GAME,
     PENDULUM_GAME,
+    GAYA,
     FADE_OUT
 };
 
@@ -26,6 +27,7 @@ class PlayScene_kiyosumi : public SceneBase
 {
 public:
     PlayScene_kiyosumi();    // コンストラクタ
+    PlayScene_kiyosumi(float _deltaTime);    // コンストラクタ
     ~PlayScene_kiyosumi();    // デストラクタ
 
     SceneBase* Update(float _deltaTime)override;    // 更新
@@ -40,7 +42,10 @@ private:
     void GameModeCircleGameBehavior(float _deltaTime);
     void GameModeGaugeGameBehavior(float _deltaTime);
     void GameModePendulumGameBehavior(float _deltaTime);
+    void GameModeGayaBehavior(float _deltaTime);
     void GameModeFadeOutBehavior(float _deltaTime);
+
+    void LoadEX(int& _tmp, short& _count, int _handle);
 
     GAME_MODE_STATE mGameMode;
 
@@ -48,17 +53,20 @@ private:
     class Camera* mCamera;
     class PlayUI* mPlayUI;    // プレイUIクラスへのポインタメンバ変数
     class BGM* mBGM;
+    class BGM* mBGM2;
     class Audience* mAudience;       //観客へのポインタ
     class StaticObjectActor* mPool;
+    class StaticObjectActor* mSky;
     class PlayerActor* mPlayer;
     class SE* mMetoronome;
     class SE* mClickNormal;
     class SE* mClickClitical;
+    class SE* mKansei;
 
     VECTOR       mTargetPos;        //カメラの見ている座標
 
     bool  mInputReturnFlag;    // Enterキーの連続入力防止
-
+    float mDeltaTime;
     int   mScore;
 
     int mStopCount;
@@ -69,6 +77,11 @@ private:
     int mFadeSpeed;
 
     bool mBGMFlag;
+    bool mBGMFlag2;
+
+    bool mFlag;
+    bool mFlag2;
+    bool mFlag3;
 
     int mGameWaitCount;
 

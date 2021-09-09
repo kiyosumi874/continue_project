@@ -64,7 +64,7 @@ SceneBase* ResultScene_kiyosumi::Update(float _deltaTime)
 {
 	mPodium->Update(_deltaTime);
 	mPool->Update(_deltaTime);
-
+	mSky->Update(_deltaTime);
 	mPlayer->SetPlayerState(PlayerActor::PLAYER_STATE::STATE_RESULT_IDLE);
 	mPlayer->UpdateActor(_deltaTime);
 	mPlayer->Update(_deltaTime);
@@ -74,7 +74,7 @@ SceneBase* ResultScene_kiyosumi::Update(float _deltaTime)
 	// リザルトUIにスコアを渡す
 	mResultUI->LoadScore(mScore);
 
-	mCamera->Update(RESULT_CAMERA_POS, mPlayer->GetPosition());
+	mCamera->Update(RESULT_CAMERA_POS, mPlayer->GetPosition(),_deltaTime);
 
 	// Enterキーの連続入力防止
 	if (!CheckHitKey(KEY_INPUT_RETURN))
@@ -196,6 +196,7 @@ void ResultScene_kiyosumi::Load()
 	mPodium = new StaticObjectActor;
 	mPool = new StaticObjectActor;
 	mFireWorks = new Effect("data/effect/hanabi.efk", 40.0f);
+	mSky = new StaticObjectActor;
 
 	// リザルトUIの初期化
 	mResultUI->Load();
@@ -205,6 +206,9 @@ void ResultScene_kiyosumi::Load()
 	mPlayer->SetScale(RESULT_PLAYER_SCALE);
 	mPlayer->SetRotation(RESULT_PLAYER_ROTATE);
 	mPlayer->SetPosition(RESULT_PLAYER_POS);
+
+	mSky->LoadModel("data/model/Skydome_X5/Dome_X501.pmx");
+
 
 	mPodium->LoadModelTex("data/model/podium/Stand.mv1", "data/model/podium/podium.png");
 	mPodium->SetScale(VGet(0.15f, 0.15f, 0.15f));

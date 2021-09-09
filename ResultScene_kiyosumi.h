@@ -28,6 +28,7 @@ private:
     class PlayerActor* mPlayer;
     class StaticObjectActor* mPodium;
     class StaticObjectActor* mPool;
+    class StaticObjectActor* mSky;
     class Effect* mFireWorks;
 
     bool  mInputReturnFlag;   // EnterƒL[‚Ì˜A‘±“ü—Í–h~
