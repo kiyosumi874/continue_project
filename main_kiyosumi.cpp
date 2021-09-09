@@ -34,7 +34,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 	// 裏画面の設定
 	SetDrawScreen(DX_SCREEN_BACK);
 	// 画面の背景色を設定する
-	SetBackgroundColor(255, 255, 255);
+	//SetBackgroundColor(255, 255, 255);
 	// 計測中に別のウインドウがアクティブになっても問題が無いように常時実行フラグをセット
 	SetAlwaysRunFlag(TRUE);
 

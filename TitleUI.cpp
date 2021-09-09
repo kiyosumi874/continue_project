@@ -11,17 +11,23 @@
 /// </summary>
 TitleUI::TitleUI()
 	: mHandle(0)
+	, mHandle2(0)
 	, mDeltaTime(0.000001f)
 	, mStartButtonBeginX(480)
 	, mStartButtonBeginY(675)
 	, mStartButtonEndX(1440)
 	, mStartButtonEndY(945)
-	, mStartButtonFontSize(170 /** 2 / 3*/)
+	, mStartButtonFontSize(150 /** 2 / 3*/)
 	, mStartButtonFlag(false)
 	, mInputReturnFlag(false)
+	, mTmpTime(0)
+	, mTmpTimeFlag(false)
 {
 	//                                     作成するフォント名,     フォントのサイズ,  フォントの太さ,                  フォントのタイプ, 文字セット, 縁の太さ, イタリック体にするかどうか
 	mFontHandle = CreateFontToHandle("data/Fonts/meiryob.tcc", mStartButtonFontSize,              -1, DX_FONTTYPE_ANTIALIASING_EDGE_4X4,         -1,        5,                       TRUE);
+	mHandle = LoadGraph("data/img/keyboard_Enter.png");
+	mHandle2 = LoadGraph("data/img/keyboard_Enter2.png");
+
 }
 
 /// <summary>
@@ -39,7 +45,7 @@ TitleUI::~TitleUI()
 void TitleUI::Update(float _deltaTime)
 {
 	mDeltaTime = _deltaTime;
-
+	mTmpTime += _deltaTime;
 	// Enterキーの連続入力防止
 	if (!CheckHitKey(KEY_INPUT_RETURN))
 	{
@@ -51,6 +57,19 @@ void TitleUI::Update(float _deltaTime)
 		mInputReturnFlag = false;
 		mStartButtonFlag = true;
 	}
+
+	if (mTmpTime >= 1.0f)
+	{
+		if (mTmpTimeFlag)
+		{
+			mTmpTimeFlag = false;
+		}
+		else 
+		{
+			mTmpTimeFlag = true;
+		}
+		mTmpTime = 0;
+	}
 }
 
 /// <summary>
@@ -59,7 +78,6 @@ void TitleUI::Update(float _deltaTime)
 void TitleUI::Load()
 {
 	mStartButtonFlag = false;
-	mHandle = 0;
 	mDeltaTime = 0.000001f;
 	mStartButtonBeginX = 480;
 	mStartButtonBeginY = 675;
@@ -95,19 +113,38 @@ void TitleUI::Draw()
 	//}
 
 	// 1920*1080
+	//if (!mStartButtonFlag)
+	//{
+	//	DrawBoxAA(mStartButtonBeginX, mStartButtonBeginY, mStartButtonEndX, mStartButtonEndY, GREEN, FALSE);
+	//	//SetFontSize(mStartButtonFontSize);
+	//	//DrawString(mStartButtonBeginX + 45, mStartButtonBeginY + 30, "Enterキー", RED);
+	//	DrawStringToHandle(mStartButtonBeginX + 45, mStartButtonBeginY + 35, "Enterキー", WHITE, mFontHandle, BLACK);
+	//}
+	//else
+	//{
+	//	DrawBoxAA(mStartButtonBeginX, mStartButtonBeginY, mStartButtonEndX, mStartButtonEndY, RED, FALSE);
+	//	//SetFontSize(mStartButtonFontSize);
+	//	//DrawString(mStartButtonBeginX + 45, mStartButtonBeginY + 30, "Enterキー", GREEN);
+	//	DrawStringToHandle(mStartButtonBeginX + 45, mStartButtonBeginY + 35, "Enterキー", WHITE, mFontHandle, BLACK);
+	//}
+
 	if (!mStartButtonFlag)
 	{
-		DrawBoxAA(mStartButtonBeginX, mStartButtonBeginY, mStartButtonEndX, mStartButtonEndY, GREEN, FALSE);
-		//SetFontSize(mStartButtonFontSize);
-		//DrawString(mStartButtonBeginX + 45, mStartButtonBeginY + 30, "Enterキー", RED);
-		DrawStringToHandle(mStartButtonBeginX + 45, mStartButtonBeginY + 35, "Enterキー", WHITE, mFontHandle, BLACK);
+		if (!mTmpTimeFlag)
+		{
+			DrawGraph(mStartButtonBeginX + 45 - 96, mStartButtonBeginY + 60, mHandle, TRUE);
+		}
+		else
+		{
+			DrawGraph(mStartButtonBeginX + 45 - 96, mStartButtonBeginY + 60, mHandle2, TRUE);
+		}
+		DrawStringToHandle(mStartButtonBeginX + 45, mStartButtonBeginY + 35, "でスタート！", WHITE, mFontHandle, BLACK);
+
 	}
 	else
 	{
-		DrawBoxAA(mStartButtonBeginX, mStartButtonBeginY, mStartButtonEndX, mStartButtonEndY, RED, FALSE);
-		//SetFontSize(mStartButtonFontSize);
-		//DrawString(mStartButtonBeginX + 45, mStartButtonBeginY + 30, "Enterキー", GREEN);
-		DrawStringToHandle(mStartButtonBeginX + 45, mStartButtonBeginY + 35, "Enterキー", WHITE, mFontHandle, BLACK);
+		DrawGraph(mStartButtonBeginX + 45 - 96, mStartButtonBeginY+60, mHandle2, TRUE);
+		DrawStringToHandle(mStartButtonBeginX + 45, mStartButtonBeginY + 35, "でスタート！", WHITE, mFontHandle, BLACK);
 	}
 }
  

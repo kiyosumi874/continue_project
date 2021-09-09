@@ -129,27 +129,27 @@ void PlayUI::Draw()
 	if (mDrawGameState == DRAW_GAME_STATE::DRAW_CIRCLE_GAME)
 	{
 		// “à‘¤‚Ì‰~
-		DrawCircleAA(mCircleInX, mCircleInY, mCircleInRadius, 64, mCircleInColor, mCircleInFillFlag);
+		DrawCircleAA(mCircleInX-150, mCircleInY+50, mCircleInRadius, 64, mCircleInColor, mCircleInFillFlag);
 		// ŠO‘¤‚Ì‰~
-		DrawCircleAA(mCircleOutX, mCircleOutY, mCircleOutRadius, 64, mCircleOutColor, mCircleOutFillFlag, mCircleOutLineThickness);
+		DrawCircleAA(mCircleOutX-150, mCircleOutY+50, mCircleOutRadius, 64, mCircleOutColor, mCircleOutFillFlag, mCircleOutLineThickness);
 	}
 
 	if (mDrawGameState == DRAW_GAME_STATE::DRAW_GAUGE_GAME)
 	{
 		// “à‘¤‚ÌŽlŠp
-		DrawBoxAA(mGaugeInBeginX, mGaugeInBeginY, mGaugeInEndX, mGaugeInEndY, mGaugeInColor, mGaugeInFillFlag);
+		DrawBoxAA(mGaugeInBeginX - 150, mGaugeInBeginY + 50, mGaugeInEndX - 150, mGaugeInEndY + 50, mGaugeInColor, mGaugeInFillFlag);
 		// ŠO‘¤‚ÌŽlŠp
-		DrawBoxAA(mGaugeOutBeginX, mGaugeOutBeginY, mGaugeOutEndX, mGaugeOutEndY, mGaugeOutColor, mGaugeOutFillFlag);
-		DrawBoxAA(mGaugeOutBeginX - 1, mGaugeOutBeginY - 1, mGaugeOutEndX + 1, mGaugeOutEndY + 1, mGaugeOutColor, mGaugeOutFillFlag);
-		DrawBoxAA(mGaugeOutBeginX - 2, mGaugeOutBeginY - 2, mGaugeOutEndX + 2, mGaugeOutEndY + 2, mGaugeOutColor, mGaugeOutFillFlag);
+		DrawBoxAA(mGaugeOutBeginX - 150, mGaugeOutBeginY + 50, mGaugeOutEndX - 150, mGaugeOutEndY + 50, mGaugeOutColor, mGaugeOutFillFlag);
+		DrawBoxAA(mGaugeOutBeginX - 150 - 1, mGaugeOutBeginY + 50 - 1, mGaugeOutEndX - 150 + 1, mGaugeOutEndY + 50 + 1, mGaugeOutColor, mGaugeOutFillFlag);
+		DrawBoxAA(mGaugeOutBeginX - 150 - 2, mGaugeOutBeginY + 50 - 2, mGaugeOutEndX - 150 + 2, mGaugeOutEndY + 50 + 2, mGaugeOutColor, mGaugeOutFillFlag);
 	}
 
 	if (mDrawGameState == DRAW_GAME_STATE::DRAW_PENDULUM_GAME)
 	{
 		// “à‘¤‚Ì‰~
-		DrawCircleAA(mPendulumInX, mPendulumInY, mPendulumInRadius, 64, mPendulumInColor, mPendulumInFillFlag);
+		DrawCircleAA(mPendulumInX - 150, mPendulumInY + 50, mPendulumInRadius, 64, mPendulumInColor, mPendulumInFillFlag);
 		// ŠO‘¤‚Ì‰~
-		DrawCircleAA(mPendulumOutX, mPendulumOutY, mPendulumOutRadius, 64, mPendulumOutColor, mPendulumOutFillFlag, mPendulumOutLineThickness);
+		DrawCircleAA(mPendulumOutX - 150, mPendulumOutY + 50, mPendulumOutRadius, 64, mPendulumOutColor, mPendulumOutFillFlag, mPendulumOutLineThickness);
 	}
 	
 }
