@@ -6,6 +6,7 @@
 #include "PlayScene_kiyosumi.h"
 #include "ResultScene_kiyosumi.h"
 #include "EffekseerForDXLib.h"
+#include "yutaro_TestScene.h"
 
 void InitializeEffekseer();
 
@@ -19,6 +20,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 {
 	int screenFlipCount;
 	float deltaTime, startTime;
+
+	SetUseDirect3DVersion(DX_DIRECT3D_9EX);
+
 	// ＤＸライブラリ初期化処理
 	if (DxLib_Init() == -1)
 	{
@@ -67,7 +71,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 
 
 	// タイトルシーンをセット
-	scene->SetScene(new TitleScene_kiyosumi);
+	scene->SetScene(new Yutaro_TestScene);
 	//scene->SetScene(new ResultScene_kiyosumi(0));
 
 

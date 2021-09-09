@@ -44,6 +44,9 @@
     <Filter Include="ソース ファイル\work_kiyosumi\Player">
       <UniqueIdentifier>{3400fe6c-b23e-40f8-9b37-8afae5839d39}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\work_yutaro">
+      <UniqueIdentifier>{063d1d6c-d881-44ba-9e0e-0ed3048148b5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -169,6 +172,15 @@
     <ClCompile Include="Effect.cpp">
       <Filter>ソース ファイル\work_haruto</Filter>
     </ClCompile>
+    <ClCompile Include="WaterObject.cpp">
+      <Filter>ソース ファイル\work_yutaro</Filter>
+    </ClCompile>
+    <ClCompile Include="yutaro_main.cpp">
+      <Filter>ソース ファイル\work_yutaro</Filter>
+    </ClCompile>
+    <ClCompile Include="yutaro_TestScene.cpp">
+      <Filter>ソース ファイル\work_yutaro</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SceneBase.h">
@@ -287,6 +299,12 @@
     </ClInclude>
     <ClInclude Include="Effect.h">
       <Filter>ソース ファイル\work_haruto</Filter>
+    </ClInclude>
+    <ClInclude Include="WaterObject.h">
+      <Filter>ソース ファイル\work_yutaro</Filter>
+    </ClInclude>
+    <ClInclude Include="yutaro_TestScene.h">
+      <Filter>ソース ファイル\work_yutaro</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
