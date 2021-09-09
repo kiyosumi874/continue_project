@@ -45,9 +45,9 @@ void SceneManager_YanoHaruto::Draw()
 /// <summary>
 /// ‰¹Šy
 /// </summary>
-void SceneManager_YanoHaruto::Sound()
+void SceneManager_YanoHaruto::Sound(float _deltaTime)
 {
-	mScene->Sound();    // BGM‚ð—¬‚·
+	mScene->Sound(_deltaTime);    // BGM‚ð—¬‚·
 }
 
 /// <summary>
