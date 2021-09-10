@@ -44,6 +44,9 @@
     <Filter Include="ソース ファイル\work_kiyosumi\Player">
       <UniqueIdentifier>{3400fe6c-b23e-40f8-9b37-8afae5839d39}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\yutaro">
+      <UniqueIdentifier>{7b408cc6-6491-4cf8-9b35-99368b9baa63}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -175,6 +178,15 @@
     <ClCompile Include="PlayerActor_YanoHaruto.cpp">
       <Filter>ソース ファイル\work_haruto</Filter>
     </ClCompile>
+    <ClCompile Include="WaterObject.cpp">
+      <Filter>ソース ファイル\yutaro</Filter>
+    </ClCompile>
+    <ClCompile Include="yutaro_main.cpp">
+      <Filter>ソース ファイル\yutaro</Filter>
+    </ClCompile>
+    <ClCompile Include="yutaro_TestScene.cpp">
+      <Filter>ソース ファイル\yutaro</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SceneBase.h">
@@ -299,6 +311,12 @@
     </ClInclude>
     <ClInclude Include="PlayerActor_YanoHaruto.h">
       <Filter>ソース ファイル\work_haruto</Filter>
+    </ClInclude>
+    <ClInclude Include="WaterObject.h">
+      <Filter>ソース ファイル\yutaro</Filter>
+    </ClInclude>
+    <ClInclude Include="yutaro_TestScene.h">
+      <Filter>ソース ファイル\yutaro</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

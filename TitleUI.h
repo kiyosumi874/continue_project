@@ -26,6 +26,7 @@ private:
 	float mDeltaTime;    // デルタタイム
 	int   mHandle;       // ハンドル格納変数
 	int   mHandle2;       // ハンドル格納変数
+	int   mHandle3;       // ハンドル格納変数
 	
 	// スタートボタンの位置を決める変数
 	int mStartButtonBeginX;    // 左上のX

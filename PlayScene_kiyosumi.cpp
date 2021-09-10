@@ -8,6 +8,8 @@
 #include "StaticObjectActor.h"
 #include "PlayerActor.h"
 #include "SE.h"
+#include "WaterObject.h"
+#include "Effect.h"
 
 const VECTOR   PLAY_CAMERA_POS = VGet(45.0f, 53.0f, -18.0f);
 const VECTOR   PLAY_PLAYER_SCALE = VGet(0.5f, 0.5f, 0.5f);
@@ -29,7 +31,8 @@ PlayScene_kiyosumi::PlayScene_kiyosumi()
 	, mAlphaPalFlag(false)
 	, mMoveSceneHandle(LoadGraph("data/img/MoveScene.png"))
 	, mBGM(nullptr)
-	, mBGM2(nullptr)
+	, mGayaGaya(nullptr)
+	//, mBGM2(nullptr)
 	, mBGMFlag(false)
 	, mBGMFlag2(false)
 	, mKansei(nullptr)
@@ -37,6 +40,7 @@ PlayScene_kiyosumi::PlayScene_kiyosumi()
 	, mPool(nullptr)
 	, mSky(nullptr)
 	, mAudience(nullptr)
+	//, mAudience2(nullptr)
 	, mPlayer(nullptr)
 	, mFadeSpeed(3)
 	, mGameMode(GAME_MODE_STATE::FADE_IN)
@@ -45,6 +49,7 @@ PlayScene_kiyosumi::PlayScene_kiyosumi()
 	, mFlag2(false)
 	, mFlag3(false)
 	, mDeltaTime(0)
+	, mHandle(0)
 {
 
 }
@@ -58,7 +63,8 @@ PlayScene_kiyosumi::PlayScene_kiyosumi(float _deltaTime)
 	, mAlphaPalFlag(false)
 	, mMoveSceneHandle(LoadGraph("data/img/MoveScene.png"))
 	, mBGM(nullptr)
-	, mBGM2(nullptr)
+	, mGayaGaya(nullptr)
+	//, mBGM2(nullptr)
 	, mBGMFlag(false)
 	, mBGMFlag2(false)
 	, mKansei(nullptr)
@@ -66,6 +72,7 @@ PlayScene_kiyosumi::PlayScene_kiyosumi(float _deltaTime)
 	, mPool(nullptr)
 	, mSky(nullptr)
 	, mAudience(nullptr)
+	//, mAudience2(nullptr)
 	, mPlayer(nullptr)
 	, mFadeSpeed(3)
 	, mGameMode(GAME_MODE_STATE::FADE_IN)
@@ -85,15 +92,30 @@ PlayScene_kiyosumi::~PlayScene_kiyosumi()
 	delete mCamera;
 	delete mPlayUI;
 	delete mBGM;
-	delete mBGM2;
+	delete mGayaGaya;
+	//delete mBGM2;
 	delete mPool;
 	delete mSky;
 	delete mAudience;
+	//delete mAudience2;
 	delete mPlayer;
 	delete mClickClitical;
 	delete mClickNormal;
 	delete mMetoronome;
 	delete mKansei;
+	delete mWater;
+	mBigSplash->StopEffect3D();
+	mBigSplash->Delete();
+	delete mBigSplash;
+	mNormalSplash->StopEffect3D();
+	mNormalSplash->Delete();
+	delete mNormalSplash;
+	mSmalleSplash->StopEffect3D();
+	mSmalleSplash->Delete();
+	delete mSmalleSplash;
+	mFeather->StopEffect3D();
+	mFeather->Delete();
+	delete mFeather;
 }
 
 /// <summary>
@@ -104,7 +126,7 @@ PlayScene_kiyosumi::~PlayScene_kiyosumi()
 /// Enterを押したときに次のシーンのInstanceのポインタを返す
 /// それ以外は自分のポインタを返す
 /// </returns>
-SceneBase* PlayScene_kiyosumi::Update(float _deltaTime)
+SceneBase* PlayScene_kiyosumi::Update(float _deltaTime, int& _hiScore)
 {
 	switch (mGameMode)
 	{
@@ -139,8 +161,12 @@ SceneBase* PlayScene_kiyosumi::Update(float _deltaTime)
 
 	mSky->Update(_deltaTime);
 	mPool->Update(_deltaTime);
+	// 水面シェーダーの更新
+	mWater->Update(_deltaTime);
+	mWater->UpdateWaterShader(_deltaTime);     // 水面用シェーダーへ情報をセットする
 	//観客の更新
 	mAudience->Update();
+	//mAudience2->Update();
 
 	// プレイヤーの更新
 	mPlayer->UpdateActor(_deltaTime);
@@ -220,11 +246,54 @@ void PlayScene_kiyosumi::Draw()
 	mSky->Draw();
 	mPool->Draw();
 	mAudience->Draw();
+	//mAudience2->Draw();
 	// プレイヤーの描画
 	mPlayer->Draw();
+	mWater->DrawWater();
 	// プレイUIの描画
 	mPlayUI->Draw();
 	
+	if (mPlayer->GetPlayerState() == PlayerActor::PLAYER_STATE::STATE_PLAY_JUMP)
+	{
+		if (mFeather->GetNowPlaying3D())
+		{
+			mFeather->PlayEffekseer(mPlayer->GetPosition());
+		}
+	}
+	//水面に飛び込んだら
+	if (10 > mPlayer->GetPositionY())
+	{
+		//500点以上なら
+		if (mScore >= 500)
+		{
+			if (mSmalleSplash->GetNowPlaying3D())
+			{
+				mSmalleSplash->PlayEffekseer(VGet(mPlayer->GetPositionX(), mPlayer->GetPositionY(), mPlayer->GetPositionZ()));
+			}
+		}
+		//200点以上なら
+		else if (mScore >= 200)
+		{
+			if (mNormalSplash->GetNowPlaying3D())
+			{
+				mNormalSplash->PlayEffekseer(VGet(mPlayer->GetPositionX(), mPlayer->GetPositionY(), mPlayer->GetPositionZ()));
+			}
+		}
+		//200以下なら
+		else if (mScore < 200)
+		{
+			if (mBigSplash->GetNowPlaying3D())
+			{
+				mBigSplash->PlayEffekseer(VGet(mPlayer->GetPositionX(), mPlayer->GetPositionY(), mPlayer->GetPositionZ()));
+			}
+		}
+	}
+	if (mGameMode == GAME_MODE_STATE::CAMERA_MOVE)
+	{
+		DrawGraph(1920 * 2 / 3-20, 1080 - 150, mHandle, TRUE);
+		DrawStringToHandle(1920 * 2 / 3+60, 1080 - 150, "でスキップ", GetColor(255, 255, 255), mFontHandle);
+	}
+
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, mAlphaPal);
 	DrawGraph(0, 0, mMoveSceneHandle, FALSE);
 }
@@ -240,7 +309,7 @@ void PlayScene_kiyosumi::Sound(float _deltaTime)
 	}
 	if (mGameMode == GAME_MODE_STATE::CIRCLE_GAME)
 	{
-		mBGM->FadeInMusic(250, _deltaTime);
+		mBGM->FadeInMusic(500, _deltaTime);
 	}
 	if (!mBGMFlag && mGameMode == GAME_MODE_STATE::CIRCLE_GAME)
 	{
@@ -249,15 +318,17 @@ void PlayScene_kiyosumi::Sound(float _deltaTime)
 	}
 	if (mGameMode == GAME_MODE_STATE::CIRCLE_GAME)
 	{
-		mBGM2->FadeOutMusic(500, _deltaTime);
+		mGayaGaya->Stop();
+		//mBGM2->FadeOutMusic(500, _deltaTime);
 	}
 	if (mGameMode == GAME_MODE_STATE::FADE_IN)
 	{
-		mBGM2->FadeInMusic(250, _deltaTime);
+		//mBGM2->FadeInMusic(250, _deltaTime);
 	}
 	if (!mBGMFlag2 && mGameMode == GAME_MODE_STATE::FADE_IN)
 	{
-		mBGM2->Play();
+		mGayaGaya->Play();
+		//mBGM2->Play();
 		mBGMFlag2 = true;
 	}
 	mPlayUI->Sound(mMetoronome, mClickNormal, mClickClitical);
@@ -268,48 +339,28 @@ void PlayScene_kiyosumi::Sound(float _deltaTime)
 /// </summary>
 void PlayScene_kiyosumi::Load()
 {
-	int mFontHandle = CreateFontToHandle("data/Fonts/meiryob.tcc", 150, -1, DX_FONTTYPE_ANTIALIASING_EDGE_4X4, -1, 5, TRUE);
+	int fontHandle;
 	int tmp = GetNowCount();
 	short tmpCount = 1;
+	fontHandle = CreateFontToHandle("data/Fonts/meiryob.tcc", 150, -1, DX_FONTTYPE_ANTIALIASING_EDGE_4X4, -1, 5, TRUE);
+	mFontHandle = CreateFontToHandle("data/Fonts/meiryob.tcc", 100, -1, DX_FONTTYPE_ANTIALIASING_EDGE_4X4, -1, 5, TRUE);
 	DrawStringToHandle(1920 / 3, 1080 / 2, "NowLoading", GetColor(255, 255, 255), mFontHandle);
 	ScreenFlip();
 	mCamera = new Camera;
 	LoadEX(tmp, tmpCount, mFontHandle);
-	/*if (GetNowCount() - tmp >= 1000)
-	{
-		if (tmpCount == 0)
-		{
-			ClearDrawScreen();
-			DrawStringToHandle(1920 / 3, 1080 / 2, "NowLoading", GetColor(255, 255, 255), mFontHandle);
-			ScreenFlip();
-		}
-		else if (tmpCount == 1)
-		{
-			ClearDrawScreen();
-			DrawStringToHandle(1920 / 3, 1080 / 2, "NowLoading.", GetColor(255, 255, 255), mFontHandle);
-			ScreenFlip();
-		}
-		else if (tmpCount == 2)
-		{
-			ClearDrawScreen();
-			DrawStringToHandle(1920 / 3, 1080 / 2, "NowLoading..", GetColor(255, 255, 255), mFontHandle);
-			ScreenFlip();
-		}
-		else
-		{
-			ClearDrawScreen();
-			DrawStringToHandle(1920 / 3, 1080 / 2, "NowLoading...", GetColor(255, 255, 255), mFontHandle);
-			ScreenFlip();
-			tmpCount = -1;
-		}
-		tmpCount++;
-	}*/
-	mPlayUI = new PlayUI;
 
+	// 水面オブジェクト(モデルはペライチの正方形)
+	mWater = new WaterObject;
+	mWater->SetScale(VGet(150.0f, 1.0f, 225.0f));
+	mWater->SetPosition(VGet(0.0f, -5.25f, -55.0f));
+
+	mPlayUI = new PlayUI;
+	mHandle = LoadGraph("data/img/keyboard_Enter.png");
 	LoadEX(tmp, tmpCount, mFontHandle);
 	mBGM = new BGM;
 	LoadEX(tmp, tmpCount, mFontHandle);
-	mBGM2 = new BGM;
+	//mBGM2 = new BGM;
+	mGayaGaya = new SE;
 	
 	LoadEX(tmp, tmpCount, mFontHandle);
 	mPool = new StaticObjectActor;
@@ -318,6 +369,7 @@ void PlayScene_kiyosumi::Load()
 	
 	LoadEX(tmp, tmpCount, mFontHandle);
 	mAudience = new Audience;
+	//mAudience2 = new Audience;
 	LoadEX(tmp, tmpCount, mFontHandle);
 	mPlayer = new PlayerActor;
 	
@@ -345,7 +397,9 @@ void PlayScene_kiyosumi::Load()
 	LoadEX(tmp, tmpCount, mFontHandle);
 	mPlayer->SetPosition(PLAY_PLAYER_POS);
 	
-	
+	/*mAudience2->SetStartPosX(-45.0f);
+	mAudience2->SetStartPosX(10.0f);
+	mAudience2->SetStartPosX(30.0f);*/
 	//mTargetPos = mAudience->mGetAudiencePos();
 
 	LoadEX(tmp, tmpCount, mFontHandle);
@@ -374,7 +428,10 @@ void PlayScene_kiyosumi::Load()
 	LoadEX(tmp, tmpCount, mFontHandle);
 	mPlayUI->Load();
 
-	
+	mFeather = new Effect("data/effect/FeatherBanish.efk");
+	mBigSplash = new Effect("data/effect/BigSplash.efk");
+	mNormalSplash = new Effect("data/effect/NormalSplash.efk");
+	mSmalleSplash = new Effect("data/effect/SmalleSplash.efk");
 	LoadEX(tmp, tmpCount, mFontHandle);
 	mMetoronome->LoadSound("data/sound/metronome_wood.wav");
 	LoadEX(tmp, tmpCount, mFontHandle);
@@ -386,7 +443,8 @@ void PlayScene_kiyosumi::Load()
 	LoadEX(tmp, tmpCount, mFontHandle);
 	mBGM->LoadMusic("data/sound/迅雷のユーロビート.mp3");
 	LoadEX(tmp, tmpCount, mFontHandle);
-	mBGM2->LoadMusic("data/sound/gaya2.mp3");
+	mGayaGaya->LoadSound("data/sound/gaya2.mp3");
+	//mBGM2->LoadMusic("data/sound/gaya2.mp3");
 }
 
 void PlayScene_kiyosumi::GameModeFadeInBehavior(float _deltaTime)
@@ -414,6 +472,10 @@ void PlayScene_kiyosumi::GameModeCameraMoveBehavior(float _deltaTime)
 		{
 			mGameMode = GAME_MODE_STATE::CIRCLE_GAME;
 			mClickNormal->Play();
+		}
+		if (!mGayaGaya->IsPlaying())
+		{
+			mGameMode = GAME_MODE_STATE::CIRCLE_GAME;
 		}
 	}
 }
@@ -534,6 +596,7 @@ void PlayScene_kiyosumi::GameModeGayaBehavior(float _deltaTime)
 	else
 	{
 		mFlag = true;
+		mPlayer->SetPlayerState(PlayerActor::PLAYER_STATE::STATE_PLAY_FLOAT);
 	}
 	if (mFlag && !mFlag2)
 	{

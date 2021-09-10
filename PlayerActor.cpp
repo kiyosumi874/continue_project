@@ -1,4 +1,5 @@
 #include "PlayerActor.h"
+#include "Effect.h"
 /// <summary>
 /// 初期化
 /// </summary>
@@ -9,7 +10,11 @@ PlayerActor::PlayerActor()
 	, mPlayTime(0)
 	, mNowState(PLAYER_STATE::STATE_TITLE_IDLE)
 	, mPrevState(PLAYER_STATE::STATE_NUM)
+	, mAura(nullptr)
+	, mWind(nullptr)
 {
+	mAura = new Effect("data/effect/Aura.efk", 3.0f);
+	mWind = new Effect("data/effect/Wind.efk", 1.0f);
 }
 
 /// <summary>
@@ -17,6 +22,12 @@ PlayerActor::PlayerActor()
 /// </summary>
 PlayerActor::~PlayerActor()
 {
+	mAura->StopEffect3D();
+	mAura->Delete();
+	delete mAura;
+	mWind->StopEffect3D();
+	mWind->Delete();
+	delete mWind;
 }
 
 /// <summary>
@@ -54,9 +65,13 @@ void PlayerActor::UpdateActor(float _deltaTime)
 	case PLAYER_STATE::STATE_PLAY_JUMP:
 		PlayJumpBehavior(_deltaTime);
 		break;
+	case PLAYER_STATE::STATE_PLAY_FLOAT:
+		PlayFloatBehavior(_deltaTime);
+		break;
 
 	case PLAYER_STATE::STATE_RESULT_IDLE:
 		ResultIdleBehavior(_deltaTime);
+		break;
 		break;
 
 	default:
@@ -65,6 +80,7 @@ void PlayerActor::UpdateActor(float _deltaTime)
 }
 //-----------------------------
 // 0->Idle,1->また開きジャンプ,2->run,3->飛び込み,4->体操
+// 5->手首足首,6->飛び込み,7->浮く,8->屈伸,9->深呼吸
 //--------------------------
 void PlayerActor::TitleIdleBehavior(float _deltaTime)
 {
@@ -79,6 +95,7 @@ void PlayerActor::TitleIdleBehavior(float _deltaTime)
 		mTotalTime = MV1GetAttachAnimTotalTime(mMHandle, mAttachIndex);
 		mPrevState = mNowState;
 	}
+	
 	mPlayTime += 50.0f * _deltaTime;
 	// 再生時間がアニメーションの総再生時間に達したら再生時間を０に戻す
 	if (mPlayTime >= mTotalTime)
@@ -135,12 +152,20 @@ void PlayerActor::PlayRunBehavior(float _deltaTime)
 	// 初めてこのステートに入る場合
 	if (mNowState != mPrevState)
 	{
+		//エフェクト追加
+		//-----------------------------------------------------------------
+		mAura->PlayEffekseer(mPosition);
+		//-----------------------------------------------------------------
 		MV1DetachAnim(mMHandle, mAttachIndex);
 		mPlayTime = 0;
 		mAttachIndex = MV1AttachAnim(mMHandle, 2/*Idleのアニメーション番号*/, -1, FALSE);
 		mTotalTime = MV1GetAttachAnimTotalTime(mMHandle, mAttachIndex);
 		mPrevState = mNowState;
 	}
+	//エフェクト追加
+	//-----------------------------------------------------------------
+	mAura->SetPlayingEffectPos(mPosition);
+	//-----------------------------------------------------------------
 	mPlayTime += 50.0f * _deltaTime;
 	// 再生時間がアニメーションの総再生時間に達したら再生時間を０に戻す
 	if (mPlayTime >= mTotalTime)
@@ -160,7 +185,7 @@ void PlayerActor::PlayGame1Behavior(float _deltaTime)
 	{
 		MV1DetachAnim(mMHandle, mAttachIndex);
 		mPlayTime = 0;
-		mAttachIndex = MV1AttachAnim(mMHandle, 4/*Idleのアニメーション番号*/, -1, FALSE);
+		mAttachIndex = MV1AttachAnim(mMHandle, 9/*Idleのアニメーション番号*/, -1, FALSE);
 		mTotalTime = MV1GetAttachAnimTotalTime(mMHandle, mAttachIndex);
 		mPrevState = mNowState;
 	}
@@ -182,7 +207,7 @@ void PlayerActor::PlayGame2Behavior(float _deltaTime)
 	{
 		MV1DetachAnim(mMHandle, mAttachIndex);
 		mPlayTime = 0;
-		mAttachIndex = MV1AttachAnim(mMHandle, 4/*Idleのアニメーション番号*/, -1, FALSE);
+		mAttachIndex = MV1AttachAnim(mMHandle, 5/*Idleのアニメーション番号*/, -1, FALSE);
 		mTotalTime = MV1GetAttachAnimTotalTime(mMHandle, mAttachIndex);
 		mPrevState = mNowState;
 	}
@@ -205,7 +230,7 @@ void PlayerActor::PlayGame3Behavior(float _deltaTime)
 	{
 		MV1DetachAnim(mMHandle, mAttachIndex);
 		mPlayTime = 0;
-		mAttachIndex = MV1AttachAnim(mMHandle, 4/*Idleのアニメーション番号*/, -1, FALSE);
+		mAttachIndex = MV1AttachAnim(mMHandle, 8/*Idleのアニメーション番号*/, -1, FALSE);
 		mTotalTime = MV1GetAttachAnimTotalTime(mMHandle, mAttachIndex);
 		mPrevState = mNowState;
 	}
@@ -226,9 +251,13 @@ void PlayerActor::PlayJumpBehavior(float _deltaTime)
 	// 初めてこのステートに入る場合
 	if (mNowState != mPrevState)
 	{
+		//エフェクト追加
+		//-----------------------------------------------------------------
+		mWind->PlayEffekseer(mPosition);
+		//-----------------------------------------------------------------
 		MV1DetachAnim(mMHandle, mAttachIndex);
 		mPlayTime = 0;
-		mAttachIndex = MV1AttachAnim(mMHandle, 3/*Idleのアニメーション番号*/, -1, FALSE);
+		mAttachIndex = MV1AttachAnim(mMHandle, 6/*Idleのアニメーション番号*/, -1, FALSE);
 		mTotalTime = MV1GetAttachAnimTotalTime(mMHandle, mAttachIndex);
 		mPrevState = mNowState;
 	}
@@ -237,6 +266,29 @@ void PlayerActor::PlayJumpBehavior(float _deltaTime)
 	if (mPlayTime >= mTotalTime)
 	{
 		mPlayTime = mTotalTime;
+	}
+
+
+	// 待機アニメーション再生
+	MV1SetAttachAnimTime(mMHandle, mAttachIndex, mPlayTime);
+}
+
+void PlayerActor::PlayFloatBehavior(float _deltaTime)
+{
+	// 初めてこのステートに入る場合
+	if (mNowState != mPrevState)
+	{
+		MV1DetachAnim(mMHandle, mAttachIndex);
+		mPlayTime = 0;
+		mAttachIndex = MV1AttachAnim(mMHandle, 7/*Idleのアニメーション番号*/, -1, FALSE);
+		mTotalTime = MV1GetAttachAnimTotalTime(mMHandle, mAttachIndex);
+		mPrevState = mNowState;
+	}
+	mPlayTime += 20.0f * _deltaTime;
+	// 再生時間がアニメーションの総再生時間に達したら再生時間を０に戻す
+	if (mPlayTime >= mTotalTime)
+	{
+		mPlayTime = 0;
 	}
 
 

@@ -17,17 +17,20 @@ public:
     ResultScene(int _score);    // コンストラクタ
     ~ResultScene();    // デストラクタ
 
-    SceneBase* Update(float _deltaTime)override;    // 更新
+    SceneBase* Update(float _deltaTime, int& _hiScore)override;    // 更新
     void       Draw()                  override;    // 描画
-    void       Sound()                 override;    // 音楽
+    void       Sound(float _deltaTime)                 override;    // 音楽
     void       Load()                  override;    // 初期化
 private:
-    class ResultCamera* mResultCamera;    // リザルトカメラクラスへのポインタメンバ変数
     class Camera* mCamera;
     class ResultUI* mResultUI;        // リザルトUIクラスへのポインタメンバ変数
     class PlayerActor* mPlayer;
-    class StaticObjectActor* mStaticObjectActor;
-    float mDeltaTime;         // デルタタイム
+    class StaticObjectActor* mPodium;
+    class StaticObjectActor* mPool;
+    class StaticObjectActor* mSky;
+    class Effect* mFireWorks;
+    class WaterObject* mWater;
+
     bool  mInputReturnFlag;   // Enterキーの連続入力防止
     int mScore;
 
@@ -37,6 +40,13 @@ private:
     bool mCheckHitFlag;
 
     int mFadeSpeed;
+
+    float mCameraPosX;
+    float mCameraPosY;
+    float mCameraPosZ;
+    float mCameraTargetPosX;
+    float mCameraTargetPosY;
+    float mCameraTargetPosZ;
 
 };
 

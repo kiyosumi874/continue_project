@@ -19,6 +19,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 {
 	int screenFlipCount;
 	float deltaTime, startTime;
+
+	SetUseDirect3DVersion(DX_DIRECT3D_9EX);
+
 	// ＤＸライブラリ初期化処理
 	if (DxLib_Init() == -1)
 	{
@@ -54,7 +57,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 		// ScreenFlip を行った回数をインクリメント
 		screenFlipCount++;
 	}
-
 	// 常時実行フラグを元に戻す
 	SetAlwaysRunFlag(FALSE);
 
@@ -68,9 +70,10 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 
 	// タイトルシーンをセット
 	scene->SetScene(new TitleScene_kiyosumi);
-	//scene->SetScene(new ResultScene_kiyosumi(0));
+	//scene->SetScene(new ResultScene_kiyosumi(500));
 	
 
+	int hiScore = 0;
 	/*deltaTime = 0.000001f;*/
 
 	// エスケープキーが押されるかウインドウが閉じられるまでループ
@@ -81,7 +84,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 		ClearDrawScreen();
 		float perfDelta = deltaTime / 1000000.0f;
 		// シーン制御
-		scene->Update(perfDelta);
+		scene->Update(perfDelta, hiScore);
 
 		// 描画処理
 		scene->Draw();

@@ -15,7 +15,7 @@ public:
 	 SceneManager_kiyosumi();	// コンストラクタ
 	~SceneManager_kiyosumi();    // デストラクタ
 
-	void Update(float _deltaTime);    // 更新
+	void Update(float _deltaTime, int& _hiScore);    // 更新
 	void Draw();		              // 描画
 	void Sound(float _deltaTime);		              // 音楽
 

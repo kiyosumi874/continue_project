@@ -53,6 +53,8 @@ private:
 	int   mScore;        // スコア
 	bool  mInputReturnFlag;    // Enterキーの連続入力防止
 	int   mFontHandle;
+	int   mHandle;
+	int   mHandle2;
 	bool mClickNormalFlag;
 	bool mClickCriticalFlag;
 	bool mMetoronomeFlag;
@@ -120,4 +122,8 @@ private:
 	
 	bool mPlayPendulumGameFlag;           // 振り子ゲームをしているかしていないかのFlag
 
+	//エフェクト追加　9/6
+	//-------------------------------------------------
+	class Effect* mCriticalEffect;
+	class Effect* mUIEffect;
 };

@@ -1,6 +1,7 @@
 #include "DxLib.h"
 #include "PlayUI.h"
 #include "SE.h"
+#include "Effect.h"
 #include <math.h>
 
 #define GRAVITY 9.80665f
@@ -64,6 +65,9 @@ PlayUI::PlayUI()
 	, mPlayPendulumGameFlag(true)
 	, mFontHandle(-1)
 	, mDrawGameState(DRAW_GAME_STATE::DRAW_NULL)
+	//-------------------------------------------------- Effect追加
+	, mCriticalEffect(nullptr)
+	, mUIEffect(nullptr)
 {
 }
 
@@ -73,6 +77,13 @@ PlayUI::PlayUI()
 PlayUI::~PlayUI()
 {
 	DeleteFontToHandle(mFontHandle);
+	//----------------------------------------------------------------------エフェクト追加
+	mCriticalEffect->StopEffect2D();
+	mCriticalEffect->Delete();
+	delete mCriticalEffect;
+	mUIEffect->StopEffect2D();
+	mUIEffect->Delete();
+	delete mUIEffect;
 }
 
 /// <summary>
@@ -90,6 +101,11 @@ void PlayUI::Load()
 {
 	
 	mFontHandle = CreateFontToHandle("data/Fonts/meiryob.tcc", 170 * 2 / 3, -1, DX_FONTTYPE_ANTIALIASING_4X4, -1, 5, FALSE);
+	mHandle = LoadGraph("data/img/keyboard_Enter.png");
+	mHandle2 = LoadGraph("data/img/keyboard_Enter2.png");
+	//----------------------------------------------------------------------------エフェクト追加
+	mCriticalEffect = new Effect("data/effect/UIEffect2.efk", 50.0f);
+	mUIEffect = new Effect("data/effect/UIEffect1.efk", 50.0f);
 }
 
 /// <summary>
@@ -98,40 +114,19 @@ void PlayUI::Load()
 void PlayUI::Draw()
 {
 	// デバッグ用
-	DrawFormatStringToHandle(0, 0, GetColor(0, 255, 0), mFontHandle,"スコア：%d", mScore);
+	//DrawFormatStringToHandle(0, 0, GetColor(0, 255, 0), mFontHandle,"スコア：%d", mScore);
 
-	//switch (mDrawGameState)
-	//{
-	//case DRAW_GAME_STATE::DRAW_CIRCLE_GAME:
-	//	// 内側の円
-	//	DrawCircleAA(mCircleInX, mCircleInY, mCircleInRadius, 64, mCircleInColor, mCircleInFillFlag);
-	//	// 外側の円
-	//	DrawCircleAA(mCircleOutX, mCircleOutY, mCircleOutRadius, 64, mCircleOutColor, mCircleOutFillFlag, mCircleOutLineThickness);
-	//	break;
-	//case DRAW_GAME_STATE::DRAW_GAUGE_GAME:
-	//	// 内側の四角
-	//	DrawBoxAA(mGaugeInBeginX, mGaugeInBeginY, mGaugeInEndX, mGaugeInEndY, mGaugeInColor, mGaugeInFillFlag);
-	//	// 外側の四角
-	//	DrawBoxAA(mGaugeOutBeginX, mGaugeOutBeginY, mGaugeOutEndX, mGaugeOutEndY, mGaugeOutColor, mGaugeOutFillFlag);
-	//	DrawBoxAA(mGaugeOutBeginX - 1, mGaugeOutBeginY - 1, mGaugeOutEndX + 1, mGaugeOutEndY + 1, mGaugeOutColor, mGaugeOutFillFlag);
-	//	DrawBoxAA(mGaugeOutBeginX - 2, mGaugeOutBeginY - 2, mGaugeOutEndX + 2, mGaugeOutEndY + 2, mGaugeOutColor, mGaugeOutFillFlag);
-	//	break;
-	//case DRAW_GAME_STATE::DRAW_PENDULUM_GAME:
-	//	// 内側の円
-	//	DrawCircleAA(mPendulumInX, mPendulumInY, mPendulumInRadius, 64, mPendulumInColor, mPendulumInFillFlag);
-	//	// 外側の円
-	//	DrawCircleAA(mPendulumOutX, mPendulumOutY, mPendulumOutRadius, 64, mPendulumOutColor, mPendulumOutFillFlag, mPendulumOutLineThickness);
-	//	break;
-	//default:
-	//	break;
-	//}
-	
+	//DrawStringToHandle()
+
+
 	if (mDrawGameState == DRAW_GAME_STATE::DRAW_CIRCLE_GAME)
 	{
 		// 内側の円
 		DrawCircleAA(mCircleInX-150, mCircleInY+50, mCircleInRadius, 64, mCircleInColor, mCircleInFillFlag);
 		// 外側の円
 		DrawCircleAA(mCircleOutX-150, mCircleOutY+50, mCircleOutRadius, 64, mCircleOutColor, mCircleOutFillFlag, mCircleOutLineThickness);
+		DrawGraph(480 + 45 - 110, 825 + 40, mHandle, TRUE);
+		DrawStringToHandle(480 + 45, 825 + 35, "をタイミングよく押せ", GetColor(255, 255, 255), mFontHandle);
 	}
 
 	if (mDrawGameState == DRAW_GAME_STATE::DRAW_GAUGE_GAME)
@@ -142,6 +137,8 @@ void PlayUI::Draw()
 		DrawBoxAA(mGaugeOutBeginX - 150, mGaugeOutBeginY + 50, mGaugeOutEndX - 150, mGaugeOutEndY + 50, mGaugeOutColor, mGaugeOutFillFlag);
 		DrawBoxAA(mGaugeOutBeginX - 150 - 1, mGaugeOutBeginY + 50 - 1, mGaugeOutEndX - 150 + 1, mGaugeOutEndY + 50 + 1, mGaugeOutColor, mGaugeOutFillFlag);
 		DrawBoxAA(mGaugeOutBeginX - 150 - 2, mGaugeOutBeginY + 50 - 2, mGaugeOutEndX - 150 + 2, mGaugeOutEndY + 50 + 2, mGaugeOutColor, mGaugeOutFillFlag);
+		DrawGraph(480 + 45 - 110, 825 + 40, mHandle, TRUE);
+		DrawStringToHandle(480 + 45, 825 + 35, "をタイミングよく押せ", GetColor(255, 255, 255), mFontHandle);
 	}
 
 	if (mDrawGameState == DRAW_GAME_STATE::DRAW_PENDULUM_GAME)
@@ -150,6 +147,8 @@ void PlayUI::Draw()
 		DrawCircleAA(mPendulumInX - 150, mPendulumInY + 50, mPendulumInRadius, 64, mPendulumInColor, mPendulumInFillFlag);
 		// 外側の円
 		DrawCircleAA(mPendulumOutX - 150, mPendulumOutY + 50, mPendulumOutRadius, 64, mPendulumOutColor, mPendulumOutFillFlag, mPendulumOutLineThickness);
+		DrawGraph(480 + 45 - 110, 825 + 40, mHandle, TRUE);
+		DrawStringToHandle(480 + 45, 825 + 35, "をタイミングよく押せ", GetColor(255, 255, 255), mFontHandle);
 	}
 	
 }
@@ -196,12 +195,16 @@ void PlayUI::CircleGameBehavior(float _deltaTime)
 
 	if (CheckHitKey(KEY_INPUT_RETURN) && mInputReturnFlag)
 	{
+		//----------------------------------------------------------------------------エフェクト追加
+		mUIEffect->PlayEffekseer2D(VGet(mCircleInX-50-60, mCircleInY, 0));
 		if (mCircleOutRadius <= 40.0f)
 		{
 			mScore += 200;
 			mCircleOutRadius = 30.0f;
 			mCircleInColor = GetColor(0, 255, 0);
 			mClickCriticalFlag = true;
+			//-------------------------------------------------------------------------クリティカルエフェクト追加
+			mCriticalEffect->PlayEffekseer2D(VGet(mCircleInX-50-60, mCircleInY, 0));
 		}
 		else if (mCircleOutRadius <= 120.0f)
 		{
@@ -233,12 +236,16 @@ void PlayUI::GaugeGameBehavior(float _deltaTime)
 
 	if (CheckHitKey(KEY_INPUT_RETURN) && mInputReturnFlag)
 	{
+		//----------------------------------------------------------------------------エフェクト追加
+		mUIEffect->PlayEffekseer2D(VGet(mCircleInX-50-60, mCircleInY, 0));
 		if ((mGaugeInBeginY <= 370.0f) || (710.0f <= mGaugeInBeginY && mGaugeInBeginY <= 720.0f))
 		{
 			mScore += 200;
 			mGaugeInBeginY = 360.0f;
 			mGaugeInColor = GetColor(0, 255, 0);
 			mClickCriticalFlag = true;
+			//------------------------------------------------------------------------クリティカルエフェクト追加
+			mCriticalEffect->PlayEffekseer2D(VGet(mCircleInX-50-60, mCircleInY, 0));
 		}
 		else if (mGaugeInBeginY <= 560.0f)
 		{
@@ -252,6 +259,12 @@ void PlayUI::GaugeGameBehavior(float _deltaTime)
 		}
 		mInputReturnFlag = false;
 		mPlayGaugeGameFlag = false;
+	}
+	//------------------------------------------------------------------------クリアする前ならエフェクト削除
+	else
+	{
+		mCriticalEffect->StopEffect2D();
+		mUIEffect->StopEffect2D();
 	}
 }
 
@@ -306,6 +319,8 @@ void PlayUI::PendulumGameBehavior(float _deltaTime)
 
 	if (CheckHitKey(KEY_INPUT_RETURN) && mInputReturnFlag)
 	{
+		//----------------------------------------------------------------------------エフェクト追加
+		mUIEffect->PlayEffekseer2D(VGet(mPendulumInX-50-60, mPendulumInY, 0));
 		if (940.0f <= mPendulumInX && mPendulumInX <= 980.0f)
 		{
 			mPendulumInX = 960.0f;
@@ -313,7 +328,8 @@ void PlayUI::PendulumGameBehavior(float _deltaTime)
 			mScore += 200;
 			mPendulumInColor = GetColor(0, 255, 0);
 			mClickCriticalFlag = true;
-
+			//-------------------------------------------------------------------------クリティカルエフェクト追加
+			mCriticalEffect->PlayEffekseer2D(VGet(mPendulumInX-50-60, mPendulumInY, 0));
 		}
 		else if (820.0f <= mPendulumInX && mPendulumInX < 940.0f || 980.0f < mPendulumInX && mPendulumInX <= 1100.0f)
 		{
@@ -329,5 +345,11 @@ void PlayUI::PendulumGameBehavior(float _deltaTime)
 
 		mInputReturnFlag = false;
 		mPlayPendulumGameFlag = false;
+	}
+	//------------------------------------------------------------------------クリアする前ならエフェクト削除
+	else
+	{
+		mCriticalEffect->StopEffect2D();
+		mUIEffect->StopEffect2D();
 	}
 }

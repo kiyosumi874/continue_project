@@ -17,6 +17,7 @@ public:
 	~ResultUI();    // デストラクタ
 
 	void Update(float _deltaTime)override;    // 更新
+	void Update(float _deltaTime, int& _hiScore);
 	void Load()                  override;    // ロード
 	void Draw()                  override;    // 描画
 
@@ -26,5 +27,12 @@ private:
 	float mDeltaTime;    // デルタタイム
 	int   mHandle;       // ハンドル格納変数
 	int   mScore;        // スコア
+	int   mHiScore;        // スコア
 	int mFontHandle;
+	int mFontHandle2;
+	int mFontHandle2ex;
+	int mFontHandle3;
+	int mFontHandle3ex;
+	int mFontHandle4;
+	int mFontHandle4ex;
 };

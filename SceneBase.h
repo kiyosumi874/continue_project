@@ -16,7 +16,7 @@ public:
 	         SceneBase()   ;    // コンストラクタ
 	virtual ~SceneBase() {};    // 仮想デストラクタ
 
-	virtual SceneBase* Update(float _deltaTime) = 0;    // シーンの更新処理 (オーバーライド必須)
+	virtual SceneBase* Update(float _deltaTime, int& _hiScore) = 0;    // シーンの更新処理 (オーバーライド必須)
 	virtual void       Draw()                   = 0;    // シーンの描画処理 (オーバーライド必須)
 	virtual void       Sound(float _deltaTime)  = 0;    // 音楽	  (オーバーライド必須)
 	virtual void       Load()                   = 0;    // 初期化 (オーバーライド必須)

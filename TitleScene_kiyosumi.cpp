@@ -11,6 +11,7 @@
 #include "Camera.h"
 #include "StaticObjectActor.h"
 #include "Audience.h"
+#include "WaterObject.h"
 
 const char* MOVE_SCENE_IMG = "data/img/MoveScene.png";
 const char* PLAYER_MODEL_HANDLE = "data/model/player5/waterboy.pmx";
@@ -47,12 +48,15 @@ TitleScene_kiyosumi::TitleScene_kiyosumi()
 	, mAlphaPal(MAX_ALPHA_PAL)
 	, mFadeSpeed(IMG_FADE_SPEED)
 	, mCameraType(CAMERA_TYPE::CAMERA_1)
+	, mAudience(nullptr)
+	//, mAudience2(nullptr)
 {
 	//mMoveCircle.mPosX = 0.0f;
 	//mMoveCircle.mPosY = 31.5f;
 	//mMoveCircle.mPosZ = 0.0f;
 	//mMoveCircle.mAngle = 0.0f;
 	//mMoveCircle.mLength = 25.0f;
+
 }
 
 /// <summary>
@@ -67,6 +71,9 @@ TitleScene_kiyosumi::~TitleScene_kiyosumi()
 	delete mPlayer;
 	delete mPool;
 	delete mSky;
+	delete mWater;
+	delete mAudience;
+	//delete mAudience2;
 }
 
 /// <summary>
@@ -77,38 +84,23 @@ TitleScene_kiyosumi::~TitleScene_kiyosumi()
 /// Enterを押したときに次のシーンのInstanceのポインタを返す
 /// それ以外は自分のポインタを返す
 /// </returns>
-SceneBase* TitleScene_kiyosumi::Update(float _deltaTime)
+SceneBase* TitleScene_kiyosumi::Update(float _deltaTime, int& _hiScore)
 {
 	static VECTOR cameraPos = VGet(0.0f, 40.0f, -25.0f);
-	
-	//mMoveCircle.mCenterX = mPlayer->GetPositionX();
-	//mMoveCircle.mCenterY = mPlayer->GetPositionY();
-	//mMoveCircle.mCenterZ = mPlayer->GetPositionZ();
-	//
 
-	//// 中心座標に角度と長さを使用した円の位置を加算する
-	//// 度数法の角度を弧度法に変換
-	//float radius = mMoveCircle.mAngle * DX_PI_F / 180.0f;
-
-	//// 三角関数を使用し、円の位置を割り出す。
-	//float add_x = cos(radius) * mMoveCircle.mLength;
-	//float add_z = sin(radius) * mMoveCircle.mLength;
-
-	//// 結果ででた位置を中心位置に加算し、それを描画位置とする
-	//mMoveCircle.mPosX = mMoveCircle.mCenterX + add_x * _deltaTime;
-	//mMoveCircle.mPosZ = mMoveCircle.mCenterZ + add_z * _deltaTime;
-
-	// 角度更新
-	mMoveCircle.mAngle += 1.0f;
 	mSky->Update(_deltaTime);
 	mPool->Update(_deltaTime);
+	// 水面シェーダーの更新
+	mWater->Update(_deltaTime);
+	mWater->UpdateWaterShader(_deltaTime);     // 水面用シェーダーへ情報をセットする
 	mAudience->Update();
+	//mAudience2->Update();
 	// プレイヤーの更新
 	mPlayer->UpdateActor(_deltaTime);  // 1
 	mPlayer->Update(_deltaTime);       // 2 この順番で書く
 	// タイトルUIの更新
 	mTitleUI->Update(_deltaTime);
-	cameraPos = VAdd(cameraPos, VGet(mMoveCircle.mPosX, 0.0f,mMoveCircle.mPosZ));
+	cameraPos = VAdd(cameraPos, VGet(0.0f, 0.0f,0.0f));
 	// カメラの更新
 	if (mCameraType == CAMERA_TYPE::CAMERA_1)
 	{
@@ -229,8 +221,10 @@ void TitleScene_kiyosumi::Draw()
 	mSky->Draw();
 	mPool->Draw();
 	mAudience->Draw();
+	//mAudience2->Draw();
 	// プレイヤーの描画
 	mPlayer->Draw();
+	mWater->DrawWater();
 	// タイトルUIの描画
 	mTitleUI->Draw();
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, mAlphaPal);
@@ -281,6 +275,11 @@ void TitleScene_kiyosumi::Load()
 	mPool = new StaticObjectActor;
 	mSky = new StaticObjectActor;
 	mAudience = new Audience;
+	//mAudience2 = new Audience;
+	// 水面オブジェクト(モデルはペライチの正方形)
+	mWater = new WaterObject;
+	mWater->SetScale(VGet(150.0f, 1.0f, 225.0f));
+	mWater->SetPosition(VGet(0.0f, -5.25f, -55.0f));
 	mTitleUI->Load();
 	mClickNormal->LoadSound(SOUND_CLICK_HANDLE);
 	mBGM->LoadMusic(BGM_HANDLE);
@@ -290,6 +289,11 @@ void TitleScene_kiyosumi::Load()
 	mPool->SetScale   (TITLE_POOL_SCALE);
 	mPool->SetRotation(TITLE_POOL_ROTATE);
 	mPool->SetPosition(TITLE_POOL_POS);
+
+
+	/*mAudience2->SetStartPosX(-45.0f);
+	mAudience2->SetStartPosX(10.0f);
+	mAudience2->SetStartPosX(30.0f);*/
 
 	mSky->LoadModel("data/model/Skydome_X5/Dome_X501.pmx");
 	

@@ -23,9 +23,9 @@ SceneManager_kiyosumi::~SceneManager_kiyosumi()
 /// 更新処理
 /// </summary>
 /// <param name="_deltaTime">デルタタイム</param>
-void SceneManager_kiyosumi::Update(float _deltaTime)
+void SceneManager_kiyosumi::Update(float _deltaTime, int& _hiScore)
 {
-	SceneBase* tmpScene = mScene->Update(_deltaTime);    // 現在のシーンを保存(publicの関数・変数を呼び出すときはアロー演算子(->)　要調査)
+	SceneBase* tmpScene = mScene->Update(_deltaTime,_hiScore);    // 現在のシーンを保存(publicの関数・変数を呼び出すときはアロー演算子(->)　要調査)
 	if (tmpScene != mScene)   // シーンが切り替わった時
 	{
 		delete mScene;    // 直前のシーンを消す

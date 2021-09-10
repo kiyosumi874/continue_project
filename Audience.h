@@ -19,7 +19,12 @@ public:
 	void Init();
 	void Update();
 	void Draw();
-	const VECTOR& mGetAudiencePos()const { return mPos[NULL][NULL]; };
+	const VECTOR& mGetAudiencePos()const { return mPos[NULL][NULL]; }
+	void SetAudiencePos(const VECTOR& _pos) { mPos[0][0] = _pos; }
+	void SetStartPosX(float _pos) { mStartPosX = _pos; }
+	void SetStartPosY(float _pos) { mStartPosY = _pos; }
+	void SetStartPosZ(float _pos) { mStartPosZ = _pos; }
+	void SetRote(const VECTOR& _rote) { mRote = _rote; }
 private:
 	int   mAudienceModelHandle[AudienceLine][AudienceNum];		  //ŠÏ‹q‚Ìƒ‚ƒfƒ‹ƒnƒ“ƒhƒ‹
 	VECTOR mPos[AudienceLine][AudienceNum];	                      //ŠÏ‹q‚ÌˆÊ’u

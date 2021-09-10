@@ -30,7 +30,7 @@ public:
     PlayScene_kiyosumi(float _deltaTime);    // コンストラクタ
     ~PlayScene_kiyosumi();    // デストラクタ
 
-    SceneBase* Update(float _deltaTime)override;    // 更新
+    SceneBase* Update(float _deltaTime, int& _hiScore)override;    // 更新
     void       Draw()                  override;    // 描画
     void       Sound(float _deltaTime) override;    // 音楽
     void       Load()                  override;    // 初期化
@@ -53,8 +53,9 @@ private:
     class Camera* mCamera;
     class PlayUI* mPlayUI;    // プレイUIクラスへのポインタメンバ変数
     class BGM* mBGM;
-    class BGM* mBGM2;
+    //class BGM* mBGM2;
     class Audience* mAudience;       //観客へのポインタ
+    //class Audience* mAudience2;       //観客へのポインタ
     class StaticObjectActor* mPool;
     class StaticObjectActor* mSky;
     class PlayerActor* mPlayer;
@@ -62,7 +63,12 @@ private:
     class SE* mClickNormal;
     class SE* mClickClitical;
     class SE* mKansei;
-
+    class SE* mGayaGaya;
+    class WaterObject* mWater;
+    class Effect* mSmalleSplash;
+    class Effect* mNormalSplash;
+    class Effect* mBigSplash;
+    class Effect* mFeather;
     VECTOR       mTargetPos;        //カメラの見ている座標
 
     bool  mInputReturnFlag;    // Enterキーの連続入力防止
@@ -86,4 +92,7 @@ private:
     int mGameWaitCount;
 
     float mJumpPower;
+
+    int mFontHandle;
+    int mHandle;
 };

@@ -12,11 +12,12 @@
 TitleUI::TitleUI()
 	: mHandle(0)
 	, mHandle2(0)
+	, mHandle3(0)
 	, mDeltaTime(0.000001f)
 	, mStartButtonBeginX(480)
-	, mStartButtonBeginY(675)
+	, mStartButtonBeginY(675+150)
 	, mStartButtonEndX(1440)
-	, mStartButtonEndY(945)
+	, mStartButtonEndY(945+150)
 	, mStartButtonFontSize(150 /** 2 / 3*/)
 	, mStartButtonFlag(false)
 	, mInputReturnFlag(false)
@@ -27,7 +28,7 @@ TitleUI::TitleUI()
 	mFontHandle = CreateFontToHandle("data/Fonts/meiryob.tcc", mStartButtonFontSize,              -1, DX_FONTTYPE_ANTIALIASING_EDGE_4X4,         -1,        5,                       TRUE);
 	mHandle = LoadGraph("data/img/keyboard_Enter.png");
 	mHandle2 = LoadGraph("data/img/keyboard_Enter2.png");
-
+	mHandle3 = LoadGraph("data/img/VirtualDive.png");
 }
 
 /// <summary>
@@ -80,9 +81,9 @@ void TitleUI::Load()
 	mStartButtonFlag = false;
 	mDeltaTime = 0.000001f;
 	mStartButtonBeginX = 480;
-	mStartButtonBeginY = 675;
+	mStartButtonBeginY = 675+100;
 	mStartButtonEndX = 1440;
-	mStartButtonEndY = 945;
+	mStartButtonEndY = 945+100;
 	mStartButtonFontSize = 200;
 	mStartButtonFlag = false;
 	mInputReturnFlag = false;
@@ -128,6 +129,8 @@ void TitleUI::Draw()
 	//	DrawStringToHandle(mStartButtonBeginX + 45, mStartButtonBeginY + 35, "EnterÉLÅ[", WHITE, mFontHandle, BLACK);
 	//}
 
+	//DrawGraph(1920/3, 1080/3, mHandle3, TRUE);
+	DrawExtendGraph(1920/4+200,1080/4+150, 1920 / 4+533+200, 1080 / 4+351+150, mHandle3, TRUE);
 	if (!mStartButtonFlag)
 	{
 		if (!mTmpTimeFlag)

@@ -1,10 +1,10 @@
 #include "DxLib.h"
 
-#include "SceneManager_kiyosumi.h"
+#include "SceneManager.h"
 #include "SceneBase.h"
-#include "TitleScene_kiyosumi.h"
-#include "PlayScene_kiyosumi.h"
-#include "ResultScene_kiyosumi.h"
+#include "TitleScene.h"
+#include "PlayScene.h"
+#include "ResultScene.h"
 #include "EffekseerForDXLib.h"
 
 void InitializeEffekseer();
@@ -19,6 +19,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 {
 	int screenFlipCount;
 	float deltaTime, startTime;
+
+	SetUseDirect3DVersion(DX_DIRECT3D_9EX);
+
 	// ＤＸライブラリ初期化処理
 	if (DxLib_Init() == -1)
 	{
@@ -34,7 +37,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 	// 裏画面の設定
 	SetDrawScreen(DX_SCREEN_BACK);
 	// 画面の背景色を設定する
-	SetBackgroundColor(255, 255, 255);
+	//SetBackgroundColor(255, 255, 255);
 	// 計測中に別のウインドウがアクティブになっても問題が無いように常時実行フラグをセット
 	SetAlwaysRunFlag(TRUE);
 
@@ -54,7 +57,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 		// ScreenFlip を行った回数をインクリメント
 		screenFlipCount++;
 	}
-
 	// 常時実行フラグを元に戻す
 	SetAlwaysRunFlag(FALSE);
 
@@ -63,14 +65,15 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 	deltaTime = 1000000.0f / screenFlipCount;
 
 	// シーンマネージャークラスのインスタンスを生成
-	SceneManager_kiyosumi* scene = new SceneManager_kiyosumi;
+	SceneManager* scene = new SceneManager;
 
 
 	// タイトルシーンをセット
-	scene->SetScene(new TitleScene_kiyosumi);
-	//scene->SetScene(new ResultScene_kiyosumi(0));
+	scene->SetScene(new TitleScene);
+	//scene->SetScene(new ResultScene_kiyosumi(500));
 
 
+	int hiScore = 0;
 	/*deltaTime = 0.000001f;*/
 
 	// エスケープキーが押されるかウインドウが閉じられるまでループ
@@ -81,7 +84,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 		ClearDrawScreen();
 		float perfDelta = deltaTime / 1000000.0f;
 		// シーン制御
-		scene->Update(perfDelta);
+		scene->Update(perfDelta, hiScore);
 
 		// 描画処理
 		scene->Draw();

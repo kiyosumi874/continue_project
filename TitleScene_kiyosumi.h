@@ -22,7 +22,7 @@ public:
     TitleScene_kiyosumi();    // コンストラクタ
     ~TitleScene_kiyosumi();    // デストラクタ
 
-    SceneBase* Update(float _deltaTime)override;    // 更新
+    SceneBase* Update(float _deltaTime, int& _hiScore)override;    // 更新
     void       Draw()                  override;    // 描画
     void       Sound(float _deltaTime)                 override;    // 音楽
     void       Load()                  override;    // 初期化
@@ -36,18 +36,8 @@ private:
     class StaticObjectActor* mSky;
     class StaticObjectActor* mPool;
     class Audience* mAudience;       //観客へのポインタ
-
-    typedef struct MoveCircle
-    {
-        float mPosX;
-        float mPosY;
-        float mPosZ;
-        float mCenterX;
-        float mCenterY;
-        float mCenterZ;
-        float mAngle;
-        float mLength;
-    };
+    //class Audience* mAudience2;       //観客へのポインタ
+    class WaterObject* mWater;
 
     enum class CAMERA_TYPE : unsigned char
     {
@@ -55,7 +45,6 @@ private:
         CAMERA_2,
         CAMERA_3
     };
-    MoveCircle mMoveCircle;
     CAMERA_TYPE mCameraType;
 
     bool mBGMFlag;
