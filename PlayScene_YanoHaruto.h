@@ -1,11 +1,11 @@
 //----------------------------------------------------------------------------------//
-// @file         PlayScene_YanoHaruto.h
-// @brief        PlayScene_YanoHarutoクラス
+// @file         PlayScene.h
+// @brief        PlaySceneクラス
 // @note         継承元:SceneBaseクラス              
 // @author       椎原 清澄 (Kiyosumi Shiihara, @2021)
 // @changelog
-// 2021/ 7/29    新規作成 
-// 9/3           清澄君のプレイシーンコピー&effect追加
+// 2021/ 7/29    新規作成
+// 9/13 AudienceContorolle追加
 //----------------------------------------------------------------------------------//
 
 #pragma once
@@ -20,6 +20,7 @@ enum class GAME_MODE_STATE : unsigned char
     CIRCLE_GAME,
     GAUGE_GAME,
     PENDULUM_GAME,
+    GAYA,
     FADE_OUT
 };
 
@@ -27,9 +28,10 @@ class PlayScene_YanoHaruto : public SceneBase
 {
 public:
     PlayScene_YanoHaruto();    // コンストラクタ
+    PlayScene_YanoHaruto(float _deltaTime);    // コンストラクタ
     ~PlayScene_YanoHaruto();    // デストラクタ
 
-    SceneBase* Update(float _deltaTime)override;    // 更新
+    SceneBase* Update(float _deltaTime, int& _hiScore)override;    // 更新
     void       Draw()                  override;    // 描画
     void       Sound(float _deltaTime) override;    // 音楽
     void       Load()                  override;    // 初期化
@@ -41,33 +43,42 @@ private:
     void GameModeCircleGameBehavior(float _deltaTime);
     void GameModeGaugeGameBehavior(float _deltaTime);
     void GameModePendulumGameBehavior(float _deltaTime);
+    void GameModeGayaBehavior(float _deltaTime);
     void GameModeFadeOutBehavior(float _deltaTime);
+
+    void LoadEX(int& _tmp, short& _count, int _handle);
 
     GAME_MODE_STATE mGameMode;
 
     //class PlayCamera* mPlayCamera;    // プレイカメラクラスへのポインタメンバ変数
     class Camera* mCamera;
-    class PlayUI_YanoHaruto* mPlayUI;    // プレイUIクラスへのポインタメンバ変数
+    class PlayUI* mPlayUI;    // プレイUIクラスへのポインタメンバ変数
     class BGM* mBGM;
+    //class BGM* mBGM2;
     class Audience* mAudience;       //観客へのポインタ
+    //class Audience* mAudience2;       //観客へのポインタ
     class StaticObjectActor* mPool;
-    class PlayerActor_YanoHaruto* mPlayer;
+    class StaticObjectActor* mSky;
+    class PlayerActor* mPlayer;
     class SE* mMetoronome;
     class SE* mClickNormal;
     class SE* mClickClitical;
+    class SE* mKansei;
+    class SE* mGayaGaya;
+    class WaterObject* mWater;
     class Effect* mSmalleSplash;
     class Effect* mNormalSplash;
     class Effect* mBigSplash;
     class Effect* mFeather;
+    class AudienceContoroller* mAudienceCon;
 
     VECTOR       mTargetPos;        //カメラの見ている座標
 
     bool  mInputReturnFlag;    // Enterキーの連続入力防止
-
+    float mDeltaTime;
     int   mScore;
 
     int mStopCount;
-    int mEnterCount;
 
     int mMoveSceneHandle;
     float mAlphaPal;
@@ -75,8 +86,16 @@ private:
     int mFadeSpeed;
 
     bool mBGMFlag;
+    bool mBGMFlag2;
+
+    bool mFlag;
+    bool mFlag2;
+    bool mFlag3;
 
     int mGameWaitCount;
 
     float mJumpPower;
+
+    int mFontHandle;
+    int mHandle;
 };

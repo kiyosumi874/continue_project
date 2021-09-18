@@ -1,30 +1,35 @@
+//----------------------------------------------------------------------------------//
+// @file         ResultScene.h
+// @brief        ResultSceneクラス
+// @note         継承元:SceneBaseクラス              
+// @author       椎原 清澄 (Kiyosumi Shiihara, @2021)
+// @changelog
+// 2021/ 7/29    新規作成
+// 2021/ 8/25    cameraとplayerのクラスを追加
+//----------------------------------------------------------------------------------//
+
 #pragma once
 #include "SceneBase.h"
 
-/// <summary>
-/// 8/27エフェクト追加　by矢野陽大
-/// </summary>
-/// 
-#define FIREWORKS 4
-#define CONFETTIES  3
 class ResultScene_YanoHaruto : public SceneBase
 {
 public:
     ResultScene_YanoHaruto(int _score);    // コンストラクタ
     ~ResultScene_YanoHaruto();    // デストラクタ
 
-    SceneBase* Update(float _deltaTime)override;    // 更新
+    SceneBase* Update(float _deltaTime, int& _hiScore)override;    // 更新
     void       Draw()                  override;    // 描画
     void       Sound(float _deltaTime)                 override;    // 音楽
     void       Load()                  override;    // 初期化
 private:
-    class ResultCamera* mResultCamera;    // リザルトカメラクラスへのポインタメンバ変数
     class Camera* mCamera;
     class ResultUI* mResultUI;        // リザルトUIクラスへのポインタメンバ変数
     class PlayerActor* mPlayer;
     class StaticObjectActor* mPodium;
     class StaticObjectActor* mPool;
+    class StaticObjectActor* mSky;
     class Effect* mFireWorks;
+    class WaterObject* mWater;
 
     bool  mInputReturnFlag;   // Enterキーの連続入力防止
     int mScore;
@@ -35,6 +40,13 @@ private:
     bool mCheckHitFlag;
 
     int mFadeSpeed;
+
+    float mCameraPosX;
+    float mCameraPosY;
+    float mCameraPosZ;
+    float mCameraTargetPosX;
+    float mCameraTargetPosY;
+    float mCameraTargetPosZ;
 
 };
 

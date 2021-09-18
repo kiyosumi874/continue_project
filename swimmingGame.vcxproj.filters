@@ -187,6 +187,12 @@
     <ClCompile Include="yutaro_TestScene.cpp">
       <Filter>ソース ファイル\yutaro</Filter>
     </ClCompile>
+    <ClCompile Include="AudienceContoroller.cpp">
+      <Filter>ソース ファイル\work_haruto</Filter>
+    </ClCompile>
+    <ClCompile Include="NewAudience.cpp">
+      <Filter>ソース ファイル\work_haruto</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SceneBase.h">
@@ -317,6 +323,12 @@
     </ClInclude>
     <ClInclude Include="yutaro_TestScene.h">
       <Filter>ソース ファイル\yutaro</Filter>
+    </ClInclude>
+    <ClInclude Include="AudienceContoroller.h">
+      <Filter>ソース ファイル\work_haruto</Filter>
+    </ClInclude>
+    <ClInclude Include="NewAudience.h">
+      <Filter>ソース ファイル\work_haruto</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -1,3 +1,12 @@
+//----------------------------------------------------------------------------------//
+// @file         SceneManager_YanoHaruto.h
+// @brief        SceneManager_YanoHarutoクラス
+// @note         シーンの管理クラス              
+// @author       椎原 清澄 (Kiyosumi Shiihara, @2021)
+// @changelog
+// 2021/ 7/31    新規作成
+//----------------------------------------------------------------------------------//
+
 #pragma once
 
 class SceneManager_YanoHaruto
@@ -6,7 +15,7 @@ public:
 	SceneManager_YanoHaruto();	// コンストラクタ
 	~SceneManager_YanoHaruto();    // デストラクタ
 
-	void Update(float _deltaTime);    // 更新
+	void Update(float _deltaTime, int& _hiScore);    // 更新
 	void Draw();		              // 描画
 	void Sound(float _deltaTime);		              // 音楽
 
@@ -14,4 +23,5 @@ public:
 
 private:
 	class SceneBase* mScene;    // シーンベースへのポインタメンバ変数 (要調査)
+
 };

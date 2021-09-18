@@ -19,6 +19,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 {
 	int screenFlipCount;
 	float deltaTime, startTime;
+
+	SetUseDirect3DVersion(DX_DIRECT3D_9EX);
+
 	// ＤＸライブラリ初期化処理
 	if (DxLib_Init() == -1)
 	{
@@ -34,7 +37,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 	// 裏画面の設定
 	SetDrawScreen(DX_SCREEN_BACK);
 	// 画面の背景色を設定する
-	SetBackgroundColor(255, 255, 255);
+	//SetBackgroundColor(255, 255, 255);
 	// 計測中に別のウインドウがアクティブになっても問題が無いように常時実行フラグをセット
 	SetAlwaysRunFlag(TRUE);
 
@@ -54,7 +57,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 		// ScreenFlip を行った回数をインクリメント
 		screenFlipCount++;
 	}
-
 	// 常時実行フラグを元に戻す
 	SetAlwaysRunFlag(FALSE);
 
@@ -68,9 +70,10 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 
 	// タイトルシーンをセット
 	scene->SetScene(new TitleScene_YanoHaruto);
-	//scene->SetScene(new ResultScene_YanoHaruto(0));
+	//scene->SetScene(new ResultScene_kiyosumi(500));
 
 
+	int hiScore = 0;
 	/*deltaTime = 0.000001f;*/
 
 	// エスケープキーが押されるかウインドウが閉じられるまでループ
@@ -81,7 +84,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 		ClearDrawScreen();
 		float perfDelta = deltaTime / 1000000.0f;
 		// シーン制御
-		scene->Update(perfDelta);
+		scene->Update(perfDelta, hiScore);
 
 		// 描画処理
 		scene->Draw();

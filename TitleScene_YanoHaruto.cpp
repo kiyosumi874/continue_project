@@ -10,6 +10,8 @@
 #include "PlayerActor.h"
 #include "Camera.h"
 #include "StaticObjectActor.h"
+#include "AudienceContoroller.h"
+#include "WaterObject.h"
 
 const char* MOVE_SCENE_IMG = "data/img/MoveScene.png";
 const char* PLAYER_MODEL_HANDLE = "data/model/player5/waterboy.pmx";
@@ -35,6 +37,7 @@ TitleScene_YanoHaruto::TitleScene_YanoHaruto()
 	, mPlayer(nullptr)
 	, mClickNormal(nullptr)
 	, mPool(nullptr)
+	, mSky(nullptr)
 	, mInputReturnFlag(false)
 	, mStartButtonFlag(false)
 	, mAlphaPalFlag(false)
@@ -44,12 +47,16 @@ TitleScene_YanoHaruto::TitleScene_YanoHaruto()
 	, mMoveSceneHandle(NULL)
 	, mAlphaPal(MAX_ALPHA_PAL)
 	, mFadeSpeed(IMG_FADE_SPEED)
+	, mCameraType(CAMERA_TYPE::CAMERA_1)
+	, mAudienceCon(nullptr)
+	//, mAudienceCon2(nullptr)
 {
-	mMoveCircle.mPosX = 0.0f;
-	mMoveCircle.mPosY = 31.5f;
-	mMoveCircle.mPosZ = 0.0f;
-	mMoveCircle.mAngle = 0.0f;
-	mMoveCircle.mLength = 25.0f;
+	//mMoveCircle.mPosX = 0.0f;
+	//mMoveCircle.mPosY = 31.5f;
+	//mMoveCircle.mPosZ = 0.0f;
+	//mMoveCircle.mAngle = 0.0f;
+	//mMoveCircle.mLength = 25.0f;
+
 }
 
 /// <summary>
@@ -63,6 +70,10 @@ TitleScene_YanoHaruto::~TitleScene_YanoHaruto()
 	delete mClickNormal;
 	delete mPlayer;
 	delete mPool;
+	delete mSky;
+	delete mWater;
+	delete mAudienceCon;
+	//delete mAudienceCon2;
 }
 
 /// <summary>
@@ -73,40 +84,65 @@ TitleScene_YanoHaruto::~TitleScene_YanoHaruto()
 /// Enterを押したときに次のシーンのInstanceのポインタを返す
 /// それ以外は自分のポインタを返す
 /// </returns>
-SceneBase* TitleScene_YanoHaruto::Update(float _deltaTime)
+SceneBase* TitleScene_YanoHaruto::Update(float _deltaTime, int& _hiScore)
 {
 	static VECTOR cameraPos = VGet(0.0f, 40.0f, -25.0f);
 
-	mMoveCircle.mCenterX = mPlayer->GetPositionX();
-	mMoveCircle.mCenterY = mPlayer->GetPositionY();
-	mMoveCircle.mCenterZ = mPlayer->GetPositionZ();
-
-
-	// 中心座標に角度と長さを使用した円の位置を加算する
-	// 度数法の角度を弧度法に変換
-	float radius = mMoveCircle.mAngle * DX_PI_F / 180.0f;
-
-	// 三角関数を使用し、円の位置を割り出す。
-	float add_x = cos(radius) * mMoveCircle.mLength;
-	float add_z = sin(radius) * mMoveCircle.mLength;
-
-	// 結果ででた位置を中心位置に加算し、それを描画位置とする
-	mMoveCircle.mPosX = mMoveCircle.mCenterX + add_x * _deltaTime;
-	mMoveCircle.mPosZ = mMoveCircle.mCenterZ + add_z * _deltaTime;
-
-	// 角度更新
-	mMoveCircle.mAngle += 1.0f;
-
+	mSky->Update(_deltaTime);
 	mPool->Update(_deltaTime);
+	// 水面シェーダーの更新
+	mWater->Update(_deltaTime);
+	mWater->UpdateWaterShader(_deltaTime);     // 水面用シェーダーへ情報をセットする
 
+	//----------------------------------------9/18(deltTime)
+	mAudienceCon->Update(_deltaTime);
+	//mAudienceCon2->Update();
 	// プレイヤーの更新
 	mPlayer->UpdateActor(_deltaTime);  // 1
 	mPlayer->Update(_deltaTime);       // 2 この順番で書く
 	// タイトルUIの更新
 	mTitleUI->Update(_deltaTime);
-	cameraPos = VAdd(cameraPos, VGet(mMoveCircle.mPosX, 0.0f, mMoveCircle.mPosZ));
+	cameraPos = VAdd(cameraPos, VGet(0.0f, 0.0f, 0.0f));
 	// カメラの更新
-	mCamera->Update(cameraPos, mPlayer->GetPosition());
+	if (mCameraType == CAMERA_TYPE::CAMERA_1)
+	{
+		mCamera->SetSpeed(0.2f);
+		mCamera->SetPos(VAdd(TITLE_CAMERA_POS, VGet(5.0f, 5.0f, 0.0f)));
+		mCamera->SetTarget(VAdd(TITLE_POOL_POS, VGet(0.0f, 20.0f, -30.0f)));
+		if (mCamera->GetFuturePos().z >= -25.0f - 10.0f)
+		{
+			mCameraType = CAMERA_TYPE::CAMERA_2;
+			mCamera->SetFuturePos(VGet(-25.0f, 50.0f, -20.0f));
+			mCamera->SetFutureTarget(mPlayer->GetPosition());
+		}
+	}
+	if (mCameraType == CAMERA_TYPE::CAMERA_2)
+	{
+		mCamera->SetSpeed(0.2f);
+		mCamera->SetPos(VAdd(VGet(-25.0f, 50.0f, -20.0f), VGet(50.0f, 0.0f, 0.0f)));
+		mCamera->SetTarget(VAdd(mPlayer->GetPosition(), VGet(0.0f, 0.0f, 0.0f)));
+		if (mCamera->GetFuturePos().x >= 17.0f)
+		{
+			mCameraType = CAMERA_TYPE::CAMERA_3;
+			mCamera->SetFuturePos(VGet(30.0f, 20.0f, 0.0f));
+			mCamera->SetFutureTarget(VGet(50.0f, 20.0f, -10.0f));
+		}
+	}
+	if (mCameraType == CAMERA_TYPE::CAMERA_3)
+	{
+		mCamera->SetSpeed(0.1f);
+		mCamera->SetPos(VAdd(VGet(30.0f, 20.0f, 0.0f), VGet(0.0f, 0.0f, -100.0f)));
+		mCamera->SetTarget(VAdd(VGet(50.0f, 20.0f, -10.0f), VGet(0.0f, 0.0f, -100.0f)));
+		if (mCamera->GetFuturePos().z <= -85.0f)
+		{
+			mCameraType = CAMERA_TYPE::CAMERA_1;
+			mCamera->SetFuturePos(VAdd(TITLE_CAMERA_POS, VGet(-30.0f, 20.0f, -130.0f)));
+			mCamera->SetFutureTarget(VAdd(TITLE_POOL_POS, VGet(0.0f, 20.0f, -30.0f)));
+		}
+
+	}
+
+	mCamera->Update(cameraPos, mPlayer->GetPosition(), _deltaTime);
 	// フェードイン
 	if (0 <= mAlphaPal && !mAlphaPalFlag)
 	{
@@ -128,7 +164,7 @@ SceneBase* TitleScene_YanoHaruto::Update(float _deltaTime)
 	if (mAlphaPal >= 255)
 	{
 		// 条件を満たしていたら次のシーンを生成してそのポインタを返す
-		return new PlayScene_YanoHaruto();
+		return new PlayScene_YanoHaruto(_deltaTime);
 	}
 
 	// シーンが変更されていなかったら自分のポインタを返す
@@ -184,9 +220,13 @@ void TitleScene_YanoHaruto::Draw()
 #endif
 
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 255);
+	mSky->Draw();
 	mPool->Draw();
+	mAudienceCon->Draw();
+	//mAudienceCon2->Draw();
 	// プレイヤーの描画
 	mPlayer->Draw();
+	mWater->DrawWater();
 	// タイトルUIの描画
 	mTitleUI->Draw();
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, mAlphaPal);
@@ -235,6 +275,17 @@ void TitleScene_YanoHaruto::Load()
 	mClickNormal = new SE;
 	mPlayer = new PlayerActor;
 	mPool = new StaticObjectActor;
+	mSky = new StaticObjectActor;
+	//----------------------------------------------9/18
+	mAudienceCon = new AudienceContoroller;
+	mAudienceCon->LoadAudience();
+	mAudienceCon->SetAudience();
+
+	//mAudienceCon2 = new Audience;
+	// 水面オブジェクト(モデルはペライチの正方形)
+	mWater = new WaterObject;
+	mWater->SetScale(VGet(150.0f, 1.0f, 225.0f));
+	mWater->SetPosition(VGet(0.0f, -5.25f, -55.0f));
 	mTitleUI->Load();
 	mClickNormal->LoadSound(SOUND_CLICK_HANDLE);
 	mBGM->LoadMusic(BGM_HANDLE);
@@ -244,6 +295,18 @@ void TitleScene_YanoHaruto::Load()
 	mPool->SetScale(TITLE_POOL_SCALE);
 	mPool->SetRotation(TITLE_POOL_ROTATE);
 	mPool->SetPosition(TITLE_POOL_POS);
+
+
+	/*mAudienceCon2->SetStartPosX(-45.0f);
+	mAudienceCon2->SetStartPosX(10.0f);
+	mAudienceCon2->SetStartPosX(30.0f);*/
+
+	mSky->LoadModel("data/model/Skydome_X5/Dome_X501.pmx");
+
+	mCamera->SetFuturePos(VAdd(TITLE_CAMERA_POS, VGet(-30.0f, 20.0f, -130.0f)));
+	mCamera->SetFutureTarget(VAdd(TITLE_POOL_POS, VGet(0.0f, 20.0f, -30.0f)));
+	mCamera->SetPos(VAdd(TITLE_CAMERA_POS, VGet(5.0f, 5.0f, -5.0f)));
+	mCamera->SetTarget(VGet(-45.5f, 10.0f, -30.0f));
 
 	mPlayer->SetPlayerState(PlayerActor::PLAYER_STATE::STATE_TITLE_IDLE);
 	mPlayer->LoadModel(PLAYER_MODEL_HANDLE);

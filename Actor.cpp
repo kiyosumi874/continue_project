@@ -74,7 +74,6 @@ void Actor::ComputeWorldTransform()
         MV1SetRotationXYZ(mMHandle, mRotate);
         MV1SetPosition(mMHandle, mPosition);
     }
-   
 }
 /// <summary>
 /// モデルデータをロードする
