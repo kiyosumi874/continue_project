@@ -1,7 +1,7 @@
 #include "PlayScene_YanoHaruto.h"
 #include "ResultScene_YanoHaruto.h"
 #include "TitleScene_YanoHaruto.h"
-#include "PlayUI.h"
+#include "PlayUI_YanoHaruto.h"
 #include "Camera.h"
 #include "BGM.h"
 #include "Audience.h"
@@ -268,7 +268,7 @@ void PlayScene_YanoHaruto::Draw()
 		}
 	}
 	//…–Ê‚É”ò‚Ñž‚ñ‚¾‚ç
-	if (10 > mPlayer->GetPositionY())
+	if (0 > mPlayer->GetPositionY())
 	{
 		//500“_ˆÈã‚È‚ç
 		if (mScore >= 500)
@@ -338,7 +338,7 @@ void PlayScene_YanoHaruto::Sound(float _deltaTime)
 		//mBGM2->Play();
 		mBGMFlag2 = true;
 	}
-	mPlayUI->Sound(mMetoronome, mClickNormal, mClickClitical);
+	mPlayUI->Sound(mMetoronome, mClickNormal, mClickClitical, mBad);
 }
 
 /// <summary>
@@ -364,7 +364,7 @@ void PlayScene_YanoHaruto::Load()
 	mWater->SetScale(VGet(150.0f, 1.0f, 225.0f));
 	mWater->SetPosition(VGet(0.0f, -5.25f, -55.0f));
 
-	mPlayUI = new PlayUI;
+	mPlayUI = new PlayUI_YanoHaruto;
 	mHandle = LoadGraph("data/img/keyboard_Enter.png");
 	LoadEX(tmp, tmpCount, mFontHandle);
 	mBGM = new BGM;
@@ -383,6 +383,9 @@ void PlayScene_YanoHaruto::Load()
 	LoadEX(tmp, tmpCount, mFontHandle);
 	mPlayer = new PlayerActor;
 
+	//------------------------------------------------------9/19
+	mBad = new SE;
+	mBad->LoadSound("data/sound/Negative-.mp3");
 
 	LoadEX(tmp, tmpCount, mFontHandle);
 	mMetoronome = new SE;
@@ -442,6 +445,7 @@ void PlayScene_YanoHaruto::Load()
 	mBigSplash = new Effect("data/effect/BigSplash.efk");
 	mNormalSplash = new Effect("data/effect/NormalSplash.efk");
 	mSmalleSplash = new Effect("data/effect/SmalleSplash.efk");
+	
 	LoadEX(tmp, tmpCount, mFontHandle);
 	mMetoronome->LoadSound("data/sound/metronome_wood.wav");
 	LoadEX(tmp, tmpCount, mFontHandle);

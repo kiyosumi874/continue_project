@@ -1,6 +1,3 @@
-#pragma once
-
-
 //----------------------------------------------------------------------------------//
 // @file         PlayUI_YanoHaruto.h
 // @brief        PlayUI_YanoHarutoクラス
@@ -8,7 +5,6 @@
 // @author       椎原 清澄 (Kiyosumi Shiihara, @2021)
 // @changelog
 // 2021/ 7/31    新規作成
-//       9/6     エフェクト追加　矢野 
 //----------------------------------------------------------------------------------//
 
 #pragma once
@@ -32,7 +28,7 @@ public:
 	void Update(float _deltaTime)override;    // 更新
 	void Load()                  override;    // ロード
 	void Draw()                  override;    // 描画
-	void Sound(class SE* _metoronome, class SE* _clickNormal, class SE* _clickClitical);
+	void Sound(class SE* _metoronome, class SE* _clickNormal, class SE* _clickClitical,class SE* _bad);
 
 
 	bool GetPlayCircleGameFlag() { return mPlayCircleGameFlag; }
@@ -57,6 +53,8 @@ private:
 	int   mScore;        // スコア
 	bool  mInputReturnFlag;    // Enterキーの連続入力防止
 	int   mFontHandle;
+	int   mHandle;
+	int   mHandle2;
 	bool mClickNormalFlag;
 	bool mClickCriticalFlag;
 	bool mMetoronomeFlag;
@@ -124,9 +122,11 @@ private:
 
 	bool mPlayPendulumGameFlag;           // 振り子ゲームをしているかしていないかのFlag
 
-
 	//エフェクト追加　9/6
 	//-------------------------------------------------
 	class Effect* mCriticalEffect;
 	class Effect* mUIEffect;
+	//--------------------9/19
+	class Effect* mBadEffect;
+	bool mBadFlag;
 };

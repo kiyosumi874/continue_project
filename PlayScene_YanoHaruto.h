@@ -52,16 +52,17 @@ private:
 
     //class PlayCamera* mPlayCamera;    // プレイカメラクラスへのポインタメンバ変数
     class Camera* mCamera;
-    class PlayUI* mPlayUI;    // プレイUIクラスへのポインタメンバ変数
+    class PlayUI_YanoHaruto* mPlayUI;    // プレイUIクラスへのポインタメンバ変数
     class BGM* mBGM;
     //class BGM* mBGM2;
-    class Audience* mAudience;       //観客へのポインタ
     //class Audience* mAudience2;       //観客へのポインタ
     class StaticObjectActor* mPool;
     class StaticObjectActor* mSky;
     class PlayerActor* mPlayer;
     class SE* mMetoronome;
     class SE* mClickNormal;
+    //----------------------------------bad追加
+    class SE* mBad;
     class SE* mClickClitical;
     class SE* mKansei;
     class SE* mGayaGaya;
