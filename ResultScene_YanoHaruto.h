@@ -6,6 +6,7 @@
 // @changelog
 // 2021/ 7/29    新規作成
 // 2021/ 8/25    cameraとplayerのクラスを追加
+// 2021/9/20     confetti紙吹雪を追加
 //----------------------------------------------------------------------------------//
 
 #pragma once
@@ -29,6 +30,7 @@ private:
     class StaticObjectActor* mPool;
     class StaticObjectActor* mSky;
     class Effect* mFireWorks;
+    class Effect* mConfetti;     //紙吹雪
     class WaterObject* mWater;
 
     bool  mInputReturnFlag;   // Enterキーの連続入力防止

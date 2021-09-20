@@ -36,6 +36,8 @@ ResultScene_YanoHaruto::ResultScene_YanoHaruto(int _score)
 	, mFireWorks(nullptr)
 	, mPool(nullptr)
 	, mWater(nullptr)
+	//------------------------------------------紙吹雪追加
+	, mConfetti(nullptr)
 {
 	mCameraPosX = 8.5f;
 
@@ -60,7 +62,14 @@ ResultScene_YanoHaruto::~ResultScene_YanoHaruto()
 	delete mPlayer;
 	delete mCamera;
 	delete mPodium;
+	//--------------------------------------------------9.20
+	mFireWorks->StopEffect3D();
+	mFireWorks->Delete();
 	delete mFireWorks;
+	mConfetti->StopEffect3D();
+	mConfetti->Delete();
+	delete mConfetti;
+
 	delete mPool;
 	delete mSky;
 	delete mWater;
@@ -233,10 +242,14 @@ void ResultScene_YanoHaruto::Draw()
 	mWater->DrawWater();
 	mPlayer->Draw();
 	mPodium->Draw();
-
-	if (mFireWorks->GetNowPlaying2D())
+	//--------------------------------------------------------------9.20
+	if (mFireWorks->GetNowPlaying3D()&&mScore>200)
 	{
-		mFireWorks->PlayEffekseer2D(VGet(rand() % 1920, rand() % 1080, 0));
+		mFireWorks->PlayEffekseer(VGet(33.0f,0.0f,-58.0f));
+	}
+	if (mConfetti->GetNowPlaying3D()&&mScore > 400)
+	{
+		mConfetti->PlayEffekseer(VGet(30.0f, 10.0f, -54.0f));
 	}
 
 	// リザルトUIの描画
@@ -263,8 +276,10 @@ void ResultScene_YanoHaruto::Load()
 	mPlayer = new PlayerActor;
 	mPodium = new StaticObjectActor;
 	mPool = new StaticObjectActor;
-	mFireWorks = new Effect("data/effect/hanabi.efk", 40.0f);
+	//------------------------------------------------------------------size変更
+	mFireWorks = new Effect("data/effect/hanabi.efk", 1.0f);
 	mSky = new StaticObjectActor;
+	mConfetti = new Effect("data/effect/confetti.efk", 1.0f);
 
 	// リザルトUIの初期化
 	mResultUI->Load();
