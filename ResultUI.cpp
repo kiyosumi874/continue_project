@@ -18,7 +18,18 @@ ResultUI::ResultUI()
 	mFontHandle3ex = CreateFontToHandle("data/Fonts/meiryob.tcc", 120, -1, DX_FONTTYPE_ANTIALIASING_4X4, -1, 5, FALSE);
 	mFontHandle4 = CreateFontToHandle("data/Fonts/BIZ-UDGothicB.tcc", 210, -1, DX_FONTTYPE_ANTIALIASING_4X4, -1, 2, FALSE);
 	mFontHandle4ex = CreateFontToHandle("data/Fonts/BIZ-UDGothicR.tcc", 200, -1, DX_FONTTYPE_ANTIALIASING_4X4, -1, 2, FALSE);
-	mHandle = LoadGraph("data/img/ResultUI.png");
+	
+	// 画面サイズの取得
+	GetWindowSize(&mScreenSizeW, &mScreenSizeH);
+
+	// スコアウィンドウのロード
+	mHandleScoreWindow = LoadGraph("data/img/ResultUI.png");
+	GetGraphSize(mHandleScoreWindow, &mSizeScoreWindowW, &mSizeScoreWindowH);
+	mScaleScoreWindow = 1.0;
+	mPosScoreWindowX = mScreenSizeW - (mScreenSizeW / 4) - ((mSizeScoreWindowW * mScaleScoreWindow) / 2);
+	mPosScoreWindowY = (mScreenSizeH / 2) - ((mSizeScoreWindowH / 2) * mScaleScoreWindow);
+
+	
 	mHandle0   = LoadGraph("data/img/0pt.png");
 	mHandle100 = LoadGraph("data/img/100pt.png");
 	mHandle200 = LoadGraph("data/img/200pt.png");
@@ -79,7 +90,14 @@ void ResultUI::Load()
 /// </summary>
 void ResultUI::Draw()
 {
-	DrawGraph(1920 / 2 + 1920 / 2 / 6 + 50, 100, mHandle, TRUE);
+
+	// スコアウィンドウの描画
+	DrawExtendGraph(mPosScoreWindowX, mPosScoreWindowY, 
+		            mPosScoreWindowX + (mSizeScoreWindowW * mScaleScoreWindow),
+		            mPosScoreWindowY + (mSizeScoreWindowH * mScaleScoreWindow),
+		            mHandleScoreWindow, TRUE);
+
+
 	//SetDrawBlendMode(DX_BLENDMODE_ALPHA, 128);
 	//DrawBoxAA(1920 / 2 + 1920 / 2 / 6 + 50, 100, 1920 - 50, 1080 - 100, GetColor(255, 255, 255), TRUE, 1.0);
 	//SetDrawBlendMode(DX_BLENDMODE_ALPHA, 200);

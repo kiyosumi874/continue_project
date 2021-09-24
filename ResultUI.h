@@ -24,10 +24,30 @@ public:
 	void LoadScore(int _score);
 
 private:
+
 	float mDeltaTime;    // デルタタイム
 	int   mHandle;       // ハンドル格納変数
 	int   mScore;        // スコア
 	int   mHiScore;        // スコア
+
+	// ウィンドウサイズ(UI配置の基準)
+	int mScreenSizeW;
+	int mScreenSizeH;
+
+	// スコアウィンドウ関連
+	int mHandleScoreWindow;
+	int mSizeScoreWindowW;
+	int mSizeScoreWindowH;
+	int mPosScoreWindowX;
+	int mPosScoreWindowY;
+	double mScaleScoreWindow;
+
+
+
+	// アルファ制御用
+	int mAlphaVal;
+	int mAlphaCount;
+
 	int mFontHandle;
 	int mFontHandle2;
 	int mFontHandle2ex;
