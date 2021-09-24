@@ -54,7 +54,7 @@ private:
     class PlayUI* mPlayUI;    // プレイUIクラスへのポインタメンバ変数
     class BGM* mBGM;
     //class BGM* mBGM2;
-    class Audience* mAudience;       //観客へのポインタ
+    class AudienceContoroller* mAudience;       //観客へのポインタ
     //class Audience* mAudience2;       //観客へのポインタ
     class StaticObjectActor* mPool;
     class StaticObjectActor* mSky;
@@ -64,6 +64,9 @@ private:
     class SE* mClickClitical;
     class SE* mKansei;
     class SE* mGayaGaya;
+    class SE* mWaterSound;
+    //------------------------------------------------------9/22
+    class SE* mBadSound;
     class WaterObject* mWater;
     class Effect* mSmalleSplash;
     class Effect* mNormalSplash;
@@ -74,6 +77,7 @@ private:
     bool  mInputReturnFlag;    // Enterキーの連続入力防止
     float mDeltaTime;
     int   mScore;
+    int tmpX, tmpY;
 
     int mStopCount;
 
@@ -88,6 +92,7 @@ private:
     bool mFlag;
     bool mFlag2;
     bool mFlag3;
+    bool mFlag4;
 
     int mGameWaitCount;
 
@@ -95,4 +100,8 @@ private:
 
     int mFontHandle;
     int mHandle;
+    int mHandleLoad;
+    int mGridHandle;
+
+    bool mSplash;
 };

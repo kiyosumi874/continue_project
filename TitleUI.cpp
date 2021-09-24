@@ -1,5 +1,6 @@
 #include "DxLib.h"
 #include "TitleUI.h"
+#include <math.h>
 
 #define RED   GetColor(255, 0, 0)
 #define GREEN GetColor(0, 255, 0)
@@ -14,8 +15,8 @@ TitleUI::TitleUI()
 	, mHandle2(0)
 	, mHandle3(0)
 	, mDeltaTime(0.000001f)
-	, mStartButtonBeginX(480)
-	, mStartButtonBeginY(675+150)
+	, mStartButtonBeginX(480-51)
+	, mStartButtonBeginY(675+150+60)
 	, mStartButtonEndX(1440)
 	, mStartButtonEndY(945+150)
 	, mStartButtonFontSize(150 /** 2 / 3*/)
@@ -23,11 +24,17 @@ TitleUI::TitleUI()
 	, mInputReturnFlag(false)
 	, mTmpTime(0)
 	, mTmpTimeFlag(false)
+	, mSizeX(0)
+	, mSizeY(0)
+	, mSize2X(0)
+	, mSize2Y(0)
+	, mAlphaPal(0)
+	, mAlphaCount(0)
 {
-	//                                     作成するフォント名,     フォントのサイズ,  フォントの太さ,                  フォントのタイプ, 文字セット, 縁の太さ, イタリック体にするかどうか
-	mFontHandle = CreateFontToHandle("data/Fonts/meiryob.tcc", mStartButtonFontSize,              -1, DX_FONTTYPE_ANTIALIASING_EDGE_4X4,         -1,        5,                       TRUE);
-	mHandle = LoadGraph("data/img/keyboard_Enter.png");
-	mHandle2 = LoadGraph("data/img/keyboard_Enter2.png");
+	////                                     作成するフォント名,     フォントのサイズ,  フォントの太さ,                  フォントのタイプ, 文字セット, 縁の太さ, イタリック体にするかどうか
+	//mFontHandle = CreateFontToHandle("data/Fonts/meiryob.tcc", mStartButtonFontSize,              -1, DX_FONTTYPE_ANTIALIASING_EDGE_4X4,         -1,        5,                       TRUE);
+	mHandle = LoadGraph("data/img/TitleUI3.png");
+	mHandle2 = LoadGraph("data/img/TitleUI4.png");
 	mHandle3 = LoadGraph("data/img/VirtualDive.png");
 }
 
@@ -71,6 +78,25 @@ void TitleUI::Update(float _deltaTime)
 		}
 		mTmpTime = 0;
 	}
+	mAlphaPal = sin(mAlphaCount)+4;
+
+	if (CheckHitKey(KEY_INPUT_RIGHT))
+	{
+		mStartButtonBeginX += 15;
+	}
+	if (CheckHitKey(KEY_INPUT_LEFT))
+	{
+		mStartButtonBeginX += -15;
+	}
+	if (CheckHitKey(KEY_INPUT_UP))
+	{
+		mStartButtonBeginY += -15;
+	}
+	if (CheckHitKey(KEY_INPUT_DOWN))
+	{
+		mStartButtonBeginY += 15;
+	}
+	mAlphaCount += 0.07;
 }
 
 /// <summary>
@@ -80,13 +106,15 @@ void TitleUI::Load()
 {
 	mStartButtonFlag = false;
 	mDeltaTime = 0.000001f;
-	mStartButtonBeginX = 480;
-	mStartButtonBeginY = 675+100;
+	mStartButtonBeginX = 710;
+	mStartButtonBeginY = 745;
 	mStartButtonEndX = 1440;
 	mStartButtonEndY = 945+100;
 	mStartButtonFontSize = 200;
 	mStartButtonFlag = false;
 	mInputReturnFlag = false;
+	GetGraphSize(mHandle, &mSizeX, &mSizeY);
+	GetGraphSize(mHandle2, &mSize2X, &mSize2Y);
 }
 
 /// <summary>
@@ -97,57 +125,33 @@ void TitleUI::Draw()
 	//----------------//
 	// スタートボタン //
     //----------------//
-	// 1920*1080 * 2/3
+	//DrawExtendGraph(1920/4+200,1080/4+150, 1920 / 4+533+200, 1080 / 4+351+150, mHandle3, TRUE);
+	DrawExtendGraph(120, 120, 120+533, 120+351, mHandle3, TRUE);
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 51*mAlphaPal);
+	DrawExtendGraph(mStartButtonBeginX, mStartButtonBeginY, mStartButtonBeginX + mSizeX * 2 / 3, mStartButtonBeginY + mSizeY * 2 / 3, mHandle, TRUE);
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 255);
+
 	//if (!mStartButtonFlag)
 	//{
-	//	DrawBox(mStartButtonBeginX*2/3, mStartButtonBeginY * 2 / 3, mStartButtonEndX * 2 / 3, mStartButtonEndY * 2 / 3, GREEN, FALSE);
-	//	//SetFontSize(mStartButtonFontSize);
-	//	//DrawString(mStartButtonBeginX + 45, mStartButtonBeginY + 30, "Enterキー", RED);
-	//	DrawStringToHandle(mStartButtonBeginX * 2 / 3 + 45, mStartButtonBeginY * 2 / 3 + 35, "Enterキー", WHITE, mFontHandle, BLACK);
+	//	if (!mTmpTimeFlag)
+	//	{
+	//		DrawExtendGraph(mStartButtonBeginX, mStartButtonBeginY,mStartButtonBeginX + mSizeX*2/3, mStartButtonBeginY + mSizeY*2/3, mHandle, TRUE);
+	//	}
+	//	else
+	//	{
+	//		DrawExtendGraph(mStartButtonBeginX, mStartButtonBeginY, mStartButtonBeginX + mSize2X*2/3, mStartButtonBeginY + mSize2Y*2/3, mHandle2, TRUE);
+	//	}
+	//	//DrawStringToHandle(mStartButtonBeginX + 45, mStartButtonBeginY + 35, "でスタート！", WHITE, mFontHandle, BLACK);
+
 	//}
 	//else
 	//{
-	//	DrawBox(mStartButtonBeginX * 2 / 3, mStartButtonBeginY * 2 / 3, mStartButtonEndX * 2 / 3, mStartButtonEndY * 2 / 3, RED, FALSE);
-	//	//SetFontSize(mStartButtonFontSize);
-	//	//DrawString(mStartButtonBeginX + 45, mStartButtonBeginY + 30, "Enterキー", GREEN);
-	//	DrawStringToHandle(mStartButtonBeginX * 2 / 3 + 45, mStartButtonBeginY * 2 / 3 + 35, "Enterキー", WHITE, mFontHandle, BLACK);
+	//	DrawExtendGraph(mStartButtonBeginX, mStartButtonBeginY, mStartButtonBeginX + mSize2X*2/3, mStartButtonBeginY + mSize2Y*2/3, mHandle2, TRUE);
+	//	/*DrawStringToHandle(mStartButtonBeginX + 45, mStartButtonBeginY + 35, "でスタート！", WHITE, mFontHandle, BLACK);*/
 	//}
+	clsDx();
+	printfDx("mStartButtonBeginX:%d\n", mStartButtonBeginX);
+	printfDx("mStartButtonBeginY:%d\n", mStartButtonBeginY);
 
-	// 1920*1080
-	//if (!mStartButtonFlag)
-	//{
-	//	DrawBoxAA(mStartButtonBeginX, mStartButtonBeginY, mStartButtonEndX, mStartButtonEndY, GREEN, FALSE);
-	//	//SetFontSize(mStartButtonFontSize);
-	//	//DrawString(mStartButtonBeginX + 45, mStartButtonBeginY + 30, "Enterキー", RED);
-	//	DrawStringToHandle(mStartButtonBeginX + 45, mStartButtonBeginY + 35, "Enterキー", WHITE, mFontHandle, BLACK);
-	//}
-	//else
-	//{
-	//	DrawBoxAA(mStartButtonBeginX, mStartButtonBeginY, mStartButtonEndX, mStartButtonEndY, RED, FALSE);
-	//	//SetFontSize(mStartButtonFontSize);
-	//	//DrawString(mStartButtonBeginX + 45, mStartButtonBeginY + 30, "Enterキー", GREEN);
-	//	DrawStringToHandle(mStartButtonBeginX + 45, mStartButtonBeginY + 35, "Enterキー", WHITE, mFontHandle, BLACK);
-	//}
-
-	//DrawGraph(1920/3, 1080/3, mHandle3, TRUE);
-	DrawExtendGraph(1920/4+200,1080/4+150, 1920 / 4+533+200, 1080 / 4+351+150, mHandle3, TRUE);
-	if (!mStartButtonFlag)
-	{
-		if (!mTmpTimeFlag)
-		{
-			DrawGraph(mStartButtonBeginX + 45 - 96, mStartButtonBeginY + 60, mHandle, TRUE);
-		}
-		else
-		{
-			DrawGraph(mStartButtonBeginX + 45 - 96, mStartButtonBeginY + 60, mHandle2, TRUE);
-		}
-		DrawStringToHandle(mStartButtonBeginX + 45, mStartButtonBeginY + 35, "でスタート！", WHITE, mFontHandle, BLACK);
-
-	}
-	else
-	{
-		DrawGraph(mStartButtonBeginX + 45 - 96, mStartButtonBeginY+60, mHandle2, TRUE);
-		DrawStringToHandle(mStartButtonBeginX + 45, mStartButtonBeginY + 35, "でスタート！", WHITE, mFontHandle, BLACK);
-	}
 }
  

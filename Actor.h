@@ -53,9 +53,10 @@ public:
 
 	void          LoadModel(const TCHAR* _modelFile);
 	void          LoadModelTex(const TCHAR* _modelFile, const TCHAR* _texFile);
+	int GetHandle() { return mMHandle; }    // ˆÊ’u‚ÌƒQƒbƒg
 protected:
 	int    mMHandle;
-	int    mTexHandle;
+	int    mTexHandle[7];
 	bool   mIsDrawable;  // •`‰æ‰Â”\‚©‚Ç‚¤‚©
 	State  mState;
 	VECTOR mPosition;

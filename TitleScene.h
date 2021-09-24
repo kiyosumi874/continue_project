@@ -35,7 +35,7 @@ private:
     class PlayerActor* mPlayer;
     class StaticObjectActor* mSky;
     class StaticObjectActor* mPool;
-    class Audience* mAudience;       //観客へのポインタ
+    class AudienceContoroller* mAudience;       //観客へのポインタ
     //class Audience* mAudience2;       //観客へのポインタ
     class WaterObject* mWater;
 
@@ -58,10 +58,15 @@ private:
 
 
     int mMoveSceneHandle;
+    int mLightHandle;
+    int mLightHandle2;
+    int mLightHandle3;
+    int mLightHandle4;
     int mAlphaPal;
     bool mAlphaPalFlag;
 
     int mFadeSpeed;
+    int mGridHandle;
 
 };
 

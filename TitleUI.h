@@ -25,9 +25,15 @@ public:
 private:
 	float mDeltaTime;    // デルタタイム
 	int   mHandle;       // ハンドル格納変数
+	int mSizeX;
+	int mSizeY;
 	int   mHandle2;       // ハンドル格納変数
+	int mSize2X;
+	int mSize2Y;
 	int   mHandle3;       // ハンドル格納変数
-	
+	double mAlphaPal;
+	double mAlphaCount;
+
 	// スタートボタンの位置を決める変数
 	int mStartButtonBeginX;    // 左上のX
 	int mStartButtonBeginY;    // 左上のY

@@ -25,10 +25,12 @@ private:
     class Camera* mCamera;
     class ResultUI* mResultUI;        // リザルトUIクラスへのポインタメンバ変数
     class PlayerActor* mPlayer;
+    class AudienceContoroller* mAudience;
     class StaticObjectActor* mPodium;
     class StaticObjectActor* mPool;
     class StaticObjectActor* mSky;
     class Effect* mFireWorks;
+    class Effect* mConfetti;     //紙吹雪
     class WaterObject* mWater;
 
     bool  mInputReturnFlag;   // Enterキーの連続入力防止
@@ -47,6 +49,12 @@ private:
     float mCameraTargetPosX;
     float mCameraTargetPosY;
     float mCameraTargetPosZ;
+
+    VECTOR mFireWorksPos;
+    VECTOR mConfettiPos;
+    VECTOR mFirstPlace;
+    VECTOR mSecondPlace;
+    VECTOR mThirdPlace;
 
 };
 

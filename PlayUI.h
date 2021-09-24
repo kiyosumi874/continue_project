@@ -59,6 +59,8 @@ private:
 	bool mClickCriticalFlag;
 	bool mMetoronomeFlag;
 
+	int tmpX, tmpY;
+
 	//------------//
 	//-CircleGame-//
 	//------------//
@@ -81,6 +83,8 @@ private:
 	//-----------//
 	//-GaugeGame-//
 	//-----------//
+	int mGaugeHandle;
+	int mGaugeHandle2;
 	float mGaugeSpeed;
 	float mGaugeOutBeginX;    // ï`âÊÇ∑ÇÈéläpå`ÇÃç∂è„ÇÃX
 	float mGaugeOutBeginY;    // ï`âÊÇ∑ÇÈéläpå`ÇÃç∂è„ÇÃY
@@ -126,4 +130,7 @@ private:
 	//-------------------------------------------------
 	class Effect* mCriticalEffect;
 	class Effect* mUIEffect;
+	//--------------------9/19
+	class Effect* mBadEffect;
+	bool mBadFlag;
 };

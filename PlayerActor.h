@@ -25,6 +25,7 @@ public:
 		STATE_PLAY_GAME2,
 		STATE_PLAY_GAME3,
 		STATE_PLAY_JUMP,
+		STATE_PLAY_JUMP2,
 		STATE_PLAY_FLOAT,
 
 		STATE_RESULT_IDLE,
@@ -51,6 +52,7 @@ private:
 	void PlayGame2Behavior(float _deltaTime);
 	void PlayGame3Behavior(float _deltaTime);
 	void PlayJumpBehavior(float _deltaTime);
+	void PlayJump2Behavior(float _deltaTime);
 	void PlayFloatBehavior(float _deltaTime);
 
 	void ResultIdleBehavior(float _deltaTime);
