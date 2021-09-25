@@ -122,7 +122,7 @@ void TitleUI::Update(float _deltaTime)
 	{
 		mFloatingCounter = 0;
 	}
-	mPosTitleLogoY = 65 + (15 * sin(mFloatingCounter));
+	//mPosTitleLogoY = 65 + (15 * sin(mFloatingCounter));
 
 }
 

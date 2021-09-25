@@ -48,6 +48,7 @@ private:
 	double mScaleTitleLogo;       // 描画時に使用するスケール
 	float mFloatingCounter;         // ロゴ上下に動かす
 
+	// アルファ制御用
 	double mAlphaPal;
 	int mAlphaCount;
 

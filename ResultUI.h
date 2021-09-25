@@ -23,6 +23,9 @@ public:
 
 	void LoadScore(int _score);
 
+	void AlphaCount(float _deltaTime);
+
+
 private:
 
 	float mDeltaTime;    // デルタタイム
@@ -45,7 +48,7 @@ private:
 
 
 	// アルファ制御用
-	int mAlphaVal;
+	int mAlphaPal;
 	int mAlphaCount;
 
 	int mFontHandle;
@@ -56,6 +59,12 @@ private:
 	int mFontHandle4;
 	int mFontHandle4ex;
 	
+	int mHighScorePosX;
+	int mHighScorePosY;
+	int mThisTimeScorePosX;
+	int mThisTimeScorePosY;
+	int mSizeScoreW;
+	int mSizeScoreH;
 	int mHandle0;
 	int mHandle100;
 	int mHandle200;
@@ -64,9 +73,11 @@ private:
 	int mHandle500;
 	int mHandle600;
 
-	int mHandleA;
-	int mHandleB;
-	int mHandleC;
-	int mHandleD;
-	int mHandleE;
+	int mResultPosX;
+	int mResultPosY;
+	int mHandleResultFailed;
+	int mHandleResultDeficient;
+	int mHandleResultGood;
+	int mHandleResultVGood;
+	int mHandleResultExcellent;
 };
