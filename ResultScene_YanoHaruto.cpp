@@ -7,6 +7,7 @@
 #include "StaticObjectActor.h"
 #include "Effect.h"
 #include "WaterObject.h"
+#include "SE.h"
 //            ↓はTitleSceneで定義しているので書かなくていい
 //const char* MOVE_SCENE_IMG = "data/img/MoveScene.png";
 //const float    FIRST_DELTA_TIME = 0.000001f;
@@ -36,8 +37,14 @@ ResultScene_YanoHaruto::ResultScene_YanoHaruto(int _score)
 	, mFireWorks(nullptr)
 	, mPool(nullptr)
 	, mWater(nullptr)
-	//------------------------------------------紙吹雪追加
 	, mConfetti(nullptr)
+	//------------------------------------------9/26
+	, mBadEffect(nullptr)
+	, mBadEffectPos(VGet(0,-200,0))
+	,mBadSound(nullptr)
+	,mFireWorks2(nullptr)
+	,mFireWorksPos(VGet(33,0,-58))
+	,mVictory()
 {
 	mCameraPosX = 8.5f;
 
@@ -62,7 +69,7 @@ ResultScene_YanoHaruto::~ResultScene_YanoHaruto()
 	delete mPlayer;
 	delete mCamera;
 	delete mPodium;
-	//--------------------------------------------------9.20
+	
 	mFireWorks->StopEffect3D();
 	mFireWorks->Delete();
 	delete mFireWorks;
@@ -70,6 +77,13 @@ ResultScene_YanoHaruto::~ResultScene_YanoHaruto()
 	mConfetti->Delete();
 	delete mConfetti;
 
+	//--------------------------------------------------9.26
+	mFireWorks2->StopEffect3D();
+	mFireWorks2->Delete();
+	delete mFireWorks2;
+	mBadEffect->StopEffect3D();
+	mBadEffect->Delete();
+	delete mConfetti;
 	delete mPool;
 	delete mSky;
 	delete mWater;
@@ -242,12 +256,20 @@ void ResultScene_YanoHaruto::Draw()
 	mWater->DrawWater();
 	mPlayer->Draw();
 	mPodium->Draw();
-	//--------------------------------------------------------------9.20
-	if (mFireWorks->GetNowPlaying3D()&&mScore>200)
+	//--------------------------------------------------------------9.26
+	if (mBadEffect->GetNowPlaying2D() && mScore < 201)
 	{
-		mFireWorks->PlayEffekseer(VGet(33.0f,0.0f,-58.0f));
+		mBadEffect->PlayEffekseer2D(mBadEffectPos);
 	}
-	if (mConfetti->GetNowPlaying3D()&&mScore > 400)
+	else if (mFireWorks2->GetNowPlaying3D() && mScore > 200)
+	{
+		mFireWorks2->PlayEffekseer(mFireWorksPos);
+	}
+	else if (mFireWorks->GetNowPlaying3D()&&mScore>300)
+	{
+		mFireWorks->PlayEffekseer(mFireWorksPos);
+	}
+	else if (mConfetti->GetNowPlaying3D()&&mScore > 500)
 	{
 		mConfetti->PlayEffekseer(VGet(30.0f, 10.0f, -54.0f));
 	}
@@ -263,6 +285,10 @@ void ResultScene_YanoHaruto::Draw()
 /// </summary>
 void ResultScene_YanoHaruto::Sound(float _deltaTime)
 {
+	if (mScore < 201)
+	{
+		mBadSound->Play();
+	}
 }
 
 /// <summary>
@@ -276,10 +302,16 @@ void ResultScene_YanoHaruto::Load()
 	mPlayer = new PlayerActor;
 	mPodium = new StaticObjectActor;
 	mPool = new StaticObjectActor;
-	//------------------------------------------------------------------size変更
 	mFireWorks = new Effect("data/effect/hanabi.efk", 1.0f);
 	mSky = new StaticObjectActor;
 	mConfetti = new Effect("data/effect/confetti.efk", 1.0f);
+	//-------------------------------------------------------9.26
+	mFireWorks2 = new Effect("data/effect/Fireworks2.efk", 1.0f);
+	mBadEffect = new Effect("data/effect/BadEffect.efk", 1.0f);
+	mBadSound = new SE();
+	mBadSound->LoadSound("data/sound/Onmtp-Negative02-2.mp3");
+	mVictory = new SE();
+	//mVictory->LoadSound("data/sound/");
 
 	// リザルトUIの初期化
 	mResultUI->Load();

@@ -30,8 +30,17 @@ private:
     class StaticObjectActor* mPool;
     class StaticObjectActor* mSky;
     class Effect* mFireWorks;
-    class Effect* mConfetti;     //†á
+    class Effect* mConfetti;     //†á  
     class WaterObject* mWater;
+    //-----------------------------------9.26
+    class Effect* mFireWorks2;
+    class Effect* mBadEffect;
+    class SE* mVictory;
+    class SE* mBadSound;
+
+    VECTOR mFireWorksPos;
+    VECTOR mBadEffectPos;
+
 
     bool  mInputReturnFlag;   // EnterƒL[‚Ì˜A‘±“ü—Í–h~
     int mScore;

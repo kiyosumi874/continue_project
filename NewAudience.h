@@ -3,6 +3,7 @@
 #include "Actor.h"
 /// <summary>
 /// 9/10–î–ì
+/// 9/26 updateActorXV
 /// </summary>
 class NewAudience :
     public Actor

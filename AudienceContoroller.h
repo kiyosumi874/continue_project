@@ -2,6 +2,7 @@
 /// <summary>
 /// 観客の数や観客同士の距離、ジャンプするタイミングを決めるクラス
 ///　9・11矢野陽大
+///　9.26 LoadAudience更新
 /// </summary>
 #include "DxLib.h"
 #include <iostream>
