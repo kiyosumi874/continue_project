@@ -31,16 +31,24 @@ PlayUI::PlayUI()
 	, mPlayCircleGameFlag(true)
 	// GaugeGame
 	, mGaugeSpeed(0)
-	, mGaugeOutBeginX(920)
+	/*, mGaugeOutBeginX(920)
 	, mGaugeOutBeginY(360)
+	, mGaugeOutEndX(1000)
+	, mGaugeOutEndY(720)*/
+	, mGaugeOutBeginX(650)
+	, mGaugeOutBeginY(255)
 	, mGaugeOutEndX(1000)
 	, mGaugeOutEndY(720)
 	, mGaugeOutColor(GetColor(0, 0, 255))
 	, mGaugeOutFillFlag(false)
-	, mGaugeInBeginX(920)
+	/*, mGaugeInBeginX(920)
 	, mGaugeInBeginY(720)
 	, mGaugeInEndX(1000)
-	, mGaugeInEndY(720)
+	, mGaugeInEndY(720)*/
+	, mGaugeInBeginX(650)
+	, mGaugeInBeginY(615)
+	, mGaugeInEndX(730)
+	, mGaugeInEndY(615)
 	, mGaugeInColor(GetColor(255, 0, 0))
 	, mGaugeInFillFlag(true)
 	, mPlayGaugeGameFlag(true)
@@ -52,9 +60,9 @@ PlayUI::PlayUI()
 	, mPendulumOutColor(GetColor(0, 0, 255))
 	, mPendulumOutFillFlag(false)
 	, mPendulumOutLineThickness(3)
-	, mPendulumInX(960+300)
+	, mPendulumInX(960 + 300)
 	, mPendulumInFx(960)
-	, mPendulumInY(700-300)
+	, mPendulumInY(700 - 300)
 	, mPendulumInFy(400)
 	, mPendulumInAngle(0.0f)
 	, mPendulumInAngleSpeed(0.0f)
@@ -70,6 +78,18 @@ PlayUI::PlayUI()
 	, mUIEffect(nullptr)
 	, mBadEffect(nullptr)
 	, mBadFlag(false)
+	// Ellipticalgame
+	, mEllipticalHandle(0)
+	, mEllipticalX(500)
+	, mEllipticalY(540)
+	, mEllipticalX2(500)
+	, mEllipticalY2(540)
+	, mLongRad(300)
+	, mShortRad(200)
+	, mPlayEllipticalFlag(true)
+	, mEllipticalCount(0)
+	, mEllipticalCount2(180)
+	, mEllipticalFlag(false)
 {
 	tmpX = 565;
 	tmpY = 880;
@@ -99,22 +119,30 @@ PlayUI::~PlayUI()
 /// <param name="_deltaTime">デルタタイム</param>
 void PlayUI::Update(float _deltaTime)
 {
-	/*if (CheckHitKey(KEY_INPUT_RIGHT))
+	if (CheckHitKey(KEY_INPUT_RIGHT))
 	{
-		tmpX += 15;
+		mGaugeOutBeginX += 15;
+		mGaugeInBeginX += 15;
+		mGaugeInEndX += 15;
 	}
 	if (CheckHitKey(KEY_INPUT_LEFT))
 	{
-		tmpX += -15;
+		mGaugeOutBeginX += -15;
+		mGaugeInBeginX += -15;
+		mGaugeInEndX += -15;
 	}
 	if (CheckHitKey(KEY_INPUT_UP))
 	{
-		tmpY += -15;
+		mGaugeOutBeginY += -15;
+		mGaugeInBeginY += -15;
+		mGaugeInEndY += -15;
 	}
 	if (CheckHitKey(KEY_INPUT_DOWN))
 	{
-		tmpY += 15;
-	}*/
+		mGaugeOutBeginY += 15;
+		mGaugeInBeginY += 15;
+		mGaugeInEndY += 15;
+	}
 }
 
 /// <summary>
@@ -128,6 +156,8 @@ void PlayUI::Load()
 	mHandle2 = LoadGraph("data/img/keyboard_Enter2.png");
 	mGaugeHandle = LoadGraph("data/img/PlayUI2-1.png");
 	mGaugeHandle2 = LoadGraph("data/img/PlayUI2-2.png");
+	mEllipticalHandle = LoadGraph("data/img/PlayUI1.png");
+	mEllipticalHandle2 = LoadGraph("data/img/PlayUI1-2.png");
 	//----------------------------------------------------------------------------エフェクト追加
 	mCriticalEffect = new Effect("data/effect/UIEffect2.efk", 50.0f);
 	mUIEffect = new Effect("data/effect/UIEffect1.efk", 50.0f);
@@ -159,6 +189,7 @@ void PlayUI::Draw()
 
 	if (mDrawGameState == DRAW_GAME_STATE::DRAW_GAUGE_GAME)
 	{
+
 		DrawGraph(mGaugeOutBeginX - 150, mGaugeOutBeginY + 50, mGaugeHandle, TRUE);
 		// 内側の四角
 		DrawBoxAA(mGaugeInBeginX - 150+3, mGaugeInBeginY + 50+3, mGaugeInEndX - 139, mGaugeInEndY + 87, mGaugeInColor, mGaugeInFillFlag);
@@ -183,9 +214,34 @@ void PlayUI::Draw()
 		DrawExtendGraph(tmpX, tmpY, tmpX + 1233 * 2 / 3, tmpY + 161 * 2 / 3, mHandle, TRUE);
 		//DrawStringToHandle(480 + 45, 825 + 35, "をタイミングよく押せ", GetColor(255, 255, 255), mFontHandle);
 	}
-	/*clsDx();
-	printfDx("X:%d\n", tmpX);
-	printfDx("Y:%d\n", tmpY);*/
+	if (mDrawGameState == DRAW_GAME_STATE::DRAW_ELLIPTICAL_GAME)
+	{
+		if (mEllipticalFlag)
+		{
+			DrawGraph(mEllipticalX, mEllipticalY, mEllipticalHandle2, TRUE);
+		}
+		else
+		{
+			DrawGraph(mEllipticalX, mEllipticalY, mEllipticalHandle, TRUE);
+			DrawGraph(mEllipticalX2, mEllipticalY2, mEllipticalHandle, TRUE);
+		}
+		
+		DrawExtendGraph(tmpX, tmpY, tmpX + 1233 * 2 / 3, tmpY + 161 * 2 / 3, mHandle, TRUE);
+	}
+	clsDx();
+	/*printfDx("inX:%f\n", mCircleInX);
+	printfDx("inY:%f\n", mCircleInY);
+	printfDx("outX:%f\n", mCircleOutX);
+	printfDx("outY:%f\n", mCircleOutY);*/
+	/*printfDx("eX:%f\n", mEllipticalX2);
+	printfDx("eY:%f\n", mEllipticalY2);*/
+	/*printfDx("X:%f\n", mGaugeOutBeginX);
+	printfDx("X:%f\n", mGaugeInBeginX);
+	printfDx("X:%f\n", mGaugeInEndX);
+	printfDx("Y:%f\n", mGaugeOutBeginY);
+	printfDx("Y:%f\n", mGaugeInBeginY);
+	printfDx("Y:%f\n", mGaugeInEndY);*/
+	printfDx("Y:%f\n", mEllipticalY2);
 	
 }
 
@@ -272,11 +328,11 @@ void PlayUI::GaugeGameBehavior(float _deltaTime)
 	{
 		mGaugeInBeginY = 720.0f;
 	}*/
-	if (mGaugeInBeginY <= 360.0f)
+	if (mGaugeInBeginY <= 255.0f)
 	{
 		flag = true;
 	}
-	if (mGaugeInBeginY >= 760.0f)
+	if (mGaugeInBeginY >= 655.0f)
 	{
 		flag = false;
 	}
@@ -292,21 +348,21 @@ void PlayUI::GaugeGameBehavior(float _deltaTime)
 
 	if (CheckHitKey(KEY_INPUT_RETURN) && mInputReturnFlag)
 	{
-		if (mGaugeInBeginY <= 370.0f)
+		if (mGaugeInBeginY <= 265.0f)
 		{
 			mScore += 200;
-			mGaugeInBeginY = 360.0f;
+			mGaugeInBeginY = 255.0f;
 			mGaugeInColor = GetColor(0, 255, 0);
 			mClickCriticalFlag = true;
 			//------------------------------------------------------------------------クリティカルエフェクト追加
-			mCriticalEffect->PlayEffekseer2D(VGet(mCircleInX-50-60, mCircleInY, 0));
+			mCriticalEffect->PlayEffekseer2D(VGet(mGaugeInBeginX, mGaugeInBeginY, 0));
 		}
-		else if (mGaugeInBeginY <= 560.0f)
+		else if (mGaugeInBeginY <= 455.0f)
 		{
 			mScore += 100;
 			mClickNormalFlag = true;
 			//----------------------------------------------------------------------------エフェクト追加
-			mUIEffect->PlayEffekseer2D(VGet(mCircleInX-50-60, mCircleInY, 0));
+			mUIEffect->PlayEffekseer2D(VGet(mGaugeInBeginX, mGaugeInBeginY, 0));
 		}
 		else
 		{
@@ -405,6 +461,79 @@ void PlayUI::PendulumGameBehavior(float _deltaTime)
 
 		mInputReturnFlag = false;
 		mPlayPendulumGameFlag = false;
+	}
+	//------------------------------------------------------------------------クリアする前ならエフェクト削除
+	else
+	{
+		mCriticalEffect->StopEffect2D();
+		mUIEffect->StopEffect2D();
+		mBadEffect->StopEffect2D();
+	}
+}
+
+
+void PlayUI::EllipticalGameBehavior(float _deltaTime)
+{
+	// Enterキーの連続入力防止
+	if (!CheckHitKey(KEY_INPUT_RETURN))
+	{
+		mInputReturnFlag = true;
+	}
+	float tmpX = 0, tmpY = 0, tmpX2 = 0, tmpY2 = 0;
+	tmpX = mLongRad * cos(-mEllipticalCount * DX_PI_F / 180.0f);
+	tmpY = mShortRad * sin(-mEllipticalCount * DX_PI_F / 180.0f);
+
+	mEllipticalX += tmpX * _deltaTime;
+	mEllipticalY += tmpY * _deltaTime;
+
+	tmpX2 = mLongRad * cos(-mEllipticalCount2 * DX_PI_F / 180.0f);
+	tmpY2 = mShortRad * sin(-mEllipticalCount2* DX_PI_F / 180.0f);
+
+	mEllipticalX2 += tmpX2 * _deltaTime;
+	mEllipticalY2 += tmpY2 * _deltaTime;
+	mEllipticalCount  += _deltaTime * 150;
+	mEllipticalCount2 += _deltaTime * 150;
+
+	if (490.0f <= mEllipticalX2 && mEllipticalX2 <= 510.0f && 530.0f <= mEllipticalY2 && mEllipticalY2 <= 550.0f)
+	{
+		mEllipticalFlag = true;
+	}
+	else
+	{
+		mEllipticalFlag = false;
+	}
+
+	if (CheckHitKey(KEY_INPUT_RETURN) && mInputReturnFlag)
+	{
+		if (490.0f <= mEllipticalX2 && mEllipticalX2 <= 510.0f && 530.0f <= mEllipticalY2 && mEllipticalY2 <= 550.0f)
+		{
+			mEllipticalX = 500.0f;
+			mEllipticalY = 540.0f;
+			mEllipticalX2 = 500.0f;
+			mEllipticalY2 = 540.0f;
+			mScore += 200;
+			mClickCriticalFlag = true;
+			//-------------------------------------------------------------------------クリティカルエフェクト追加
+			mCriticalEffect->PlayEffekseer2D(VGet(mEllipticalX, mEllipticalY, 0));
+		}
+		else if (630.0f >= mEllipticalY2)
+		{
+			mScore += 100;
+			mClickNormalFlag = true;
+			//----------------------------------------------------------------------------エフェクト追加
+			mUIEffect->PlayEffekseer2D(VGet(mEllipticalX, mEllipticalY, 0));
+
+		}
+		else
+		{
+			mScore += 0;
+			mClickNormalFlag = true;
+			//----------------------------------------------------------9/18追加
+			mBadEffect->PlayEffekseer2D(VGet(0, -200, 0));
+		}
+
+		mInputReturnFlag = false;
+		mPlayEllipticalFlag = false;
 	}
 	//------------------------------------------------------------------------クリアする前ならエフェクト削除
 	else

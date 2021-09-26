@@ -15,6 +15,7 @@ enum class DRAW_GAME_STATE : unsigned char
 	DRAW_CIRCLE_GAME,
 	DRAW_GAUGE_GAME,
 	DRAW_PENDULUM_GAME,
+	DRAW_ELLIPTICAL_GAME,
 	DRAW_NULL
 };
 
@@ -34,6 +35,7 @@ public:
 	bool GetPlayCircleGameFlag() { return mPlayCircleGameFlag; }
 	bool GetPlayGaugeGameFlag() { return mPlayGaugeGameFlag; }
 	bool GetPlayPendulumGameFlag() { return mPlayPendulumGameFlag; }
+	bool GetPlayEllipticalGameFlag() { return mPlayEllipticalFlag; }
 
 	void SetDrawGameState(DRAW_GAME_STATE _drawGameState) { mDrawGameState = _drawGameState; }
 
@@ -44,6 +46,7 @@ public:
 	void CircleGameBehavior(float _deltaTime);
 	void GaugeGameBehavior(float _deltaTime);
 	void PendulumGameBehavior(float _deltaTime);
+	void EllipticalGameBehavior(float _deltaTime);
 
 private:
 
@@ -125,6 +128,22 @@ private:
 	int mPendulumInFillFlag;          // TRUE(1の意)で円の中身も塗りつぶし、FALSE(0の意)で輪郭のみ
 	
 	bool mPlayPendulumGameFlag;           // 振り子ゲームをしているかしていないかのFlag
+
+	//------------//
+	//-楕円ゲーム-//
+	//------------//
+	int   mEllipticalHandle;
+	int   mEllipticalHandle2;
+	float mEllipticalX;
+	float mEllipticalY;
+	float mEllipticalX2;
+	float mEllipticalY2;
+	float mLongRad;
+	float mShortRad;
+	float mEllipticalCount;
+	float mEllipticalCount2;
+	bool  mPlayEllipticalFlag;
+	bool  mEllipticalFlag;
 
 	//エフェクト追加　9/6
 	//-------------------------------------------------

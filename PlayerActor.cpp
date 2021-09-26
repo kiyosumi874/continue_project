@@ -189,7 +189,7 @@ void PlayerActor::PlayGame1Behavior(float _deltaTime)
 	{
 		MV1DetachAnim(mMHandle, mAttachIndex);
 		mPlayTime = 0;
-		mAttachIndex = MV1AttachAnim(mMHandle, 9/*Idleのアニメーション番号*/, -1, FALSE);
+		mAttachIndex = MV1AttachAnim(mMHandle, 5/*Idleのアニメーション番号*/, -1, FALSE);
 		mTotalTime = MV1GetAttachAnimTotalTime(mMHandle, mAttachIndex);
 		mPrevState = mNowState;
 	}
@@ -211,7 +211,7 @@ void PlayerActor::PlayGame2Behavior(float _deltaTime)
 	{
 		MV1DetachAnim(mMHandle, mAttachIndex);
 		mPlayTime = 0;
-		mAttachIndex = MV1AttachAnim(mMHandle, 5/*Idleのアニメーション番号*/, -1, FALSE);
+		mAttachIndex = MV1AttachAnim(mMHandle, 9/*Idleのアニメーション番号*/, -1, FALSE);
 		mTotalTime = MV1GetAttachAnimTotalTime(mMHandle, mAttachIndex);
 		mPrevState = mNowState;
 	}
