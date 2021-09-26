@@ -7,6 +7,7 @@
 #include "ResultScene.h"
 #include "EffekseerForDXLib.h"
 
+
 void InitializeEffekseer();
 
 // SetGraphModeのパラメータ
@@ -70,7 +71,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 
 	// タイトルシーンをセット
 	scene->SetScene(new TitleScene);
-	//scene->SetScene(new ResultScene_kiyosumi(500));
+	//scene->SetScene(new ResultScene(600));
 
 
 	int hiScore = 0;

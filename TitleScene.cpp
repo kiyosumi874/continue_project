@@ -10,7 +10,7 @@
 #include "PlayerActor.h"
 #include "Camera.h"
 #include "StaticObjectActor.h"
-#include "Audience.h"
+#include "AudienceContoroller.h"
 #include "WaterObject.h"
 
 const char* MOVE_SCENE_IMG = "data/img/MoveScene.png";
@@ -19,7 +19,7 @@ const char* BGM_HANDLE = "data/sound/サイクリング_3.mp3";
 const char* SOUND_CLICK_HANDLE = "data/sound/click_normal.mp3";
 const VECTOR   TITLE_PLAYER_SCALE = VGet(0.5f, 0.5f, 0.5f);
 const VECTOR   TITLE_PLAYER_ROTATE = VGet(0.0f, /*90.0f * DX_PI_F / 180.0f*/0.0f, 0.0f);
-const VECTOR   TITLE_PLAYER_POS = VGet(0.0f, 31.5f, 0.0f);
+const VECTOR   TITLE_PLAYER_POS = VGet(-2.0f, 31.5f, 0.0f);
 const VECTOR   TITLE_CAMERA_POS = VGet(45.0f, 53.0f, -18.0f);
 const VECTOR   TITLE_POOL_SCALE = VGet(1.0f, 1.0f, 1.0f);
 const VECTOR   TITLE_POOL_ROTATE = VGet(0.0f, /*90.0f * DX_PI_F / 180.0f*/0.0f, 0.0f);
@@ -49,13 +49,12 @@ TitleScene::TitleScene()
 	, mFadeSpeed(IMG_FADE_SPEED)
 	, mCameraType(CAMERA_TYPE::CAMERA_1)
 	, mAudience(nullptr)
-	//, mAudience2(nullptr)
+	, mLightHandle(NULL)
+	, mLightHandle2(NULL)
+	, mLightHandle3(NULL)
+	, mLightHandle4(NULL)
+	, mWater(nullptr)
 {
-	//mMoveCircle.mPosX = 0.0f;
-	//mMoveCircle.mPosY = 31.5f;
-	//mMoveCircle.mPosZ = 0.0f;
-	//mMoveCircle.mAngle = 0.0f;
-	//mMoveCircle.mLength = 25.0f;
 
 }
 
@@ -73,7 +72,10 @@ TitleScene::~TitleScene()
 	delete mSky;
 	delete mWater;
 	delete mAudience;
-	//delete mAudience2;
+	DeleteLightHandle(mLightHandle);
+	DeleteLightHandle(mLightHandle2);
+	DeleteLightHandle(mLightHandle3);
+	DeleteLightHandle(mLightHandle4);
 }
 
 /// <summary>
@@ -93,7 +95,7 @@ SceneBase* TitleScene::Update(float _deltaTime, int& _hiScore)
 	// 水面シェーダーの更新
 	mWater->Update(_deltaTime);
 	mWater->UpdateWaterShader(_deltaTime);     // 水面用シェーダーへ情報をセットする
-	mAudience->Update();
+	mAudience->Update(_deltaTime);
 	//mAudience2->Update();
 	// プレイヤーの更新
 	mPlayer->UpdateActor(_deltaTime);  // 1
@@ -175,58 +177,60 @@ SceneBase* TitleScene::Update(float _deltaTime, int& _hiScore)
 void TitleScene::Draw()
 {
 #ifdef _DEBUG
-	// デバッグモード時のみ実行
-	clsDx();
-	printfDx("CameraPosX:%f\n", mCamera->GetPositionX());
-	printfDx("CameraPosY:%f\n", mCamera->GetPositionY());
-	printfDx("CameraPosZ:%f\n", mCamera->GetPositionZ());
-	printfDx("CameraAimPosX:%f\n", mCamera->GetAimTargetPositionX());
-	printfDx("CameraAimPosY:%f\n", mCamera->GetAimTargetPositionY());
-	printfDx("CameraAimPosZ:%f\n", mCamera->GetAimTargetPositionZ());
-	printfDx("PlayerPosX:%f\n", mPlayer->GetPositionX());
-	printfDx("PlayerPosY:%f\n", mPlayer->GetPositionY());
-	printfDx("PlayerPosZ:%f\n", mPlayer->GetPositionZ());
-	switch (mPlayer->GetPlayerState())
-	{
-	case PlayerActor::PLAYER_STATE::STATE_TITLE_IDLE:
-		printfDx("NowState:TITLE_IDLE\n");
-		break;
-
-	case PlayerActor::PLAYER_STATE::STATE_PLAY_IDLE:
-		printfDx("NowState:PLAY_IDLE\n");
-		break;
-
-	case PlayerActor::PLAYER_STATE::STATE_PLAY_GAME1:
-		printfDx("NowState:PLAY_GAME1\n");
-		break;
-
-	case PlayerActor::PLAYER_STATE::STATE_PLAY_GAME2:
-		printfDx("NowState:PLAY_GAME2\n");
-		break;
-
-	case PlayerActor::PLAYER_STATE::STATE_PLAY_GAME3:
-		printfDx("NowState:PLAY_GAME3\n");
-		break;
-
-	case PlayerActor::PLAYER_STATE::STATE_RESULT_IDLE:
-		printfDx("NowState:RESULT_IDLE\n");
-		break;
-
-	default:
-		break;
-	}
+//	// デバッグモード時のみ実行
+//	clsDx();
+//	printfDx("CameraPosX:%f\n", mCamera->GetPositionX());
+//	printfDx("CameraPosY:%f\n", mCamera->GetPositionY());
+//	printfDx("CameraPosZ:%f\n", mCamera->GetPositionZ());
+//	printfDx("CameraAimPosX:%f\n", mCamera->GetAimTargetPositionX());
+//	printfDx("CameraAimPosY:%f\n", mCamera->GetAimTargetPositionY());
+//	printfDx("CameraAimPosZ:%f\n", mCamera->GetAimTargetPositionZ());
+//	printfDx("PlayerPosX:%f\n", mPlayer->GetPositionX());
+//	printfDx("PlayerPosY:%f\n", mPlayer->GetPositionY());
+//	printfDx("PlayerPosZ:%f\n", mPlayer->GetPositionZ());
+//	switch (mPlayer->GetPlayerState())
+//	{
+//	case PlayerActor::PLAYER_STATE::STATE_TITLE_IDLE:
+//		printfDx("NowState:TITLE_IDLE\n");
+//		break;
+//
+//	case PlayerActor::PLAYER_STATE::STATE_PLAY_IDLE:
+//		printfDx("NowState:PLAY_IDLE\n");
+//		break;
+//
+//	case PlayerActor::PLAYER_STATE::STATE_PLAY_GAME1:
+//		printfDx("NowState:PLAY_GAME1\n");
+//		break;
+//
+//	case PlayerActor::PLAYER_STATE::STATE_PLAY_GAME2:
+//		printfDx("NowState:PLAY_GAME2\n");
+//		break;
+//
+//	case PlayerActor::PLAYER_STATE::STATE_PLAY_GAME3:
+//		printfDx("NowState:PLAY_GAME3\n");
+//		break;
+//
+//	case PlayerActor::PLAYER_STATE::STATE_RESULT_IDLE:
+//		printfDx("NowState:RESULT_IDLE\n");
+//		break;
+//
+//	default:
+//		break;
+//	}
 #endif
 
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 255);
 	mSky->Draw();
 	mPool->Draw();
 	mAudience->Draw();
-	//mAudience2->Draw();
 	// プレイヤーの描画
 	mPlayer->Draw();
 	mWater->DrawWater();
+
+
 	// タイトルUIの描画
 	mTitleUI->Draw();
+	//DrawGraph(0, 0, mGridHandle, TRUE);
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, mAlphaPal);
 	DrawGraph(0, 0, mMoveSceneHandle, FALSE);
 }
@@ -274,8 +278,9 @@ void TitleScene::Load()
 	mPlayer = new PlayerActor;
 	mPool = new StaticObjectActor;
 	mSky = new StaticObjectActor;
-	mAudience = new Audience;
-	//mAudience2 = new Audience;
+	mAudience = new AudienceContoroller;
+	mAudience->LoadAudience();
+	mAudience->SetAudience();
 	// 水面オブジェクト(モデルはペライチの正方形)
 	mWater = new WaterObject;
 	mWater->SetScale(VGet(150.0f, 1.0f, 225.0f));
@@ -284,16 +289,16 @@ void TitleScene::Load()
 	mClickNormal->LoadSound(SOUND_CLICK_HANDLE);
 	mBGM->LoadMusic(BGM_HANDLE);
 	mMoveSceneHandle = LoadGraph(MOVE_SCENE_IMG);
-
-	mPool->LoadModelTex("data/model/pool/Stadium.mv1", "data/model/pool/Pool.png");
+	mGridHandle = LoadGraph("data/img/grid.png");
+	//SetGlobalAmbientLight(GetColorF(255/2, 255/2, 255/2, 0));
+	/*mLightHandle = CreateDirLightHandle(VGet(1.0f, 0.0f, 0.0f));
+	mLightHandle2 = CreateDirLightHandle(VGet(-1.0f, 0.0f, 0.0f));
+	mLightHandle3 = CreateDirLightHandle(VGet(0.0f, 0.0f, 1.0f));
+	mLightHandle4 = CreateDirLightHandle(VGet(0.0f, 0.0f, -1.0f));*/
+	mPool->LoadModelTex("data/model/pool/Stadium.mv1", "data/model/pool/Stadium0.png");
 	mPool->SetScale(TITLE_POOL_SCALE);
 	mPool->SetRotation(TITLE_POOL_ROTATE);
 	mPool->SetPosition(TITLE_POOL_POS);
-
-
-	/*mAudience2->SetStartPosX(-45.0f);
-	mAudience2->SetStartPosX(10.0f);
-	mAudience2->SetStartPosX(30.0f);*/
 
 	mSky->LoadModel("data/model/Skydome_X5/Dome_X501.pmx");
 

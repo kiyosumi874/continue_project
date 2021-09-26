@@ -23,11 +23,34 @@ public:
 
 	void LoadScore(int _score);
 
+	void AlphaCount(float _deltaTime);
+
+
 private:
+
 	float mDeltaTime;    // デルタタイム
 	int   mHandle;       // ハンドル格納変数
 	int   mScore;        // スコア
 	int   mHiScore;        // スコア
+
+	// ウィンドウサイズ(UI配置の基準)
+	int mScreenSizeW;
+	int mScreenSizeH;
+
+	// スコアウィンドウ関連
+	int mHandleScoreWindow;
+	int mSizeScoreWindowW;
+	int mSizeScoreWindowH;
+	int mPosScoreWindowX;
+	int mPosScoreWindowY;
+	double mScaleScoreWindow;
+
+
+
+	// アルファ制御用
+	int mAlphaPal;
+	int mAlphaCount;
+
 	int mFontHandle;
 	int mFontHandle2;
 	int mFontHandle2ex;
@@ -35,4 +58,26 @@ private:
 	int mFontHandle3ex;
 	int mFontHandle4;
 	int mFontHandle4ex;
+	
+	int mHighScorePosX;
+	int mHighScorePosY;
+	int mThisTimeScorePosX;
+	int mThisTimeScorePosY;
+	int mSizeScoreW;
+	int mSizeScoreH;
+	int mHandle0;
+	int mHandle100;
+	int mHandle200;
+	int mHandle300;
+	int mHandle400;
+	int mHandle500;
+	int mHandle600;
+
+	int mResultPosX;
+	int mResultPosY;
+	int mHandleResultFailed;
+	int mHandleResultDeficient;
+	int mHandleResultGood;
+	int mHandleResultVGood;
+	int mHandleResultExcellent;
 };

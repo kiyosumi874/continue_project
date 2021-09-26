@@ -6,7 +6,6 @@
 /// </summary>
 Actor::Actor()
     : mMHandle(-1)
-    , mTexHandle(-1)
     , mIsDrawable(true)
     , mState(State::Active)
     , mPosition(VGet(0.0f, 0.0f, 0.0f))
@@ -14,6 +13,10 @@ Actor::Actor()
     , mScale(VGet(1.0f, 1.0f, 1.0f))
     , mRecomputeWorldTransform(true)
 {
+    for (int i = 0; i < 7; i++)
+    {
+        mTexHandle[i] = -1;
+    }
 }
 /// <summary>
 /// モデルデータを指定できるコンストラクタ
@@ -87,6 +90,15 @@ void Actor::LoadModel(const TCHAR* _modelFile)
 void Actor::LoadModelTex(const TCHAR* _modelFile, const TCHAR* _texFile)
 {
     mMHandle = MV1LoadModel(_modelFile);
-    mTexHandle = LoadGraph(_texFile);
-    MV1SetTextureGraphHandle(mMHandle, 0, mTexHandle, TRUE);
+    mTexHandle[4] = LoadGraph(_texFile); // 終わり
+    mTexHandle[3] = LoadGraph("data/model/pool/Stadium1.png");
+    mTexHandle[1] = LoadGraph("data/model/pool/Stadium2.png");
+    mTexHandle[2] = LoadGraph("data/model/pool/Stadium3.png");
+    mTexHandle[6] = LoadGraph("data/model/pool/Stadium4.png");
+    mTexHandle[0] = LoadGraph("data/model/pool/Stadium5.png");
+    mTexHandle[5] = LoadGraph("data/model/pool/Stadium6.png");
+    for (int i = 0; i < 7; i++)
+    {
+        MV1SetTextureGraphHandle(mMHandle, i, mTexHandle[i], TRUE);
+    }
 }

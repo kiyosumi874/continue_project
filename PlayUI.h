@@ -15,6 +15,7 @@ enum class DRAW_GAME_STATE : unsigned char
 	DRAW_CIRCLE_GAME,
 	DRAW_GAUGE_GAME,
 	DRAW_PENDULUM_GAME,
+	DRAW_ELLIPTICAL_GAME,
 	DRAW_NULL
 };
 
@@ -34,6 +35,7 @@ public:
 	bool GetPlayCircleGameFlag() { return mPlayCircleGameFlag; }
 	bool GetPlayGaugeGameFlag() { return mPlayGaugeGameFlag; }
 	bool GetPlayPendulumGameFlag() { return mPlayPendulumGameFlag; }
+	bool GetPlayEllipticalGameFlag() { return mPlayEllipticalFlag; }
 
 	void SetDrawGameState(DRAW_GAME_STATE _drawGameState) { mDrawGameState = _drawGameState; }
 
@@ -44,6 +46,7 @@ public:
 	void CircleGameBehavior(float _deltaTime);
 	void GaugeGameBehavior(float _deltaTime);
 	void PendulumGameBehavior(float _deltaTime);
+	void EllipticalGameBehavior(float _deltaTime);
 
 private:
 
@@ -58,6 +61,8 @@ private:
 	bool mClickNormalFlag;
 	bool mClickCriticalFlag;
 	bool mMetoronomeFlag;
+
+	int tmpX, tmpY;
 
 	//------------//
 	//-CircleGame-//
@@ -81,6 +86,8 @@ private:
 	//-----------//
 	//-GaugeGame-//
 	//-----------//
+	int mGaugeHandle;
+	int mGaugeHandle2;
 	float mGaugeSpeed;
 	float mGaugeOutBeginX;    // ï`âÊÇ∑ÇÈéläpå`ÇÃç∂è„ÇÃX
 	float mGaugeOutBeginY;    // ï`âÊÇ∑ÇÈéläpå`ÇÃç∂è„ÇÃY
@@ -122,8 +129,27 @@ private:
 	
 	bool mPlayPendulumGameFlag;           // êUÇËéqÉQÅ[ÉÄÇÇµÇƒÇ¢ÇÈÇ©ÇµÇƒÇ¢Ç»Ç¢Ç©ÇÃFlag
 
+	//------------//
+	//-ë»â~ÉQÅ[ÉÄ-//
+	//------------//
+	int   mEllipticalHandle;
+	int   mEllipticalHandle2;
+	float mEllipticalX;
+	float mEllipticalY;
+	float mEllipticalX2;
+	float mEllipticalY2;
+	float mLongRad;
+	float mShortRad;
+	float mEllipticalCount;
+	float mEllipticalCount2;
+	bool  mPlayEllipticalFlag;
+	bool  mEllipticalFlag;
+
 	//ÉGÉtÉFÉNÉgí«â¡Å@9/6
 	//-------------------------------------------------
 	class Effect* mCriticalEffect;
 	class Effect* mUIEffect;
+	//--------------------9/19
+	class Effect* mBadEffect;
+	bool mBadFlag;
 };

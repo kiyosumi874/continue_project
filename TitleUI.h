@@ -20,14 +20,42 @@ public:
 	void Load()                  override;    // ロード
 	void Draw()                  override;    // 描画
 
+	void AlphaCount(float _deltaTime);
+
 	// スタートボタンのフラグのゲッター
 	const bool& GetStartButtonFlag() const { return mStartButtonFlag; }
 private:
 	float mDeltaTime;    // デルタタイム
-	int   mHandle;       // ハンドル格納変数
+
+	// "Enterキーを押してください"UI用変数
+	int   mHandlePressEnter;
+	int mPosPressEnterX;
+	int mPosPressEnterY;
+	int mSizePressEnterW;
+	int mSizePressEnterH;
+	double mScalePressEnter;
+
 	int   mHandle2;       // ハンドル格納変数
-	int   mHandle3;       // ハンドル格納変数
-	
+	int mSize2X;
+	int mSize2Y;
+
+	// タイトルロゴUI用変数
+	int   mHandleTitleLogo;
+	int mPosTitleLogoX;           // 描画の始点となるX座標
+	int mPosTitleLogoY;           // 描画の始点となるY座標
+	int mSizeTitleLogoW;          // タイトルロゴ画像の横サイズ
+	int mSizeTitleLogoH;          // タイトルロゴ画像の縦サイズ
+	double mScaleTitleLogo;       // 描画時に使用するスケール
+	float mFloatingCounter;         // ロゴ上下に動かす
+
+	// アルファ制御用
+	double mAlphaPal;
+	int mAlphaCount;
+
+	// スクリーンサイズ(ウィンドウの縦と横)
+	int mScreenSizeW;
+	int mScreenSizeH;
+
 	// スタートボタンの位置を決める変数
 	int mStartButtonBeginX;    // 左上のX
 	int mStartButtonBeginY;    // 左上のY

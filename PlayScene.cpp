@@ -4,7 +4,7 @@
 #include "PlayUI.h"
 #include "Camera.h"
 #include "BGM.h"
-#include "Audience.h"
+#include "AudienceContoroller.h"
 #include "StaticObjectActor.h"
 #include "PlayerActor.h"
 #include "SE.h"
@@ -14,7 +14,7 @@
 const VECTOR   PLAY_CAMERA_POS = VGet(45.0f, 53.0f, -18.0f);
 const VECTOR   PLAY_PLAYER_SCALE = VGet(0.5f, 0.5f, 0.5f);
 const VECTOR   PLAY_PLAYER_ROTATE = VGet(0.0f, /*90.0f * DX_PI_F / 180.0f*/0.0f, 0.0f);
-const VECTOR   PLAY_PLAYER_POS = VGet(0.0f, 32.0f, 0.0f);
+const VECTOR   PLAY_PLAYER_POS = VGet(-2.0f, 32.0f, 0.0f);
 const VECTOR   PLAY_POOL_SCALE = VGet(1.0f, 1.0f, 1.0f);
 const VECTOR   PLAY_POOL_ROTATE = VGet(0.0f, /*90.0f * DX_PI_F / 180.0f*/0.0f, 0.0f);
 const VECTOR   PLAY_POOL_POS = VGet(0.0f, 0.0f, 0.0f);
@@ -50,8 +50,10 @@ PlayScene::PlayScene()
 	, mFlag3(false)
 	, mDeltaTime(0)
 	, mHandle(0)
+	, mWaterSound(0)
 {
-
+	tmpX = 1435;
+	tmpY = 970;
 }
 
 PlayScene::PlayScene(float _deltaTime)
@@ -80,8 +82,12 @@ PlayScene::PlayScene(float _deltaTime)
 	, mFlag(false)
 	, mFlag2(false)
 	, mFlag3(false)
+	, mFlag4(false)
 	, mDeltaTime(_deltaTime)
+	, mSplash(true)
 {
+	tmpX = 1435;
+	tmpY = 970;
 }
 
 /// <summary>
@@ -116,6 +122,7 @@ PlayScene::~PlayScene()
 	mFeather->StopEffect3D();
 	mFeather->Delete();
 	delete mFeather;
+	delete mWaterSound;
 }
 
 /// <summary>
@@ -165,12 +172,11 @@ SceneBase* PlayScene::Update(float _deltaTime, int& _hiScore)
 	mWater->Update(_deltaTime);
 	mWater->UpdateWaterShader(_deltaTime);     // 水面用シェーダーへ情報をセットする
 	//観客の更新
-	mAudience->Update();
-	//mAudience2->Update();
-
+	mAudience->Update(_deltaTime);
 	// プレイヤーの更新
 	mPlayer->UpdateActor(_deltaTime);
 	mPlayer->Update(_deltaTime);
+	mPlayUI->Update(_deltaTime);
 
 	// カメラの更新
 
@@ -179,6 +185,72 @@ SceneBase* PlayScene::Update(float _deltaTime, int& _hiScore)
 
 	mScore = mPlayUI->GetScore();
 
+	/*if (CheckHitKey(KEY_INPUT_T))
+	{
+		mCamera->SetTarget(VAdd(mCamera->GetFutureTarget(), VGet(1.0f, 0.0f, 0.0f)));
+		mCamera->SetFutureTarget(VAdd(mCamera->GetFutureTarget(), VGet(1.0f, 0.0f, 0.0f)));
+	}
+	if (CheckHitKey(KEY_INPUT_Y))
+	{
+		mCamera->SetTarget(VAdd(mCamera->GetFutureTarget(), VGet(0.0f, 1.0f, 0.0f)));
+		mCamera->SetFutureTarget(VAdd(mCamera->GetFutureTarget(), VGet(0.0f, 1.0f, 0.0f)));
+	}
+	if (CheckHitKey(KEY_INPUT_U))
+	{
+		mCamera->SetTarget(VAdd(mCamera->GetFutureTarget(), VGet(0.0f, 0.0f, 1.0f)));
+		mCamera->SetFutureTarget(VAdd(mCamera->GetFutureTarget(), VGet(0.0f, 0.0f, 1.0f)));
+	}
+	if (CheckHitKey(KEY_INPUT_G))
+	{
+		mCamera->SetTarget(VAdd(mCamera->GetFutureTarget(), VGet(-1.0f, 0.0f, 0.0f)));
+		mCamera->SetFutureTarget(VAdd(mCamera->GetFutureTarget(), VGet(-1.0f, 0.0f, 0.0f)));
+	}
+	if (CheckHitKey(KEY_INPUT_H))
+	{
+		mCamera->SetTarget(VAdd(mCamera->GetFutureTarget(), VGet(0.0f, -1.0f, 0.0f)));
+		mCamera->SetFutureTarget(VAdd(mCamera->GetFutureTarget(), VGet(0.0f, -1.0f, 0.0f)));
+	}
+	if (CheckHitKey(KEY_INPUT_J))
+	{
+		mCamera->SetTarget(VAdd(mCamera->GetFutureTarget(), VGet(0.0f, 0.0f, -1.0f)));
+		mCamera->SetFutureTarget(VAdd(mCamera->GetFutureTarget(), VGet(0.0f, 0.0f, -1.0f)));
+	}
+	
+	if (CheckHitKey(KEY_INPUT_Q))
+	{
+		mCamera->SetPos(VAdd(mCamera->GetFuturePos(), VGet(1.0f, 0.0f, 0.0f)));
+		mCamera->SetFuturePos(VAdd(mCamera->GetFuturePos(), VGet(1.0f, 0.0f, 0.0f)));
+	}
+	if (CheckHitKey(KEY_INPUT_W))
+	{
+		mCamera->SetPos(VAdd(mCamera->GetFuturePos(), VGet(0.0f, 1.0f, 0.0f)));
+		mCamera->SetFuturePos(VAdd(mCamera->GetFuturePos(), VGet(0.0f, 1.0f, 0.0f)));
+
+	}
+	if (CheckHitKey(KEY_INPUT_E))
+	{
+		mCamera->SetPos(VAdd(mCamera->GetFuturePos(), VGet(0.0f, 0.0f, 1.0f)));
+		mCamera->SetFuturePos(VAdd(mCamera->GetFuturePos(), VGet(0.0f, 0.0f, 1.0f)));
+
+	}
+	if (CheckHitKey(KEY_INPUT_A))
+	{
+		mCamera->SetPos(VAdd(mCamera->GetFuturePos(), VGet(-1.0f, 0.0f, 0.0f)));
+		mCamera->SetFuturePos(VAdd(mCamera->GetFuturePos(), VGet(-1.0f, 0.0f, 0.0f)));
+
+	}
+	if (CheckHitKey(KEY_INPUT_S))
+	{
+		mCamera->SetPos(VAdd(mCamera->GetFuturePos(), VGet(0.0f, -1.0f, 0.0f)));
+		mCamera->SetFuturePos(VAdd(mCamera->GetFuturePos(), VGet(0.0f, -1.0f, 0.0f)));
+
+	}
+	if (CheckHitKey(KEY_INPUT_D))
+	{
+		mCamera->SetPos(VAdd(mCamera->GetFuturePos(), VGet(0.0f, 0.0f, -1.0f)));
+		mCamera->SetFuturePos(VAdd(mCamera->GetFuturePos(), VGet(0.0f, 0.0f, -1.0f)));
+
+	}*/
 
 	// シーン遷移条件
 	if (mAlphaPal >= 255)
@@ -205,14 +277,14 @@ void PlayScene::Draw()
 	printfDx("CameraAimPosX:%f\n", mCamera->GetAimTargetPositionX());
 	printfDx("CameraAimPosY:%f\n", mCamera->GetAimTargetPositionY());
 	printfDx("CameraAimPosZ:%f\n", mCamera->GetAimTargetPositionZ());
-	printfDx("PlayerPosX:%f\n", mPlayer->GetPositionX());
+	/*printfDx("PlayerPosX:%f\n", mPlayer->GetPositionX());
 	printfDx("PlayerPosY:%f\n", mPlayer->GetPositionY());
 	printfDx("PlayerPosZ:%f\n", mPlayer->GetPositionZ());
-	printfDx("PlayTime:%f\n", mPlayer->GetPlayTime());
+	printfDx("PlayTime:%f\n", mPlayer->GetPlayTime());*/
 	printfDx("FuturePosX:%f\n", mCamera->GetFuturePos().x);
 	printfDx("FuturePosY:%f\n", mCamera->GetFuturePos().y);
 	printfDx("FuturePosZ:%f\n", mCamera->GetFuturePos().z);
-	switch (mPlayer->GetPlayerState())
+	/*switch (mPlayer->GetPlayerState())
 	{
 	case PlayerActor::PLAYER_STATE::STATE_TITLE_IDLE:
 		printfDx("NowState:TITLE_IDLE\n");
@@ -240,7 +312,9 @@ void PlayScene::Draw()
 
 	default:
 		break;
-	}
+	}*/
+	printfDx("X:%d\n", tmpX);
+	printfDx("Y:%d\n", tmpY);
 #endif
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 255);
 	mSky->Draw();
@@ -257,11 +331,11 @@ void PlayScene::Draw()
 	{
 		if (mFeather->GetNowPlaying3D())
 		{
-			mFeather->PlayEffekseer(mPlayer->GetPosition());
+			mFeather->PlayEffekseer(VAdd(mPlayer->GetPosition(), VGet(-10,0,0)));
 		}
 	}
 	//水面に飛び込んだら
-	if (10 > mPlayer->GetPositionY())
+	if (0 > mPlayer->GetPositionY()&&mSplash)
 	{
 		//500点以上なら
 		if (mScore >= 500)
@@ -269,6 +343,7 @@ void PlayScene::Draw()
 			if (mSmalleSplash->GetNowPlaying3D())
 			{
 				mSmalleSplash->PlayEffekseer(VGet(mPlayer->GetPositionX(), mPlayer->GetPositionY(), mPlayer->GetPositionZ()));
+				mSmalleSplash->SetPlayingEffectRotation(VGet(0.0f, 90.0f, 0.0f));
 			}
 		}
 		//200点以上なら
@@ -277,6 +352,7 @@ void PlayScene::Draw()
 			if (mNormalSplash->GetNowPlaying3D())
 			{
 				mNormalSplash->PlayEffekseer(VGet(mPlayer->GetPositionX(), mPlayer->GetPositionY(), mPlayer->GetPositionZ()));
+				mNormalSplash->SetPlayingEffectRotation(VGet(0.0f, 90.0f, 0.0f));
 			}
 		}
 		//200以下なら
@@ -285,14 +361,18 @@ void PlayScene::Draw()
 			if (mBigSplash->GetNowPlaying3D())
 			{
 				mBigSplash->PlayEffekseer(VGet(mPlayer->GetPositionX(), mPlayer->GetPositionY(), mPlayer->GetPositionZ()));
+				mBigSplash->SetPlayingEffectRotation(VGet(0.0f, 90.0f, 0.0f));
 			}
 		}
+		mSplash = false;
 	}
 	if (mGameMode == GAME_MODE_STATE::CAMERA_MOVE)
 	{
-		DrawGraph(1920 * 2 / 3 - 20, 1080 - 150, mHandle, TRUE);
-		DrawStringToHandle(1920 * 2 / 3 + 60, 1080 - 150, "でスキップ", GetColor(255, 255, 255), mFontHandle);
+		
+		DrawExtendGraph(tmpX, tmpY, tmpX + 693 * 2 / 3, tmpY + 161 * 2 / 3, mHandle, TRUE);
+		//DrawStringToHandle(1920 * 2 / 3 + 60, 1080 - 150, "でスキップ", GetColor(255, 255, 255), mFontHandle);
 	}
+	//DrawGraph(0, 0, mGridHandle, TRUE);
 
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, mAlphaPal);
 	DrawGraph(0, 0, mMoveSceneHandle, FALSE);
@@ -307,16 +387,16 @@ void PlayScene::Sound(float _deltaTime)
 	{
 		mBGM->FadeOutMusic(500, _deltaTime);
 	}
-	if (mGameMode == GAME_MODE_STATE::CIRCLE_GAME)
+	if (mGameMode == GAME_MODE_STATE::GAUGE_GAME)
 	{
 		mBGM->FadeInMusic(500, _deltaTime);
 	}
-	if (!mBGMFlag && mGameMode == GAME_MODE_STATE::CIRCLE_GAME)
+	if (!mBGMFlag && mGameMode == GAME_MODE_STATE::GAUGE_GAME)
 	{
 		mBGM->Play();
 		mBGMFlag = true;
 	}
-	if (mGameMode == GAME_MODE_STATE::CIRCLE_GAME)
+	if (mGameMode == GAME_MODE_STATE::GAUGE_GAME)
 	{
 		mGayaGaya->Stop();
 		//mBGM2->FadeOutMusic(500, _deltaTime);
@@ -341,19 +421,21 @@ void PlayScene::Load()
 {
 	int tmp = GetNowCount();
 	short tmpCount = 1;
-	mFontHandle = CreateFontToHandle("data/Fonts/meiryob.tcc", 100, -1, DX_FONTTYPE_ANTIALIASING_EDGE_4X4, -1, 5, TRUE);
-	DrawStringToHandle(1920 / 3, 1080 / 2, "NowLoading", GetColor(255, 255, 255), mFontHandle);
+	mHandleLoad = LoadGraph("data/img/LoadUI.png");
+	mFontHandle = CreateFontToHandle("data/Fonts/meiryob.tcc", 70, -1, DX_FONTTYPE_ANTIALIASING_EDGE_4X4, -1, 5, TRUE);
+	DrawGraph(1920 / 5-50, 1080 / 5-50, mHandleLoad, TRUE);
+	DrawStringToHandle(1920 * 2 / 3 + 50, 1080 - 80, "NowLoading", GetColor(255, 255, 255), mFontHandle);
 	ScreenFlip();
 	mCamera = new Camera;
 	LoadEX(tmp, tmpCount, mFontHandle);
-
+	mGridHandle = LoadGraph("data/img/grid.png");
 	// 水面オブジェクト(モデルはペライチの正方形)
 	mWater = new WaterObject;
 	mWater->SetScale(VGet(150.0f, 1.0f, 225.0f));
 	mWater->SetPosition(VGet(0.0f, -5.25f, -55.0f));
 
 	mPlayUI = new PlayUI;
-	mHandle = LoadGraph("data/img/keyboard_Enter.png");
+	mHandle = LoadGraph("data/img/skkip.png");
 	LoadEX(tmp, tmpCount, mFontHandle);
 	mBGM = new BGM;
 	LoadEX(tmp, tmpCount, mFontHandle);
@@ -366,7 +448,9 @@ void PlayScene::Load()
 	mSky = new StaticObjectActor;
 
 	LoadEX(tmp, tmpCount, mFontHandle);
-	mAudience = new Audience;
+	mAudience = new AudienceContoroller;
+	mAudience->LoadAudience();
+	mAudience->SetAudience();
 	//mAudience2 = new Audience;
 	LoadEX(tmp, tmpCount, mFontHandle);
 	mPlayer = new PlayerActor;
@@ -380,7 +464,7 @@ void PlayScene::Load()
 	mClickClitical = new SE;
 	LoadEX(tmp, tmpCount, mFontHandle);
 	mKansei = new SE;
-
+	mWaterSound = new SE;
 
 	LoadEX(tmp, tmpCount, mFontHandle);
 	mPlayer->SetPlayerState(PlayerActor::PLAYER_STATE::STATE_PLAY_IDLE);
@@ -411,7 +495,7 @@ void PlayScene::Load()
 	mCamera->SetFutureTarget(mPlayer->GetPosition());
 
 	LoadEX(tmp, tmpCount, mFontHandle);
-	mPool->LoadModelTex("data/model/pool/Stadium.mv1", "data/model/pool/Pool.png");
+	mPool->LoadModelTex("data/model/pool/Stadium.mv1", "data/model/pool/Stadium0.png");
 	LoadEX(tmp, tmpCount, mFontHandle);
 	mPool->SetScale(PLAY_POOL_SCALE);
 	LoadEX(tmp, tmpCount, mFontHandle);
@@ -442,6 +526,7 @@ void PlayScene::Load()
 	mBGM->LoadMusic("data/sound/迅雷のユーロビート.mp3");
 	LoadEX(tmp, tmpCount, mFontHandle);
 	mGayaGaya->LoadSound("data/sound/gaya2.mp3");
+	mWaterSound->LoadSound("data/sound/water.mp3");
 	//mBGM2->LoadMusic("data/sound/gaya2.mp3");
 }
 
@@ -449,8 +534,7 @@ void PlayScene::GameModeFadeInBehavior(float _deltaTime)
 {
 	/*mCamera->SetPos(VGet(30.0f, 50.0f, -10.0f));
 	mCamera->SetTarget(VAdd(mPlayer->GetPosition(), VGet(0.0f, 5.0f, 0.0f)));*/
-	/*mCamera->SetPos(VAdd(mPlayer->GetPosition(), VGet(0.0f, 10.0f, -10.0f)));
-	mCamera->SetTarget(VAdd(mPlayer->GetPosition(), VGet(0.0f, 10.0f, 0.0f)));*/
+	
 	mAlphaPal -= mFadeSpeed;
 	if (mAlphaPal <= 0)
 	{
@@ -468,12 +552,12 @@ void PlayScene::GameModeCameraMoveBehavior(float _deltaTime)
 	{
 		if (CheckHitKey(KEY_INPUT_RETURN))
 		{
-			mGameMode = GAME_MODE_STATE::CIRCLE_GAME;
+			mGameMode = GAME_MODE_STATE::GAUGE_GAME;
 			mClickNormal->Play();
 		}
 		if (!mGayaGaya->IsPlaying())
 		{
-			mGameMode = GAME_MODE_STATE::CIRCLE_GAME;
+			mGameMode = GAME_MODE_STATE::GAUGE_GAME;
 		}
 	}
 }
@@ -490,7 +574,7 @@ void PlayScene::GameModeWaitBehavior(float _deltaTime)
 		tmpPos.z -= 3 * _deltaTime;
 		if (tmpPos.z <= -8)
 		{
-			mGameMode = GAME_MODE_STATE::GAUGE_GAME;
+			mGameMode = GAME_MODE_STATE::CIRCLE_GAME;
 			return;
 		}
 		mPlayUI->SetDrawGameState(DRAW_GAME_STATE::DRAW_NULL);
@@ -520,32 +604,69 @@ void PlayScene::GameModeWaitBehavior(float _deltaTime)
 		mCamera->SetSpeed(5.0f);
 		mCamera->SetPos(VAdd(mPlayer->GetPosition(), VGet(0.0f, 10.0f, -20.0f)));
 		mCamera->SetTarget(VAdd(mPlayer->GetPosition(), VGet(0.0f, 5.0f, 0.0f)));
-		if (mPlayer->GetPlayTime() >= 45)
+		if (mPlayUI->GetScore() > 200)
 		{
-			VECTOR tmpPos = mPlayer->GetPosition();
-			tmpPos.z -= 5 * _deltaTime;
-			tmpPos.y += mJumpPower * _deltaTime;
-			if (tmpPos.y <= 0.0f)
+			if (mPlayer->GetPlayTime() >= 45)
 			{
-				mGameMode = GAME_MODE_STATE::GAYA;
+				VECTOR tmpPos = mPlayer->GetPosition();
+				tmpPos.z -= 5 * _deltaTime;
+				tmpPos.y += mJumpPower * _deltaTime;
+				if (tmpPos.y <= 0.0f)
+				{
+					mGameMode = GAME_MODE_STATE::GAYA;
+				}
+				mPlayUI->SetDrawGameState(DRAW_GAME_STATE::DRAW_NULL);
+				mPlayer->SetPlayerState(PlayerActor::PLAYER_STATE::STATE_PLAY_JUMP);
+				mJumpPower -= 12.0 * _deltaTime;
+				// 更新分の座標のSet
+				mPlayer->SetPosition(tmpPos);
 			}
-			mPlayUI->SetDrawGameState(DRAW_GAME_STATE::DRAW_NULL);
-			mPlayer->SetPlayerState(PlayerActor::PLAYER_STATE::STATE_PLAY_JUMP);
-			mJumpPower -= 12.0 * _deltaTime;
-			// 更新分の座標のSet
-			mPlayer->SetPosition(tmpPos);
 		}
+		else
+		{
+			if (mPlayer->GetPlayTime() >= 45)
+			{
+				VECTOR tmpPos = mPlayer->GetPosition();
+				tmpPos.z -= 5 * _deltaTime;
+				tmpPos.y += mJumpPower * _deltaTime;
+				if (tmpPos.y <= 0.0f)
+				{
+					mGameMode = GAME_MODE_STATE::GAYA;
+				}
+				mPlayUI->SetDrawGameState(DRAW_GAME_STATE::DRAW_NULL);
+				mPlayer->SetPlayerState(PlayerActor::PLAYER_STATE::STATE_PLAY_JUMP2);
+				mJumpPower -= 12.0 * _deltaTime;
+				// 更新分の座標のSet
+				mPlayer->SetPosition(tmpPos);
+			}
+		}
+		
 	}
 }
 
 void PlayScene::GameModeCircleGameBehavior(float _deltaTime)
 {
-	mCamera->SetPos(VGet(10.0f, 45.0f, -10.0f - 10.0f));
-	mCamera->SetTarget(VAdd(mPlayer->GetPosition(), VGet(0.0f, 10.0f, -10.0f)));
+	/*mCamera->SetPos(VGet(10.0f, 45.0f, -10.0f - 10.0f));
+	mCamera->SetTarget(VAdd(mPlayer->GetPosition(), VGet(0.0f, 10.0f, -10.0f)));*/
+
+	/*mCamera->SetPos(VGet(-1.0f, 42.0f, -7.0f));
+	mCamera->SetTarget(VGet(-10.0f, 39.0f, 7.0f));
 	mPlayUI->CircleGameBehavior(_deltaTime);
 	mPlayUI->SetDrawGameState(DRAW_GAME_STATE::DRAW_CIRCLE_GAME);
 	mPlayer->SetPlayerState(PlayerActor::PLAYER_STATE::STATE_PLAY_GAME1);
 	if (!mPlayUI->GetPlayCircleGameFlag())
+	{
+		mGameMode = GAME_MODE_STATE::WAIT;
+		mGameWaitCount += 1;
+	}*/
+
+	
+	mCamera->SetPos(VGet(-1.0f, 42.0f, -7.0f - 8.0f));
+	mCamera->SetTarget(VGet(-10.0f, 39.0f, 7.0f - 8.0f));
+	mPlayUI->EllipticalGameBehavior(_deltaTime);
+	mPlayUI->SetDrawGameState(DRAW_GAME_STATE::DRAW_ELLIPTICAL_GAME);
+	mPlayer->SetPlayerState(PlayerActor::PLAYER_STATE::STATE_PLAY_GAME1);
+	if (!mPlayUI->GetPlayEllipticalGameFlag())
 	{
 		mGameMode = GAME_MODE_STATE::WAIT;
 		mGameWaitCount += 1;
@@ -554,8 +675,10 @@ void PlayScene::GameModeCircleGameBehavior(float _deltaTime)
 
 void PlayScene::GameModeGaugeGameBehavior(float _deltaTime)
 {
-	mCamera->SetPos(VGet(10.0f, 45.0f, -18.0f - 10.0f));
-	mCamera->SetTarget(VAdd(mPlayer->GetPosition(), VGet(0.0f, 10.0f, -10.0f)));
+	/*mCamera->SetPos(VGet(10.0f, 45.0f, -18.0f - 10.0f));
+	mCamera->SetTarget(VAdd(mPlayer->GetPosition(), VGet(0.0f, 10.0f, -10.0f)));*/
+	mCamera->SetPos(VGet(-1.0f, 42.0f, -7.0f));
+	mCamera->SetTarget(VGet(-10.0f, 39.0f, 7.0f));
 	mPlayUI->GaugeGameBehavior(_deltaTime);
 	mPlayUI->SetDrawGameState(DRAW_GAME_STATE::DRAW_GAUGE_GAME);
 	mPlayer->SetPlayerState(PlayerActor::PLAYER_STATE::STATE_PLAY_GAME2);
@@ -568,8 +691,10 @@ void PlayScene::GameModeGaugeGameBehavior(float _deltaTime)
 
 void PlayScene::GameModePendulumGameBehavior(float _deltaTime)
 {
-	mCamera->SetPos(VGet(10.0f, 45.0f, -26.0f - 10.0f));
-	mCamera->SetTarget(VAdd(mPlayer->GetPosition(), VGet(0.0f, 10.0f, -10.0f)));
+	/*mCamera->SetPos(VGet(10.0f, 45.0f, -26.0f - 10.0f));
+	mCamera->SetTarget(VAdd(mPlayer->GetPosition(), VGet(0.0f, 10.0f, -10.0f)));*/
+	mCamera->SetPos(VGet(2.0f, 38.0f, -27.0f));
+	mCamera->SetTarget(VGet(-14.5f, 38.0f, -12.0f));
 	mPlayUI->PendulumGameBehavior(_deltaTime);
 	mPlayUI->SetDrawGameState(DRAW_GAME_STATE::DRAW_PENDULUM_GAME);
 	mPlayer->SetPlayerState(PlayerActor::PLAYER_STATE::STATE_PLAY_GAME3);
@@ -586,6 +711,12 @@ void PlayScene::GameModeGayaBehavior(float _deltaTime)
 
 	VECTOR tmpPos = mPlayer->GetPosition();
 
+	if (mPlayer->GetPosition().y <= 10.0f && !mFlag4)
+	{
+		mWaterSound->Play();
+		mFlag4 = true;
+	}
+
 	if (mPlayer->GetPosition().y >= -30.0f && !mFlag)
 	{
 		tmpPos.y += mJumpPower * _deltaTime;
@@ -595,6 +726,7 @@ void PlayScene::GameModeGayaBehavior(float _deltaTime)
 	{
 		mFlag = true;
 		mPlayer->SetPlayerState(PlayerActor::PLAYER_STATE::STATE_PLAY_FLOAT);
+		
 	}
 	if (mFlag && !mFlag2)
 	{
@@ -616,10 +748,26 @@ void PlayScene::GameModeGayaBehavior(float _deltaTime)
 	{
 		if (!mKansei->IsPlaying())
 		{
+			mBigSplash->StopEffect3D();
+			mBigSplash->Delete();
+			mNormalSplash->StopEffect3D();
+			mNormalSplash->Delete();
+			mSmalleSplash->StopEffect3D();
+			mSmalleSplash->Delete();
+			mFeather->StopEffect3D();
+			mFeather->Delete();
 			mGameMode = GAME_MODE_STATE::FADE_OUT;
 		}
 		if (CheckHitKey(KEY_INPUT_RETURN))
 		{
+			mBigSplash->StopEffect3D();
+			mBigSplash->Delete();
+			mNormalSplash->StopEffect3D();
+			mNormalSplash->Delete();
+			mSmalleSplash->StopEffect3D();
+			mSmalleSplash->Delete();
+			mFeather->StopEffect3D();
+			mFeather->Delete();
 			mGameMode = GAME_MODE_STATE::FADE_OUT;
 		}
 	}
@@ -642,25 +790,29 @@ void PlayScene::LoadEX(int& _tmp, short& _count, int _handle)
 		if (_count == 0)
 		{
 			ClearDrawScreen();
-			DrawStringToHandle(1920 / 3, 1080 / 2, "NowLoading", GetColor(255, 255, 255), _handle);
+			DrawGraph(1920 / 5-50, 1080 / 5-50, mHandleLoad, TRUE);
+			DrawStringToHandle(1920 * 2 / 3 + 50, 1080 - 80, "NowLoading", GetColor(255, 255, 255), mFontHandle);
 			ScreenFlip();
 		}
 		else if (_count == 1)
 		{
 			ClearDrawScreen();
-			DrawStringToHandle(1920 / 3, 1080 / 2, "NowLoading.", GetColor(255, 255, 255), _handle);
+			DrawGraph(1920 / 5 - 50, 1080 / 5 - 50, mHandleLoad, TRUE);
+			DrawStringToHandle(1920 * 2 / 3 + 50, 1080 - 80, "NowLoading.", GetColor(255, 255, 255), mFontHandle);
 			ScreenFlip();
 		}
 		else if (_count == 2)
 		{
 			ClearDrawScreen();
-			DrawStringToHandle(1920 / 3, 1080 / 2, "NowLoading..", GetColor(255, 255, 255), _handle);
+			DrawGraph(1920 / 5 - 50, 1080 / 5 - 50, mHandleLoad, TRUE);
+			DrawStringToHandle(1920 * 2 / 3 + 50, 1080 - 80, "NowLoading..", GetColor(255, 255, 255), mFontHandle);
 			ScreenFlip();
 		}
 		else
 		{
 			ClearDrawScreen();
-			DrawStringToHandle(1920 / 3, 1080 / 2, "NowLoading...", GetColor(255, 255, 255), _handle);
+			DrawGraph(1920 / 5 - 50, 1080 / 5 - 50, mHandleLoad, TRUE);
+			DrawStringToHandle(1920 * 2 / 3 + 50, 1080 - 80, "NowLoading...", GetColor(255, 255, 255), mFontHandle);
 			ScreenFlip();
 			_count = -1;
 		}
