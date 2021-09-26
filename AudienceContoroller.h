@@ -19,6 +19,7 @@ public:
 	AudienceContoroller();
 	~AudienceContoroller();
 	void SetAudience();
+	void SetAudienceState(int _state);        //ジャンプを高くするなら1
 	void LoadAudience();
 	void Draw();
 	void Update(float _deltaTime);
@@ -36,5 +37,9 @@ private:
 	float mGroundHeight;										  //観客の立っている場所
 	float mFirstGroundHeight;
 	float mHighestJump;										  //観客の最高ジャンプ高度
-	float mRad;												  //角度ラジアン
+
+	float mRad; //light角度ラジアン	
+	float mRad2;
+
+	int  mLight;
 };

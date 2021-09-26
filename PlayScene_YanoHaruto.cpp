@@ -4,7 +4,6 @@
 #include "PlayUI_YanoHaruto.h"
 #include "Camera.h"
 #include "BGM.h"
-#include "Audience.h"
 #include "StaticObjectActor.h"
 #include "PlayerActor.h"
 #include "SE.h"
@@ -270,9 +269,11 @@ void PlayScene_YanoHaruto::Draw()
 	//…–Ê‚É”ò‚Ñž‚ñ‚¾‚ç
 	if (0 > mPlayer->GetPositionY())
 	{
+		
 		//500“_ˆÈã‚È‚ç
 		if (mScore >= 500)
 		{
+			mAudienceCon->SetAudienceState(1);
 			if (mSmalleSplash->GetNowPlaying3D())
 			{
 				mSmalleSplash->PlayEffekseer(VGet(mPlayer->GetPositionX(), mPlayer->GetPositionY(), mPlayer->GetPositionZ()));
@@ -281,6 +282,7 @@ void PlayScene_YanoHaruto::Draw()
 		//200“_ˆÈã‚È‚ç
 		else if (mScore >= 200)
 		{
+			mAudienceCon->SetAudienceState(1);
 			if (mNormalSplash->GetNowPlaying3D())
 			{
 				mNormalSplash->PlayEffekseer(VGet(mPlayer->GetPositionX(), mPlayer->GetPositionY(), mPlayer->GetPositionZ()));
@@ -289,6 +291,7 @@ void PlayScene_YanoHaruto::Draw()
 		//200ˆÈ‰º‚È‚ç
 		else if (mScore < 200)
 		{
+			mAudienceCon->SetAudienceState(1);
 			if (mBigSplash->GetNowPlaying3D())
 			{
 				mBigSplash->PlayEffekseer(VGet(mPlayer->GetPositionX(), mPlayer->GetPositionY(), mPlayer->GetPositionZ()));
