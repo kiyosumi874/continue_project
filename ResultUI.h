@@ -35,4 +35,18 @@ private:
 	int mFontHandle3ex;
 	int mFontHandle4;
 	int mFontHandle4ex;
+	
+	int mHandle0;
+	int mHandle100;
+	int mHandle200;
+	int mHandle300;
+	int mHandle400;
+	int mHandle500;
+	int mHandle600;
+
+	int mHandleA;
+	int mHandleB;
+	int mHandleC;
+	int mHandleD;
+	int mHandleE;
 };

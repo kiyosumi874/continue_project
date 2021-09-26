@@ -81,6 +81,8 @@ private:
 	//-----------//
 	//-GaugeGame-//
 	//-----------//
+	int mGaugeHandle;
+	int mGaugeHandle2;
 	float mGaugeSpeed;
 	float mGaugeOutBeginX;    // •`‰æ‚·‚élŠpŒ`‚Ì¶ã‚ÌX
 	float mGaugeOutBeginY;    // •`‰æ‚·‚élŠpŒ`‚Ì¶ã‚ÌY

@@ -10,7 +10,7 @@
 #include "PlayerActor.h"
 #include "Camera.h"
 #include "StaticObjectActor.h"
-#include "Audience.h"
+#include "AudienceContoroller.h"
 #include "WaterObject.h"
 
 const char* MOVE_SCENE_IMG = "data/img/MoveScene.png";
@@ -49,6 +49,10 @@ TitleScene::TitleScene()
 	, mFadeSpeed(IMG_FADE_SPEED)
 	, mCameraType(CAMERA_TYPE::CAMERA_1)
 	, mAudience(nullptr)
+	, mLightHandle(NULL)
+	, mLightHandle2(NULL)
+	, mLightHandle3(NULL)
+	, mLightHandle4(NULL)
 	//, mAudience2(nullptr)
 {
 	//mMoveCircle.mPosX = 0.0f;
@@ -56,7 +60,6 @@ TitleScene::TitleScene()
 	//mMoveCircle.mPosZ = 0.0f;
 	//mMoveCircle.mAngle = 0.0f;
 	//mMoveCircle.mLength = 25.0f;
-
 }
 
 /// <summary>
@@ -73,6 +76,10 @@ TitleScene::~TitleScene()
 	delete mSky;
 	delete mWater;
 	delete mAudience;
+	DeleteLightHandle(mLightHandle);
+	DeleteLightHandle(mLightHandle2);
+	DeleteLightHandle(mLightHandle3);
+	DeleteLightHandle(mLightHandle4);
 	//delete mAudience2;
 }
 
@@ -93,7 +100,7 @@ SceneBase* TitleScene::Update(float _deltaTime, int& _hiScore)
 	// 水面シェーダーの更新
 	mWater->Update(_deltaTime);
 	mWater->UpdateWaterShader(_deltaTime);     // 水面用シェーダーへ情報をセットする
-	mAudience->Update();
+	mAudience->Update(_deltaTime);
 	//mAudience2->Update();
 	// プレイヤーの更新
 	mPlayer->UpdateActor(_deltaTime);  // 1
@@ -274,7 +281,9 @@ void TitleScene::Load()
 	mPlayer = new PlayerActor;
 	mPool = new StaticObjectActor;
 	mSky = new StaticObjectActor;
-	mAudience = new Audience;
+	mAudience = new AudienceContoroller;
+	mAudience->LoadAudience();
+	mAudience->SetAudience();
 	//mAudience2 = new Audience;
 	// 水面オブジェクト(モデルはペライチの正方形)
 	mWater = new WaterObject;
@@ -285,7 +294,12 @@ void TitleScene::Load()
 	mBGM->LoadMusic(BGM_HANDLE);
 	mMoveSceneHandle = LoadGraph(MOVE_SCENE_IMG);
 
-	mPool->LoadModelTex("data/model/pool/Stadium.mv1", "data/model/pool/Pool.png");
+	//SetGlobalAmbientLight(GetColorF(255/2, 255/2, 255/2, 0));
+	/*mLightHandle = CreateDirLightHandle(VGet(1.0f, 0.0f, 0.0f));
+	mLightHandle2 = CreateDirLightHandle(VGet(-1.0f, 0.0f, 0.0f));
+	mLightHandle3 = CreateDirLightHandle(VGet(0.0f, 0.0f, 1.0f));
+	mLightHandle4 = CreateDirLightHandle(VGet(0.0f, 0.0f, -1.0f));*/
+	mPool->LoadModelTex("data/model/pool/Stadium.mv1", "data/model/pool/Stadium0.png");
 	mPool->SetScale(TITLE_POOL_SCALE);
 	mPool->SetRotation(TITLE_POOL_ROTATE);
 	mPool->SetPosition(TITLE_POOL_POS);

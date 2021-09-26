@@ -7,6 +7,7 @@
 #include "StaticObjectActor.h"
 #include "Effect.h"
 #include "WaterObject.h"
+#include "AudienceContoroller.h"
 //            ↓はTitleSceneで定義しているので書かなくていい
 //const char* MOVE_SCENE_IMG = "data/img/MoveScene.png";
 //const float    FIRST_DELTA_TIME = 0.000001f;
@@ -60,7 +61,14 @@ ResultScene::~ResultScene()
 	delete mPlayer;
 	delete mCamera;
 	delete mPodium;
+	//--------------------------------------------------9.20
+	mFireWorks->StopEffect3D();
+	mFireWorks->Delete();
 	delete mFireWorks;
+	mConfetti->StopEffect3D();
+	mConfetti->Delete();
+	delete mConfetti;
+
 	delete mPool;
 	delete mSky;
 	delete mWater;
@@ -85,6 +93,7 @@ SceneBase* ResultScene::Update(float _deltaTime, int& _hiScore)
 	mWater->UpdateWaterShader(_deltaTime);     // 水面用シェーダーへ情報をセットする
 	mPlayer->UpdateActor(_deltaTime);
 	mPlayer->Update(_deltaTime);
+	mAudience->Update(_deltaTime);
 	//リザルトUIにスコアを渡す
 	mResultUI->LoadScore(mScore);
 	// リザルトUIの更新
@@ -230,13 +239,19 @@ void ResultScene::Draw()
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 255);
 	mSky->Draw();
 	mPool->Draw();
+	mAudience->Draw();
 	mWater->DrawWater();
 	mPlayer->Draw();
 	mPodium->Draw();
 
-	if (mFireWorks->GetNowPlaying2D())
+	//--------------------------------------------------------------9.20
+	if (mFireWorks->GetNowPlaying3D() && mScore > 200)
 	{
-		mFireWorks->PlayEffekseer2D(VGet(rand() % 1920, rand() % 1080, 0));
+		mFireWorks->PlayEffekseer(VGet(33.0f, 0.0f, -58.0f));
+	}
+	if (mConfetti->GetNowPlaying3D() && mScore > 400)
+	{
+		mConfetti->PlayEffekseer(VGet(30.0f, 10.0f, -54.0f));
 	}
 
 	// リザルトUIの描画
@@ -263,8 +278,15 @@ void ResultScene::Load()
 	mPlayer = new PlayerActor;
 	mPodium = new StaticObjectActor;
 	mPool = new StaticObjectActor;
-	mFireWorks = new Effect("data/effect/hanabi.efk", 40.0f);
+
+	//------------------------------------------------------------------size変更
+	mFireWorks = new Effect("data/effect/hanabi.efk", 1.0f);
 	mSky = new StaticObjectActor;
+	mConfetti = new Effect("data/effect/confetti.efk", 1.0f);
+
+	mAudience = new AudienceContoroller();
+	mAudience->LoadAudience();
+	mAudience->SetAudience();
 
 	// リザルトUIの初期化
 	mResultUI->Load();
@@ -285,12 +307,14 @@ void ResultScene::Load()
 	mCamera->SetPos(VGet(22.0f, 2.9f, -49.5f));
 	mCamera->SetTarget(VGet(30.0f, 5.5f, -57.0f));
 
-	mPodium->LoadModelTex("data/model/podium/Stand.mv1", "data/model/podium/podium.png");
+	mPodium->LoadModel("data/model/podium/Stand.mv1");
+	int texHandle = LoadGraph("data/model/podium/Stand.png");
 	mPodium->SetScale(VGet(0.5f, 0.5f, 0.5f));
-	mPodium->SetRotation(VGet(0.0f, 180.0f * DX_PI_F / 180.0f, 0.0f));
+	//mPodium->SetRotation(VGet(0.0f, 180.0f * DX_PI_F / 180.0f, 0.0f));
 	mPodium->SetPosition(VGet(30.0f, 0.5f, -54.0f));
+	MV1SetTextureGraphHandle(mPodium->GetHandle(), 0, texHandle, TRUE);
 
-	mPool->LoadModelTex("data/model/pool/Stadium.mv1", "data/model/pool/Pool.png");
+	mPool->LoadModelTex("data/model/pool/Stadium.mv1", "data/model/pool/Stadium0.png");
 	mPool->SetScale(VGet(1.0f, 1.0f, 1.0f));
 	mPool->SetRotation((VGet(0.0f, 0.0f, 0.0f)));
 	mPool->SetPosition((VGet(0.0f, 0.0f, 0.0f)));

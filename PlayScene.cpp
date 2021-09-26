@@ -4,7 +4,7 @@
 #include "PlayUI.h"
 #include "Camera.h"
 #include "BGM.h"
-#include "Audience.h"
+#include "AudienceContoroller.h"
 #include "StaticObjectActor.h"
 #include "PlayerActor.h"
 #include "SE.h"
@@ -50,6 +50,7 @@ PlayScene::PlayScene()
 	, mFlag3(false)
 	, mDeltaTime(0)
 	, mHandle(0)
+	, mWaterSound(0)
 {
 
 }
@@ -80,6 +81,7 @@ PlayScene::PlayScene(float _deltaTime)
 	, mFlag(false)
 	, mFlag2(false)
 	, mFlag3(false)
+	, mFlag4(false)
 	, mDeltaTime(_deltaTime)
 {
 }
@@ -116,6 +118,7 @@ PlayScene::~PlayScene()
 	mFeather->StopEffect3D();
 	mFeather->Delete();
 	delete mFeather;
+	delete mWaterSound;
 }
 
 /// <summary>
@@ -165,9 +168,7 @@ SceneBase* PlayScene::Update(float _deltaTime, int& _hiScore)
 	mWater->Update(_deltaTime);
 	mWater->UpdateWaterShader(_deltaTime);     // 水面用シェーダーへ情報をセットする
 	//観客の更新
-	mAudience->Update();
-	//mAudience2->Update();
-
+	mAudience->Update(_deltaTime);
 	// プレイヤーの更新
 	mPlayer->UpdateActor(_deltaTime);
 	mPlayer->Update(_deltaTime);
@@ -257,11 +258,11 @@ void PlayScene::Draw()
 	{
 		if (mFeather->GetNowPlaying3D())
 		{
-			mFeather->PlayEffekseer(mPlayer->GetPosition());
+			mFeather->PlayEffekseer(VAdd(mPlayer->GetPosition(), VGet(-10,0,0)));
 		}
 	}
 	//水面に飛び込んだら
-	if (10 > mPlayer->GetPositionY())
+	if (0 > mPlayer->GetPositionY())
 	{
 		//500点以上なら
 		if (mScore >= 500)
@@ -290,8 +291,8 @@ void PlayScene::Draw()
 	}
 	if (mGameMode == GAME_MODE_STATE::CAMERA_MOVE)
 	{
-		DrawGraph(1920 * 2 / 3 - 20, 1080 - 150, mHandle, TRUE);
-		DrawStringToHandle(1920 * 2 / 3 + 60, 1080 - 150, "でスキップ", GetColor(255, 255, 255), mFontHandle);
+		DrawGraph(1920 * 2 / 3 - 70, 1080 - 200, mHandle, TRUE);
+		//DrawStringToHandle(1920 * 2 / 3 + 60, 1080 - 150, "でスキップ", GetColor(255, 255, 255), mFontHandle);
 	}
 
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, mAlphaPal);
@@ -341,8 +342,10 @@ void PlayScene::Load()
 {
 	int tmp = GetNowCount();
 	short tmpCount = 1;
+	mHandleLoad = LoadGraph("data/img/LoadUI.png");
 	mFontHandle = CreateFontToHandle("data/Fonts/meiryob.tcc", 100, -1, DX_FONTTYPE_ANTIALIASING_EDGE_4X4, -1, 5, TRUE);
-	DrawStringToHandle(1920 / 3, 1080 / 2, "NowLoading", GetColor(255, 255, 255), mFontHandle);
+	DrawGraph(1920 / 5-50, 1080 / 5-50, mHandleLoad, TRUE);
+	DrawStringToHandle(1920 * 2 / 3 - 100, 1080 - 200, "NowLoading", GetColor(255, 255, 255), mFontHandle);
 	ScreenFlip();
 	mCamera = new Camera;
 	LoadEX(tmp, tmpCount, mFontHandle);
@@ -353,7 +356,7 @@ void PlayScene::Load()
 	mWater->SetPosition(VGet(0.0f, -5.25f, -55.0f));
 
 	mPlayUI = new PlayUI;
-	mHandle = LoadGraph("data/img/keyboard_Enter.png");
+	mHandle = LoadGraph("data/img/skkip.png");
 	LoadEX(tmp, tmpCount, mFontHandle);
 	mBGM = new BGM;
 	LoadEX(tmp, tmpCount, mFontHandle);
@@ -366,7 +369,9 @@ void PlayScene::Load()
 	mSky = new StaticObjectActor;
 
 	LoadEX(tmp, tmpCount, mFontHandle);
-	mAudience = new Audience;
+	mAudience = new AudienceContoroller;
+	mAudience->LoadAudience();
+	mAudience->SetAudience();
 	//mAudience2 = new Audience;
 	LoadEX(tmp, tmpCount, mFontHandle);
 	mPlayer = new PlayerActor;
@@ -380,7 +385,7 @@ void PlayScene::Load()
 	mClickClitical = new SE;
 	LoadEX(tmp, tmpCount, mFontHandle);
 	mKansei = new SE;
-
+	mWaterSound = new SE;
 
 	LoadEX(tmp, tmpCount, mFontHandle);
 	mPlayer->SetPlayerState(PlayerActor::PLAYER_STATE::STATE_PLAY_IDLE);
@@ -411,7 +416,7 @@ void PlayScene::Load()
 	mCamera->SetFutureTarget(mPlayer->GetPosition());
 
 	LoadEX(tmp, tmpCount, mFontHandle);
-	mPool->LoadModelTex("data/model/pool/Stadium.mv1", "data/model/pool/Pool.png");
+	mPool->LoadModelTex("data/model/pool/Stadium.mv1", "data/model/pool/Stadium0.png");
 	LoadEX(tmp, tmpCount, mFontHandle);
 	mPool->SetScale(PLAY_POOL_SCALE);
 	LoadEX(tmp, tmpCount, mFontHandle);
@@ -442,6 +447,7 @@ void PlayScene::Load()
 	mBGM->LoadMusic("data/sound/迅雷のユーロビート.mp3");
 	LoadEX(tmp, tmpCount, mFontHandle);
 	mGayaGaya->LoadSound("data/sound/gaya2.mp3");
+	mWaterSound->LoadSound("data/sound/water.mp3");
 	//mBGM2->LoadMusic("data/sound/gaya2.mp3");
 }
 
@@ -520,21 +526,43 @@ void PlayScene::GameModeWaitBehavior(float _deltaTime)
 		mCamera->SetSpeed(5.0f);
 		mCamera->SetPos(VAdd(mPlayer->GetPosition(), VGet(0.0f, 10.0f, -20.0f)));
 		mCamera->SetTarget(VAdd(mPlayer->GetPosition(), VGet(0.0f, 5.0f, 0.0f)));
-		if (mPlayer->GetPlayTime() >= 45)
+		if (mPlayUI->GetScore() > 200)
 		{
-			VECTOR tmpPos = mPlayer->GetPosition();
-			tmpPos.z -= 5 * _deltaTime;
-			tmpPos.y += mJumpPower * _deltaTime;
-			if (tmpPos.y <= 0.0f)
+			if (mPlayer->GetPlayTime() >= 45)
 			{
-				mGameMode = GAME_MODE_STATE::GAYA;
+				VECTOR tmpPos = mPlayer->GetPosition();
+				tmpPos.z -= 5 * _deltaTime;
+				tmpPos.y += mJumpPower * _deltaTime;
+				if (tmpPos.y <= 0.0f)
+				{
+					mGameMode = GAME_MODE_STATE::GAYA;
+				}
+				mPlayUI->SetDrawGameState(DRAW_GAME_STATE::DRAW_NULL);
+				mPlayer->SetPlayerState(PlayerActor::PLAYER_STATE::STATE_PLAY_JUMP);
+				mJumpPower -= 12.0 * _deltaTime;
+				// 更新分の座標のSet
+				mPlayer->SetPosition(tmpPos);
 			}
-			mPlayUI->SetDrawGameState(DRAW_GAME_STATE::DRAW_NULL);
-			mPlayer->SetPlayerState(PlayerActor::PLAYER_STATE::STATE_PLAY_JUMP);
-			mJumpPower -= 12.0 * _deltaTime;
-			// 更新分の座標のSet
-			mPlayer->SetPosition(tmpPos);
 		}
+		else
+		{
+			if (mPlayer->GetPlayTime() >= 45)
+			{
+				VECTOR tmpPos = mPlayer->GetPosition();
+				tmpPos.z -= 5 * _deltaTime;
+				tmpPos.y += mJumpPower * _deltaTime;
+				if (tmpPos.y <= 0.0f)
+				{
+					mGameMode = GAME_MODE_STATE::GAYA;
+				}
+				mPlayUI->SetDrawGameState(DRAW_GAME_STATE::DRAW_NULL);
+				mPlayer->SetPlayerState(PlayerActor::PLAYER_STATE::STATE_PLAY_JUMP2);
+				mJumpPower -= 12.0 * _deltaTime;
+				// 更新分の座標のSet
+				mPlayer->SetPosition(tmpPos);
+			}
+		}
+		
 	}
 }
 
@@ -586,6 +614,12 @@ void PlayScene::GameModeGayaBehavior(float _deltaTime)
 
 	VECTOR tmpPos = mPlayer->GetPosition();
 
+	if (mPlayer->GetPosition().y <= 10.0f && !mFlag4)
+	{
+		mWaterSound->Play();
+		mFlag4 = true;
+	}
+
 	if (mPlayer->GetPosition().y >= -30.0f && !mFlag)
 	{
 		tmpPos.y += mJumpPower * _deltaTime;
@@ -595,6 +629,7 @@ void PlayScene::GameModeGayaBehavior(float _deltaTime)
 	{
 		mFlag = true;
 		mPlayer->SetPlayerState(PlayerActor::PLAYER_STATE::STATE_PLAY_FLOAT);
+		
 	}
 	if (mFlag && !mFlag2)
 	{
@@ -642,25 +677,29 @@ void PlayScene::LoadEX(int& _tmp, short& _count, int _handle)
 		if (_count == 0)
 		{
 			ClearDrawScreen();
-			DrawStringToHandle(1920 / 3, 1080 / 2, "NowLoading", GetColor(255, 255, 255), _handle);
+			DrawGraph(1920 / 5-50, 1080 / 5-50, mHandleLoad, TRUE);
+			DrawStringToHandle(1920 * 2 / 3 - 100, 1080 - 200, "NowLoading", GetColor(255, 255, 255), _handle);
 			ScreenFlip();
 		}
 		else if (_count == 1)
 		{
 			ClearDrawScreen();
-			DrawStringToHandle(1920 / 3, 1080 / 2, "NowLoading.", GetColor(255, 255, 255), _handle);
+			DrawGraph(1920 / 5 - 50, 1080 / 5 - 50, mHandleLoad, TRUE);
+			DrawStringToHandle(1920 * 2 / 3 - 100, 1080 - 200, "NowLoading.", GetColor(255, 255, 255), _handle);
 			ScreenFlip();
 		}
 		else if (_count == 2)
 		{
 			ClearDrawScreen();
-			DrawStringToHandle(1920 / 3, 1080 / 2, "NowLoading..", GetColor(255, 255, 255), _handle);
+			DrawGraph(1920 / 5 - 50, 1080 / 5 - 50, mHandleLoad, TRUE);
+			DrawStringToHandle(1920 * 2 / 3 - 100, 1080 - 200, "NowLoading..", GetColor(255, 255, 255), _handle);
 			ScreenFlip();
 		}
 		else
 		{
 			ClearDrawScreen();
-			DrawStringToHandle(1920 / 3, 1080 / 2, "NowLoading...", GetColor(255, 255, 255), _handle);
+			DrawGraph(1920 / 5 - 50, 1080 / 5 - 50, mHandleLoad, TRUE);
+			DrawStringToHandle(1920 * 2 / 3 - 100, 1080 - 200, "NowLoading...", GetColor(255, 255, 255), _handle);
 			ScreenFlip();
 			_count = -1;
 		}

@@ -24,10 +24,10 @@ TitleUI::TitleUI()
 	, mTmpTime(0)
 	, mTmpTimeFlag(false)
 {
-	//                                     作成するフォント名,     フォントのサイズ,  フォントの太さ,                  フォントのタイプ, 文字セット, 縁の太さ, イタリック体にするかどうか
-	mFontHandle = CreateFontToHandle("data/Fonts/meiryob.tcc", mStartButtonFontSize,              -1, DX_FONTTYPE_ANTIALIASING_EDGE_4X4,         -1,        5,                       TRUE);
-	mHandle = LoadGraph("data/img/keyboard_Enter.png");
-	mHandle2 = LoadGraph("data/img/keyboard_Enter2.png");
+	////                                     作成するフォント名,     フォントのサイズ,  フォントの太さ,                  フォントのタイプ, 文字セット, 縁の太さ, イタリック体にするかどうか
+	//mFontHandle = CreateFontToHandle("data/Fonts/meiryob.tcc", mStartButtonFontSize,              -1, DX_FONTTYPE_ANTIALIASING_EDGE_4X4,         -1,        5,                       TRUE);
+	mHandle = LoadGraph("data/img/TitleUI3.png");
+	mHandle2 = LoadGraph("data/img/TitleUI4.png");
 	mHandle3 = LoadGraph("data/img/VirtualDive.png");
 }
 
@@ -141,13 +141,13 @@ void TitleUI::Draw()
 		{
 			DrawGraph(mStartButtonBeginX + 45 - 96, mStartButtonBeginY + 60, mHandle2, TRUE);
 		}
-		DrawStringToHandle(mStartButtonBeginX + 45, mStartButtonBeginY + 35, "でスタート！", WHITE, mFontHandle, BLACK);
+		//DrawStringToHandle(mStartButtonBeginX + 45, mStartButtonBeginY + 35, "でスタート！", WHITE, mFontHandle, BLACK);
 
 	}
 	else
 	{
 		DrawGraph(mStartButtonBeginX + 45 - 96, mStartButtonBeginY+60, mHandle2, TRUE);
-		DrawStringToHandle(mStartButtonBeginX + 45, mStartButtonBeginY + 35, "でスタート！", WHITE, mFontHandle, BLACK);
+		/*DrawStringToHandle(mStartButtonBeginX + 45, mStartButtonBeginY + 35, "でスタート！", WHITE, mFontHandle, BLACK);*/
 	}
 }
  

@@ -65,13 +65,17 @@ void PlayerActor::UpdateActor(float _deltaTime)
 	case PLAYER_STATE::STATE_PLAY_JUMP:
 		PlayJumpBehavior(_deltaTime);
 		break;
+
+	case PLAYER_STATE::STATE_PLAY_JUMP2:
+		PlayJump2Behavior(_deltaTime);
+		break;
+
 	case PLAYER_STATE::STATE_PLAY_FLOAT:
 		PlayFloatBehavior(_deltaTime);
 		break;
 
 	case PLAYER_STATE::STATE_RESULT_IDLE:
 		ResultIdleBehavior(_deltaTime);
-		break;
 		break;
 
 	default:
@@ -273,6 +277,28 @@ void PlayerActor::PlayJumpBehavior(float _deltaTime)
 	MV1SetAttachAnimTime(mMHandle, mAttachIndex, mPlayTime);
 }
 
+void PlayerActor::PlayJump2Behavior(float _deltaTime)
+{
+	// 初めてこのステートに入る場合
+	if (mNowState != mPrevState)
+	{
+		MV1DetachAnim(mMHandle, mAttachIndex);
+		mPlayTime = 0;
+		mAttachIndex = MV1AttachAnim(mMHandle, 10/*Idleのアニメーション番号*/, -1, FALSE);
+		mTotalTime = MV1GetAttachAnimTotalTime(mMHandle, mAttachIndex);
+		mPrevState = mNowState;
+	}
+	mPlayTime += 50.0f * _deltaTime;
+	// 再生時間がアニメーションの総再生時間に達したら再生時間を０に戻す
+	if (mPlayTime >= mTotalTime)
+	{
+		mPlayTime = mTotalTime;
+	}
+	// 待機アニメーション再生
+	MV1SetAttachAnimTime(mMHandle, mAttachIndex, mPlayTime);
+}
+
+
 void PlayerActor::PlayFloatBehavior(float _deltaTime)
 {
 	// 初めてこのステートに入る場合
@@ -304,7 +330,7 @@ void PlayerActor::ResultIdleBehavior(float _deltaTime)
 	{
 		MV1DetachAnim(mMHandle, mAttachIndex);
 		mPlayTime = 0;
-		mAttachIndex = MV1AttachAnim(mMHandle, 1/*Idleのアニメーション番号*/, -1, FALSE);
+		mAttachIndex = MV1AttachAnim(mMHandle, 11/*Idleのアニメーション番号*/, -1, FALSE);
 		mTotalTime = MV1GetAttachAnimTotalTime(mMHandle, mAttachIndex);
 		mPrevState = mNowState;
 	}
