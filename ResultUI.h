@@ -24,6 +24,7 @@ public:
 	void LoadScore(int _score);
 
 	void AlphaCount(float _deltaTime);
+	void AlphaCount2(float _deltaTime);
 
 
 private:
@@ -45,11 +46,20 @@ private:
 	int mPosScoreWindowY;
 	double mScaleScoreWindow;
 
+	// "Enterキーを押してください"UI用変数
+	int   mHandlePressEnter;
+	int mPosPressEnterX;
+	int mPosPressEnterY;
+	int mSizePressEnterW;
+	int mSizePressEnterH;
+	double mScalePressEnter;
 
 
 	// アルファ制御用
 	int mAlphaPal;
 	int mAlphaCount;
+	int mAlphaPal2;
+	int mAlphaCount2;
 
 	int mFontHandle;
 	int mFontHandle2;

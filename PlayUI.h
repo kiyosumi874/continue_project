@@ -29,7 +29,7 @@ public:
 	void Update(float _deltaTime)override;    // 更新
 	void Load()                  override;    // ロード
 	void Draw()                  override;    // 描画
-	void Sound(class SE* _metoronome, class SE* _clickNormal, class SE* _clickClitical);
+	void Sound(class SE* _metoronome, class SE* _clickNormal, class SE* _clickClitical, class SE* _bad);
 
 
 	bool GetPlayCircleGameFlag() { return mPlayCircleGameFlag; }
@@ -81,7 +81,7 @@ private:
 	unsigned int mCircleInColor;    // 円の色
 	int mCircleInFillFlag;          // TRUE(1の意)で円の中身も塗りつぶし、FALSE(0の意)で輪郭のみ
 
-	bool mPlayCircleGameFlag;           // サークルゲームをしているかしていないかのFlag
+	bool mPlayCircleGameFlag;           // サークルゲームをしているかしていないかのFlag          
 
 	//-----------//
 	//-GaugeGame-//
@@ -128,6 +128,7 @@ private:
 	int mPendulumInFillFlag;          // TRUE(1の意)で円の中身も塗りつぶし、FALSE(0の意)で輪郭のみ
 	
 	bool mPlayPendulumGameFlag;           // 振り子ゲームをしているかしていないかのFlag
+	bool mPendulumFlag;           // 振り子ゲームをしているかしていないかのFlag
 
 	//------------//
 	//-楕円ゲーム-//

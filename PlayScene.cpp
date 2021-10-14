@@ -411,7 +411,7 @@ void PlayScene::Sound(float _deltaTime)
 		//mBGM2->Play();
 		mBGMFlag2 = true;
 	}
-	mPlayUI->Sound(mMetoronome, mClickNormal, mClickClitical);
+	mPlayUI->Sound(mMetoronome, mClickNormal, mClickClitical, mBadSound);
 }
 
 /// <summary>
@@ -465,6 +465,7 @@ void PlayScene::Load()
 	LoadEX(tmp, tmpCount, mFontHandle);
 	mKansei = new SE;
 	mWaterSound = new SE;
+	mBadSound = new SE;
 
 	LoadEX(tmp, tmpCount, mFontHandle);
 	mPlayer->SetPlayerState(PlayerActor::PLAYER_STATE::STATE_PLAY_IDLE);
@@ -527,6 +528,7 @@ void PlayScene::Load()
 	LoadEX(tmp, tmpCount, mFontHandle);
 	mGayaGaya->LoadSound("data/sound/gaya2.mp3");
 	mWaterSound->LoadSound("data/sound/water.mp3");
+	mBadSound->LoadSound("data/sound/Negative-.mp3");
 	//mBGM2->LoadMusic("data/sound/gaya2.mp3");
 }
 

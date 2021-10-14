@@ -12,6 +12,9 @@ ResultUI::ResultUI()
 	, mScore(0)
 	, mAlphaPal(0)
 	, mAlphaCount(1)
+	, mAlphaPal2(0)
+	, mAlphaCount2(1)
+	, mScalePressEnter(0.6)
 {
 	mFontHandle = CreateFontToHandle("data/Fonts/meiryob.tcc", 40, -1, DX_FONTTYPE_ANTIALIASING_4X4, -1, 5, FALSE);
 	mFontHandle2 = CreateFontToHandle("data/Fonts/meiryob.tcc", 130, -1, DX_FONTTYPE_ANTIALIASING_4X4, -1, 5, TRUE);
@@ -30,6 +33,11 @@ ResultUI::ResultUI()
 	mScaleScoreWindow = 1.0;
 	mPosScoreWindowX = mScreenSizeW - (mScreenSizeW / 4);
 	mPosScoreWindowY = mScreenSizeH / 2;
+
+	mHandlePressEnter = LoadGraph("data/img/ResultUI2.png");
+	GetGraphSize(mHandlePressEnter, &mSizePressEnterW, &mSizePressEnterH);
+	mPosPressEnterX = 1425;
+	mPosPressEnterY = 992;
 
 	// スコア画像(数値)のロード
 	mHandle0   = LoadGraph("data/img/0pt.png");
@@ -99,8 +107,26 @@ void ResultUI::Update(float _deltaTime, int& _hiScore)
 	}
 	mHiScore = _hiScore;
 
+	/*if (CheckHitKey(KEY_INPUT_RIGHT))
+	{
+		mPosPressEnterX += 15;
+	}
+	if (CheckHitKey(KEY_INPUT_LEFT))
+	{
+		mPosPressEnterX += -15;
+	}
+	if (CheckHitKey(KEY_INPUT_UP))
+	{
+		mPosPressEnterY += -15;
+	}
+	if (CheckHitKey(KEY_INPUT_DOWN))
+	{
+		mPosPressEnterY += 15;
+	}*/
+
 	// アルファ値更新
 	AlphaCount(_deltaTime);
+	AlphaCount2(_deltaTime);
 }
 
 /// <summary>
@@ -123,6 +149,14 @@ void ResultUI::Draw()
 		            mPosScoreWindowY + ((mSizeScoreWindowH * mScaleScoreWindow) / 2),
 		            mHandleScoreWindow, TRUE);
 
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, mAlphaPal2);
+
+	DrawExtendGraph(mPosPressEnterX, mPosPressEnterY,
+		mPosPressEnterX + (mSizePressEnterW * mScalePressEnter),
+		mPosPressEnterY + (mSizePressEnterH * mScalePressEnter),
+		mHandlePressEnter, TRUE);
+
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 255);
 
 	//SetDrawBlendMode(DX_BLENDMODE_ALPHA, 128);
 	//DrawBoxAA(1920 / 2 + 1920 / 2 / 6 + 50, 100, 1920 - 50, 1080 - 100, GetColor(255, 255, 255), TRUE, 1.0);
@@ -238,7 +272,9 @@ void ResultUI::Draw()
 		DrawStringToHandle(1920 / 2 + 1920 / 2 / 6 + 70, 800, "Excellent!!", GetColor(0, 255, 0), mFontHandle3);*/
 		DrawRotaGraph(mResultPosX, mResultPosY, 1.0, 0.0, mHandleResultExcellent, TRUE);
 	}
-
+	/*clsDx();
+	printfDx("mStartButtonBeginX:%d\n", mPosPressEnterX);
+	printfDx("mStartButtonBeginY:%d\n", mPosPressEnterY);*/
 }
 
 /// <summary>
@@ -268,4 +304,24 @@ void ResultUI::AlphaCount(float _deltaTime)
 	}
 
 	mAlphaPal += addVal * mAlphaCount;
+}
+
+void ResultUI::AlphaCount2(float _deltaTime)
+{
+	const float addVal = 150.0f * _deltaTime;
+	const double maxAlpha = 255.0 + 35.0;
+	const double minAlpha = 0.0 + 85.0f;
+
+	if (mAlphaPal2 > maxAlpha)
+	{
+		mAlphaCount2 = -1;
+	}
+
+	if (mAlphaPal2 < minAlpha)
+	{
+		mAlphaCount2 = 1;
+	}
+
+	mAlphaPal2 += addVal * mAlphaCount2;
+
 }

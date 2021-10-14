@@ -330,7 +330,7 @@ void PlayerActor::ResultIdleBehavior(float _deltaTime)
 	{
 		MV1DetachAnim(mMHandle, mAttachIndex);
 		mPlayTime = 0;
-		mAttachIndex = MV1AttachAnim(mMHandle, 1/*Idleのアニメーション番号*/, -1, FALSE);
+		mAttachIndex = MV1AttachAnim(mMHandle, 11/*Idleのアニメーション番号*/, -1, FALSE);
 		mTotalTime = MV1GetAttachAnimTotalTime(mMHandle, mAttachIndex);
 		mPrevState = mNowState;
 	}

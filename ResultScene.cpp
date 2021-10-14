@@ -8,6 +8,8 @@
 #include "Effect.h"
 #include "WaterObject.h"
 #include "AudienceContoroller.h"
+#include "SE.h"
+#include "BGM.h"
 //            «‚ÍTitleScene‚Å’è‹`‚µ‚Ä‚¢‚é‚Ì‚Å‘‚©‚È‚­‚Ä‚¢‚¢
 //const char* MOVE_SCENE_IMG = "data/img/MoveScene.png";
 //const float    FIRST_DELTA_TIME = 0.000001f;
@@ -38,24 +40,34 @@ ResultScene::ResultScene(int _score)
 	, mPool(nullptr)
 	, mWater(nullptr)
 	, mConfetti(nullptr)
+	//------------------------------------------9/26
+	, mBadEffect(nullptr)
+	, mBadEffectPos(VGet(0, -200, 0))
+	, mBadSound(nullptr)
+	, mFireWorks2(nullptr)
+	, mFireWorksPos(VGet(33, 0, -58))
+	, mVictory(nullptr)
+	, mBadFlag(false)
+	, mResultBgm(nullptr)
+	, mBgmFlag(false)
 {
-	mCameraPosX = 8.5f;
+	mCameraPosX = 22.0f;
 
-	mCameraPosY = 3.1f;
+	mCameraPosY = 2.9f;
 
-	mCameraPosZ = -49.0f;
+	mCameraPosZ = -49.5f;
 
-	mCameraTargetPosX = 17.0f;
+	mCameraTargetPosX = 30.0f;
 
-	mCameraTargetPosY = 4.0f;
+	mCameraTargetPosY = 5.6f;
 
-	mCameraTargetPosZ = -54.0f;
+	mCameraTargetPosZ = -59.0f;
 
 	//-----------------------------------------------------9/22–î–ì
-	mFireWorksPos = VGet(35.0f, 0.0f, -65.0f);
+	//mFireWorksPos = VGet(35.0f, 0.0f+30, -65.0f);
 	mConfettiPos = VGet(30.0f, 10.0f, -54.0f);
 	mFirstPlace = VGet(30.0f, 3.0f, -54.0f);
-	mSecondPlace = VGet(30.0f, 2.0f, -51.0f);
+	mSecondPlace = VGet(30.0f, 2.0f, -51.5f);
 	mThirdPlace = VGet(30.0f, 1.7f, -57.0f);
 
 }
@@ -70,16 +82,25 @@ ResultScene::~ResultScene()
 	delete mCamera;
 	delete mPodium;
 	//--------------------------------------------------9.20
-	mFireWorks->StopEffect3D();
-	mFireWorks->Delete();
-	delete mFireWorks;
-	mConfetti->StopEffect3D();
-	mConfetti->Delete();
-	delete mConfetti;
+	//mFireWorks->StopEffect3D();
+	//mFireWorks->Delete();
+	//delete mFireWorks;
+	//mConfetti->StopEffect3D();
+	//mConfetti->Delete();
+	//delete mConfetti;
+
+	////--------------------------------------------------9.26
+	//mFireWorks2->StopEffect3D();
+	//mFireWorks2->Delete();
+	//delete mFireWorks2;
+	//mBadEffect->StopEffect3D();
+	//mBadEffect->Delete();
+	//delete mBadEffect;
 
 	delete mPool;
 	delete mSky;
 	delete mWater;
+	delete mResultBgm;
 }
 
 /// <summary>
@@ -185,11 +206,20 @@ SceneBase* ResultScene::Update(float _deltaTime, int& _hiScore)
 	{
 		mCheckHitFlag = true;
 		mInputReturnFlag = false;
+		mClickNormal->Play();
 		//------------------------------------------------9/22–î–ì
 		mConfetti->StopEffect3D();
 		mConfetti->Delete();
 		mFireWorks->StopEffect3D();
 		mFireWorks->Delete();
+		mFireWorks2->StopEffect3D();
+		mFireWorks2->Delete();
+		mBadEffect->StopEffect3D();
+		mBadEffect->Delete();
+		delete mConfetti;
+		delete mFireWorks;
+		delete mFireWorks2;
+		delete mBadEffect;
 	}
 	if (mCheckHitFlag)
 	{
@@ -264,11 +294,20 @@ void ResultScene::Draw()
 	mPodium->Draw();
 
 	//--------------------------------------------------------------9.20
-	if (mFireWorks->GetNowPlaying3D() && mScore > 200)
+	if (mBadEffect->GetNowPlaying2D() && 201 > mScore/* && !mBadFlag*/)
 	{
-		mFireWorks->PlayEffekseer(VGet(33.0f, 0.0f, -58.0f));
+		mBadEffect->PlayEffekseer2D(mBadEffectPos);
+		/*mBadFlag = true;*/
 	}
-	if (mConfetti->GetNowPlaying3D() && mScore > 400)
+	else if (mFireWorks->GetNowPlaying3D() && 401 > mScore && mScore > 200)
+	{
+		mFireWorks->PlayEffekseer(mFireWorksPos);
+	}
+	else if (mFireWorks->GetNowPlaying3D() && mScore > 400)
+	{
+		mFireWorks->PlayEffekseer(mFireWorksPos);
+	}
+	else if (mConfetti->GetNowPlaying3D() && mScore > 500)
 	{
 		mConfetti->PlayEffekseer(VGet(30.0f, 10.0f, -54.0f));
 	}
@@ -284,6 +323,19 @@ void ResultScene::Draw()
 /// </summary>
 void ResultScene::Sound(float _deltaTime)
 {
+	if (!mBgmFlag)
+	{
+		mResultBgm->Play();
+		mBgmFlag = true;
+	}
+	if (mCheckHitFlag)
+	{
+		mResultBgm->FadeOutMusic(150, _deltaTime);
+	}
+	else
+	{
+		mResultBgm->FadeInMusic(150, _deltaTime);
+	}
 }
 
 /// <summary>
@@ -297,6 +349,25 @@ void ResultScene::Load()
 	mPlayer = new PlayerActor;
 	mPodium = new StaticObjectActor;
 	mPool = new StaticObjectActor;
+	mClickNormal = new SE;
+	mResultBgm = new BGM;
+	mResultBgm->LoadMusic("data/sound/result.mp3");
+	mClickNormal->LoadSound("data/sound/click_normal.wav");
+	//-------------------------------------------------------9.26
+	mFireWorks2 = new Effect("data/effect/Fireworks2.efk", 1.0f);
+	mBadEffect = new Effect("data/effect/BadEffect.efk", 40.0f);
+	mBadSound = new SE();
+	mBadSound->LoadSound("data/sound/Onmtp-Negative02-2.mp3");
+	if (mScore < 201)
+	{
+		mBadSEflag = true;
+	}
+	else
+	{
+		mBadSEflag = false;
+	}
+	mVictory = new SE();
+	//mVictory->LoadSound("data/sound/");
 
 	//------------------------------------------------------------------size•ÏX
 	mFireWorks = new Effect("data/effect/hanabi.efk", 1.0f);
@@ -335,7 +406,7 @@ void ResultScene::Load()
 	mSky->LoadModel("data/model/Skydome_X5/Dome_X501.pmx");
 
 	mCamera->SetFuturePos(VGet(22.0f, 2.9f, -49.5f));
-	mCamera->SetFutureTarget(VGet(30.0f, 5.5f, -57.0f));
+	mCamera->SetFutureTarget(VGet(30.0f, 5.6f, -59.0f));
 	mCamera->SetPos(VGet(22.0f, 2.9f, -49.5f));
 	mCamera->SetTarget(VGet(30.0f, 5.5f, -57.0f));
 

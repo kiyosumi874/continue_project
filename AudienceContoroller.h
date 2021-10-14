@@ -2,10 +2,12 @@
 /// <summary>
 /// 観客の数や観客同士の距離、ジャンプするタイミングを決めるクラス
 ///　9・11矢野陽大
+///　9.26 LoadAudience更新
 /// </summary>
 #include "DxLib.h"
 #include <iostream>
 #include <vector>
+#include "SceneBase.h"
 
 using namespace std;
 class AudienceContoroller
@@ -18,6 +20,7 @@ public:
 	AudienceContoroller();
 	~AudienceContoroller();
 	void SetAudience();
+	void SetAudienceState(int _state);        //ジャンプを高くするなら1
 	void LoadAudience();
 	void Draw();
 	void Update(float _deltaTime);
@@ -35,5 +38,9 @@ private:
 	float mGroundHeight;										  //観客の立っている場所
 	float mFirstGroundHeight;
 	float mHighestJump;										  //観客の最高ジャンプ高度
-	float mRad;												  //角度ラジアン
+
+	float mRad; //light角度ラジアン	
+	float mRad2;
+
+	int  mLight;
 };

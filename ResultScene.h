@@ -32,6 +32,21 @@ private:
     class Effect* mFireWorks;
     class Effect* mConfetti;     //éÜêÅê·
     class WaterObject* mWater;
+    class SE* mClickNormal;
+
+    class Effect* mFireWorks2;
+    class Effect* mBadEffect;
+    class SE* mVictory;
+    class SE* mBadSound;
+    class BGM* mResultBgm;
+    int ResultBgmHandle;
+    bool mBgmFlag;
+    VECTOR        mBadEffectPos;
+    bool          mBadSEflag;
+    bool mFireWorksFlag;
+    bool mFireWorks2Flag;
+    bool mConfettiFlag;
+    bool mBadFlag;
 
     bool  mInputReturnFlag;   // EnterÉLÅ[ÇÃòAë±ì¸óÕñhé~
     int mScore;

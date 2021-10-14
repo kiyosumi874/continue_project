@@ -71,6 +71,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 
 	// タイトルシーンをセット
 	scene->SetScene(new TitleScene);
+	//scene->SetScene(new PlayScene);
 	//scene->SetScene(new ResultScene(600));
 
 

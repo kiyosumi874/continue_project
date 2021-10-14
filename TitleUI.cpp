@@ -29,14 +29,14 @@ TitleUI::TitleUI()
 	, mSize2Y(0)
 	, mAlphaPal(0)
 	, mAlphaCount(1)
-	, mScaleTitleLogo(0.75)
+	, mScaleTitleLogo(0.5)
 	, mFloatingCounter(0.0f)
 {
 	////                                     作成するフォント名,     フォントのサイズ,  フォントの太さ,                  フォントのタイプ, 文字セット, 縁の太さ, イタリック体にするかどうか
 	//mFontHandle = CreateFontToHandle("data/Fonts/meiryob.tcc", mStartButtonFontSize,              -1, DX_FONTTYPE_ANTIALIASING_EDGE_4X4,         -1,        5,                       TRUE);
 	mHandlePressEnter = LoadGraph("data/img/TitleUI3.png");
 	mHandle2 = LoadGraph("data/img/TitleUI4.png");
-	mHandleTitleLogo = LoadGraph("data/img/VirtualDive.png");
+	mHandleTitleLogo = LoadGraph("data/img/VirtualDive2.png");
 	// 各画像サイズ取得
 	GetGraphSize(mHandlePressEnter, &mSizePressEnterW, &mSizePressEnterH);
 	GetGraphSize(mHandle2, &mSize2X, &mSize2Y);
@@ -50,8 +50,8 @@ TitleUI::TitleUI()
 	int adjustPosEnterY = -50;
 	mPosPressEnterX = mScreenSizeW - (mSizePressEnterW * mScalePressEnter) + adjustPosEnterX;
 	mPosPressEnterY = mScreenSizeH - (mSizePressEnterH * mScalePressEnter) + adjustPosEnterY;
-	mPosTitleLogoX = 80;
-	mPosTitleLogoY = 65;
+	mPosTitleLogoX = 50;
+	mPosTitleLogoY = -50;
 
 }
 
@@ -96,22 +96,22 @@ void TitleUI::Update(float _deltaTime)
 		mTmpTime = 0;
 	}
 
-	if (CheckHitKey(KEY_INPUT_RIGHT))
+	/*if (CheckHitKey(KEY_INPUT_RIGHT))
 	{
-		mStartButtonBeginX += 15;
+		mPosTitleLogoX += 10;
 	}
 	if (CheckHitKey(KEY_INPUT_LEFT))
 	{
-		mStartButtonBeginX += -15;
+		mPosTitleLogoX += -10;
 	}
 	if (CheckHitKey(KEY_INPUT_UP))
 	{
-		mStartButtonBeginY += -15;
+		mPosTitleLogoY += -10;
 	}
 	if (CheckHitKey(KEY_INPUT_DOWN))
 	{
-		mStartButtonBeginY += 15;
-	}
+		mPosTitleLogoY += 10;
+	}*/
 
 	// アルファのカウント更新処理
 	AlphaCount(_deltaTime);
@@ -191,9 +191,9 @@ void TitleUI::Draw()
 	//	DrawExtendGraph(mStartButtonBeginX, mStartButtonBeginY, mStartButtonBeginX + mSize2X*2/3, mStartButtonBeginY + mSize2Y*2/3, mHandle2, TRUE);
 	//	/*DrawStringToHandle(mStartButtonBeginX + 45, mStartButtonBeginY + 35, "でスタート！", WHITE, mFontHandle, BLACK);*/
 	//}
-	clsDx();
-	//printfDx("mStartButtonBeginX:%d\n", mStartButtonBeginX);
-	//printfDx("mStartButtonBeginY:%d\n", mStartButtonBeginY);
+	/*clsDx();
+	printfDx("X:%d\n", mPosTitleLogoX);
+	printfDx("Y:%d\n", mPosTitleLogoY);*/
 
 }
 
